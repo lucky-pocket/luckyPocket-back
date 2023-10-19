@@ -167,7 +167,6 @@ linters:
     - godot # check if comments end in a period
     - gofmt # checks whether code was gofmt-ed
     - goimports # fix imports, formats your code in the same style as gofmt
-    - ifshort # checks that your code uses short syntax for if-statements whenever possible
     - misspell # finds commonly misspelled English words in comments
     - noctx # finds sending http request without context.Context
     - predeclared # find code that shadows one of Go's predeclared identifiers
