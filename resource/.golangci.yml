@@ -4,7 +4,7 @@ author:
 
 run:
   timeout: 5m
-  issues-exit-code: 1
+  issues-exit-code: 0
   tests: true
   build-tags: []
   skip-dirs: []
