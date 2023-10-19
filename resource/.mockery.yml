@@ -1,0 +1,13 @@
+with-expecter: true
+mockname: "{{.InterfaceName}}"
+filename: "{{.MockName}}.go"
+dir: "test/mocks"
+outpkg: mocks
+packages:
+    github.com/lucky-pocket/luckyPocket-back/internal/domain:
+        config:
+            all: true
+    # [insert package if needed]
+    # github.com/lucky-pocket/luckyPocket-back/internal/global:
+    #     config:
+    #         all: true
