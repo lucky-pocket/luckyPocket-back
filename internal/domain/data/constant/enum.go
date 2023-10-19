@@ -60,3 +60,18 @@ func (n NoticeType) Valid() bool {
 	}
 	return false
 }
+
+type SortType string
+
+const (
+	SortTypePocket SortType = "POCKET"
+	SortTypeCoins  SortType = "COIN"
+)
+
+func (s SortType) Valid() bool {
+	switch s {
+	case SortTypePocket, SortTypeCoins:
+		return true
+	}
+	return false
+}
