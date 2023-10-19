@@ -1,8 +1,9 @@
 package output
 
 import (
-	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 	"time"
+
+	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 )
 
 type NoticeElem struct {
