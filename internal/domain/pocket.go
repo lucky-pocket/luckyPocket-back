@@ -26,3 +26,10 @@ type PocketUseCase interface {
 	GetPocketDetail(ctx context.Context, input *input.PocketIDInput) (*output.PocketOutput, error)
 	SetVisibility(ctx context.Context, input *input.VisibilityInput) error
 }
+
+type PocketRepository interface {
+	Create(ctx context.Context, pocket *Pocket) error
+	FindByID(ctx context.Context, pocketId *uint64) error
+	FindAllByUser(ctx context.Context, user *User) error
+	FindAll(ctx context.Context) error
+}
