@@ -14,5 +14,5 @@ type AuthUseCase interface {
 }
 
 type AuthRepository interface {
-	ExistByRefreshToken(ctx context.Context, refreshToken *string) (bool, error)
+	ExistByRefreshToken(ctx context.Context, refreshToken string) (bool, error)
 }
