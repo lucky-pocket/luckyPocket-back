@@ -31,3 +31,9 @@ type UserUseCase interface {
 	GetUserDetail(ctx context.Context) (*output.UserInfo, error)
 	GetRanking(ctx context.Context, input *input.UserInput) (*output.RankOutput, error)
 }
+
+type UserRepository interface {
+	Create(ctx context.Context, user *User) error
+	FindByID(ctx context.Context, userId *uint64) error
+	Exists(ctx context.Context, userId *uint64) (bool, error)
+}
