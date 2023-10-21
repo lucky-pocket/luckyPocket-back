@@ -20,7 +20,7 @@ type NoticeUseCase interface {
 }
 
 type NoticeRepository interface {
-	Create(ctx context.Context, notice *Notice) error
-	FindAllByUser(ctx context.Context, user *User) error
-	FindByID(ctx context.Context, noticeID *uint64) error
+	Create(ctx context.Context, notices []*Notice) error
+	FindAllByUserID(ctx context.Context, userID uint64) (*output.NoticeListOutput, error)
+	FindByID(ctx context.Context, noticeID uint64) (*Notice, error)
 }
