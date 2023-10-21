@@ -8,11 +8,11 @@ import (
 )
 
 type Pocket struct {
-	PocketID   uint64
-	ReceiverID *User
-	SenderID   *User
-	Content    string
-	Coins      int
+	PocketID uint64
+	Receiver *User
+	Sender   *User
+	Content  string
+	Coins    int
 }
 
 func (p Pocket) IsEmpty() bool {
@@ -29,7 +29,6 @@ type PocketUseCase interface {
 
 type PocketRepository interface {
 	Create(ctx context.Context, pocket *Pocket) error
-	FindByID(ctx context.Context, pocketID *uint64) error
-	FindAllByUser(ctx context.Context, user *User) error
-	FindAll(ctx context.Context) error
+	FindByID(ctx context.Context, pocketID *uint64) (pocket *Pocket, err error)
+	FindAllByUserID(ctx context.Context, userID uint64, offset, limit int) (pocketList []*Pocket, err error)
 }
