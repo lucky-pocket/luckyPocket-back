@@ -29,7 +29,7 @@ type PocketUseCase interface {
 
 type PocketRepository interface {
 	Create(ctx context.Context, pocket *Pocket) error
-	FindByID(ctx context.Context, pocketId *uint64) error
+	FindByID(ctx context.Context, pocketID *uint64) error
 	FindAllByUser(ctx context.Context, user *User) error
 	FindAll(ctx context.Context) error
 }

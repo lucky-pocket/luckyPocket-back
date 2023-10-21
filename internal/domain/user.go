@@ -34,6 +34,6 @@ type UserUseCase interface {
 
 type UserRepository interface {
 	Create(ctx context.Context, user *User) error
-	FindByID(ctx context.Context, userId *uint64) error
-	Exists(ctx context.Context, userId *uint64) (bool, error)
+	FindByID(ctx context.Context, userID *uint64) error
+	Exists(ctx context.Context, userID *uint64) (bool, error)
 }

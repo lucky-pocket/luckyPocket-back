@@ -22,5 +22,5 @@ type NoticeUseCase interface {
 type NoticeRepository interface {
 	Create(ctx context.Context, notice *Notice) error
 	FindAllByUser(ctx context.Context, user *User) error
-	FindByID(ctx context.Context, noticeId *uint64) error
+	FindByID(ctx context.Context, noticeID *uint64) error
 }
