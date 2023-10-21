@@ -12,3 +12,7 @@ type AuthUseCase interface {
 	Logout(ctx context.Context, input *input.RefreshInput) error
 	RefreshToken(ctx context.Context, input *input.RefreshInput) (*output.TokenOutput, error)
 }
+
+type AuthRepository interface {
+	ExistByRefreshToken(ctx context.Context, refreshToken *string) (bool, error)
+}
