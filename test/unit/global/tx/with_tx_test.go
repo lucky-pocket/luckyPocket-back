@@ -34,7 +34,7 @@ func TestWithTx(t *testing.T) {
 			},
 		},
 		{
-			desc: "rollback succes",
+			desc: "rollback success",
 			err:  errors.New("haha you should rollback"),
 			on: func() {
 				mockTx.On("Transactor").Return("hi").Once()
@@ -74,10 +74,10 @@ func TestWithTx(t *testing.T) {
 			on: func() {
 				mockTx.On("Transactor").Return("hi").Once()
 				mockTx.On("Begin").Return("hi", nil).Once()
-				mockTx.On("Rollback").Return(nil).Once()
+				mockTx.On("Rollback").Return(errors.New("haha commit failed")).Once()
 			},
 			assert: func(t *testing.T, err error) {
-				assert.ErrorContains(t, err, "rollback")
+				assert.ErrorContains(t, err, "transaction rollback")
 			},
 		},
 	}
