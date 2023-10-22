@@ -8,7 +8,8 @@ permissions:
   contents: read
     
 jobs:
-  codegen:
+  
+  lint: 
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,10 +24,6 @@ jobs:
       - name: Create mocks
         run: make mocks
 
-  lint:
-    runs-on: ubuntu-latest
-    needs: [codegen]
-    steps:
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
         with:
@@ -35,9 +32,19 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-    environment: test
-    needs: [codegen]
     steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+          cache: true
+
+      - name: Set up mockery
+        run: go install github.com/vektra/mockery/v2@v2.33.3
+        
+      - name: Create mocks
+        run: make mocks
+        
       - name: Build
         run: go build -v ./...
 
