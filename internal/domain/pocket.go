@@ -30,5 +30,5 @@ type PocketUseCase interface {
 type PocketRepository interface {
 	Create(ctx context.Context, pocket *Pocket) error
 	FindByID(ctx context.Context, pocketID uint64) (pocket *Pocket, err error)
-	FindPocketListByUserID(ctx context.Context, userID uint64, offset, limit int) (pocketList []*Pocket, err error)
+	FindListByUserID(ctx context.Context, userID uint64, offset, limit int) (pocketList []*Pocket, err error)
 }
