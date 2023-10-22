@@ -7,7 +7,7 @@ packages:
     github.com/lucky-pocket/luckyPocket-back/internal/domain:
         config:
             all: true
-    # [insert package if needed]
-    # github.com/lucky-pocket/luckyPocket-back/internal/global:
-    #     config:
-    #         all: true
+    github.com/lucky-pocket/luckyPocket-back/internal/global:
+        config:
+            all: true
+            recursive: true
