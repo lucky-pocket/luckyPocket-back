@@ -12,3 +12,8 @@ type AuthUseCase interface {
 	Logout(ctx context.Context, input *input.RefreshInput) error
 	RefreshToken(ctx context.Context, input *input.RefreshInput) (*output.TokenOutput, error)
 }
+
+type BlackListRepository interface {
+	Exists(ctx context.Context, refreshToken string) (bool, error)
+	Save(ctx context.Context, refreshToken string) error
+}

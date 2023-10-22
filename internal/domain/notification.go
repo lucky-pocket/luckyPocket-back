@@ -18,3 +18,9 @@ type Notice struct {
 type NoticeUseCase interface {
 	GetNotice(ctx context.Context) (*output.NoticeListOutput, error)
 }
+
+type NoticeRepository interface {
+	Create(ctx context.Context, notices []*Notice) error
+	FindAllByUserID(ctx context.Context, userID uint64) (*output.NoticeListOutput, error)
+	FindByID(ctx context.Context, noticeID uint64) (*Notice, error)
+}
