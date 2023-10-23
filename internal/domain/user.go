@@ -36,4 +36,6 @@ type UserRepository interface {
 	Create(ctx context.Context, user *User) error
 	FindByID(ctx context.Context, userID uint64) (*User, error)
 	Exists(ctx context.Context, userID uint64) (bool, error)
+	FindStudentsByFilter(ctx context.Context, sortType constant.SortType, name *string, grade, class *int) ([]output.RankElem, error)
+	FindNonStudentByFilter(ctx context.Context, sortType constant.SortType, name *string) ([]output.RankElem, error)
 }
