@@ -62,7 +62,7 @@ func (uc *userUseCase) GetUserDetail(ctx context.Context) (*output.UserInfo, err
 	}
 
 	if user == nil {
-		return nil, errors.Wrap(err, "user notfound")
+		return nil, errors.Wrap(err, "user not found")
 	}
 
 	return mapper.ToUserInfo(*user), nil
