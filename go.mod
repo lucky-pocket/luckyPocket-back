@@ -3,6 +3,7 @@ module github.com/lucky-pocket/luckyPocket-back
 go 1.21
 
 require (
+	github.com/golang-jwt/jwt/v5 v5.0.0
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/viper v1.17.0
 	github.com/stretchr/testify v1.8.4
