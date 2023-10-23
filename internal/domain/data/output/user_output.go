@@ -3,7 +3,7 @@ package output
 import "github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 
 type UserInfo struct {
-	UserID int    `json:"userId"`
+	UserID uint64 `json:"userId"`
 	Name   string `json:"name"`
 }
 
