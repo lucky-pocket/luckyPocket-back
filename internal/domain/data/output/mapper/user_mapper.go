@@ -1,4 +1,4 @@
-package util
+package mapper
 
 import (
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
@@ -24,7 +24,6 @@ func ToUserInfo(user domain.User) *output.UserInfo {
 }
 
 func CheckUserNil(user *domain.User, err error) {
-
 	if err != nil {
 		return
 	}
