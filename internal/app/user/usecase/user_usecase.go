@@ -32,7 +32,7 @@ func (uc *userUseCase) GetMyDetail(ctx context.Context) (*output.MyDetailOutput,
 
 	mapper.CheckUserNil(user, err)
 
-	// TODO : Notice Service 작성시 hasNewNotification 에 대한 로직 추가
+	// TODO : Notice Service 작성시 hasNewNotification 에 대한 로직 추가.
 	return mapper.ToUserToOutput(*user, true), nil
 }
 
