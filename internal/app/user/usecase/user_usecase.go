@@ -37,7 +37,6 @@ func (uc *userUseCase) GetMyDetail(ctx context.Context) (*output.MyDetailOutput,
 }
 
 func (uc *userUseCase) CountCoins(ctx context.Context) (*output.CoinOutput, error) {
-
 	userInfo := auth.MustExtract(ctx)
 
 	user, err := uc.UserRepository.FindByID(ctx, userInfo.UserID)
