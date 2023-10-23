@@ -48,5 +48,4 @@ func TestAuth(t *testing.T) {
 			auth.MustExtract(ctx)
 		})
 	})
-
 }

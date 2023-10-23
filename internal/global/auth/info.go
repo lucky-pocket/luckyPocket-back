@@ -12,8 +12,8 @@ type key struct{}
 
 // Info is a payload part of user's jwt token.
 type Info struct {
-	UserID uint64
-	Role   constant.Role
+	UserID uint64        `json:"userId"`
+	Role   constant.Role `json:"role"`
 }
 
 // InjectInfo injects user info into context.
@@ -30,7 +30,7 @@ func Extract(ctx context.Context) (*Info, error) {
 	return info, nil
 }
 
-// MustExtract does the same thing as Extract. But it panics if error != nil
+// MustExtract does the same thing as Extract. But it panics if error != nil.
 func MustExtract(ctx context.Context) *Info {
 	info, err := Extract(ctx)
 	if err != nil {
