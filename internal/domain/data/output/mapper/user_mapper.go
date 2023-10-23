@@ -33,7 +33,7 @@ func CheckUserNil(user *domain.User, err error) {
 	}
 }
 
-func RankOutput(users []output.RankElem) *output.RankOutput {
+func ToRankOutput(users []output.RankElem) *output.RankOutput {
 	rankElems := make([]output.RankElem, 0, len(users))
 
 	for _, user := range users {
