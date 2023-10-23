@@ -7,6 +7,7 @@ import (
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/auth"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/auth/jwt"
+	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -24,7 +25,7 @@ func TestIssue(t *testing.T) {
 			return secret, nil
 		})
 
-		return err
+		return errors.Wrap(err, "error parsing jwt token")
 	}
 
 	t.Run("access", func(t *testing.T) {
