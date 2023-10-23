@@ -26,6 +26,16 @@ func TestAuth(t *testing.T) {
 		assert.Equal(t, userInfo, *uInfo)
 	})
 
+	t.Run("success", func(t *testing.T) {
+		ctx := auth.Inject(ctx, userInfo)
+
+		assert.NotPanics(t, func() {
+			uInfo := auth.MustExtract(ctx)
+
+			assert.Equal(t, userInfo, *uInfo)
+		})
+	})
+
 	t.Run("not found", func(t *testing.T) {
 		uInfo, err := auth.Extract(ctx)
 
