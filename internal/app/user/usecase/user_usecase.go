@@ -72,7 +72,7 @@ func (uc *userUseCase) GetRanking(ctx context.Context, input *input.UserInput) (
 	}
 
 	if err != nil {
-		return nil, errors.Wrap(err, "UnExpected DB Error")
+		return nil, errors.Wrap(err, "unexpected error occurred")
 	}
 
 	return mapper.RankOutput(users), nil
