@@ -3,15 +3,14 @@ package usecase
 import (
 	"context"
 
-	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/output/mapper"
-
 	"github.com/pkg/errors"
 
+	"github.com/lucky-pocket/luckyPocket-back/internal/app/user/util"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/input"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/output"
-	"github.com/lucky-pocket/luckyPocket-back/internal/global/auth"
+	"github.com/lucky-pocket/luckyPocket-back/internal/global/auth"```
 )
 
 type Deps struct {
