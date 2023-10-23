@@ -28,7 +28,6 @@ func (uc *userUseCase) GetMyDetail(ctx context.Context) (*output.MyDetailOutput,
 	userInfo := auth.MustExtract(ctx)
 
 	user, err := uc.UserRepository.FindByID(ctx, userInfo.UserID)
-
 	if err != nil {
 		return nil, errors.Wrap(err, "unexpected error occurred")
 	}
