@@ -5,7 +5,7 @@ import (
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/output"
 )
 
-func ToUserToOutput(user domain.User, hasNewNotification bool) *output.MyDetailOutput {
+func ToMyDetailOutput(user domain.User, hasNewNotification bool) *output.MyDetailOutput {
 	return &output.MyDetailOutput{
 		UserInfo: output.UserInfo{
 			UserID: user.UserID,
