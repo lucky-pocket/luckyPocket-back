@@ -5,12 +5,12 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/lucky-pocket/luckyPocket-back/internal/app/user/util"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/input"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/output"
-	"github.com/lucky-pocket/luckyPocket-back/internal/global/auth"```
+	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/output/mapper"
+	"github.com/lucky-pocket/luckyPocket-back/internal/global/auth"
 )
 
 type Deps struct {
@@ -29,22 +29,28 @@ func (uc *userUseCase) GetMyDetail(ctx context.Context) (*output.MyDetailOutput,
 
 	user, err := uc.UserRepository.FindByID(ctx, userInfo.UserID)
 
-	mapper.CheckUserNil(user, err)
+	if err != nil {
+		return nil, errors.Wrap(err, "unexpected error occurred")
+	}
+
+	if user == nil {
+		return nil, errors.Wrap(err, "user notfound")
+	}
 
 	// TODO : Notice Service 작성시 hasNewNotification 에 대한 로직 추가.
-	return mapper.ToUserToOutput(*user, true), nil
+	return mapper.ToMyDetailOutput(*user, true), nil
 }
 
 func (uc *userUseCase) CountCoins(ctx context.Context) (*output.CoinOutput, error) {
 	userInfo := auth.MustExtract(ctx)
 
-	user, err := uc.UserRepository.FindByID(ctx, userInfo.UserID)
+	coins, err := uc.UserRepository.CountCoinsByUserID(ctx, userInfo.UserID)
 
-	mapper.CheckUserNil(user, err)
+	if err != nil {
+		return nil, errors.Wrap(err, "unexpected db error")
+	}
 
-	return &output.CoinOutput{
-		Coins: user.Coins,
-	}, nil
+	return mapper.ToCoinOutput(coins), nil
 }
 
 func (uc *userUseCase) GetUserDetail(ctx context.Context) (*output.UserInfo, error) {
@@ -52,7 +58,13 @@ func (uc *userUseCase) GetUserDetail(ctx context.Context) (*output.UserInfo, err
 
 	user, err := uc.UserRepository.FindByID(ctx, userInfo.UserID)
 
-	mapper.CheckUserNil(user, err)
+	if err != nil {
+		return nil, errors.Wrap(err, "unexpected error occurred")
+	}
+
+	if user == nil {
+		return nil, errors.Wrap(err, "user notfound")
+	}
 
 	return mapper.ToUserInfo(*user), nil
 }
@@ -74,5 +86,5 @@ func (uc *userUseCase) GetRanking(ctx context.Context, input *input.UserInput) (
 		return nil, errors.Wrap(err, "unexpected error occurred")
 	}
 
-	return mapper.RankOutput(users), nil
+	return mapper.ToRankOutput(users), nil
 }

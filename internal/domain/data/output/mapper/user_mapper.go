@@ -23,16 +23,6 @@ func ToUserInfo(user domain.User) *output.UserInfo {
 	}
 }
 
-func CheckUserNil(user *domain.User, err error) {
-	if err != nil {
-		return
-	}
-
-	if user == nil {
-		return
-	}
-}
-
 func ToRankOutput(users []output.RankElem) *output.RankOutput {
 	rankElems := make([]output.RankElem, 0, len(users))
 
@@ -46,5 +36,11 @@ func ToRankOutput(users []output.RankElem) *output.RankOutput {
 
 	return &output.RankOutput{
 		Users: rankElems,
+	}
+}
+
+func ToCoinOutput(coins int) *output.CoinOutput {
+	return &output.CoinOutput{
+		Coins: coins,
 	}
 }
