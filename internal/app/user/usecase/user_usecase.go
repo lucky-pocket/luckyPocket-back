@@ -45,7 +45,6 @@ func (uc *userUseCase) CountCoins(ctx context.Context) (*output.CoinOutput, erro
 	userInfo := auth.MustExtract(ctx)
 
 	coins, err := uc.UserRepository.CountCoinsByUserID(ctx, userInfo.UserID)
-
 	if err != nil {
 		return nil, errors.Wrap(err, "unexpected db error")
 	}
