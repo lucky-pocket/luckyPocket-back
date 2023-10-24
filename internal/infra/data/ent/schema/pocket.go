@@ -22,8 +22,9 @@ func (Pocket) Fields() []ent.Field {
 			Annotations(entsql.Annotation{
 				Incremental: &t,
 			}),
-		field.String("content").MaxLen(1000),
+		field.String("content").MaxLen(300),
 		field.Uint64("coins"),
+		field.Bool("isPublic"),
 	}
 }
 
