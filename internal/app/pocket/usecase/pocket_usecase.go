@@ -164,6 +164,10 @@ func (p *pocketUseCase) SetVisibility(ctx context.Context, input *input.Visibili
 		return errors.Wrap(err2, "not allowed permission this pocket")
 	}
 
-	p.PocketRepository.UpdateVisible(ctx, pocket.PocketID, input.Visible)
+	err = p.PocketRepository.UpdateVisibility(ctx, pocket.PocketID, input.Visible)
+
+	if err != nil {
+		return errors.Wrap(err, "unexpected db error")
+	}
 	return nil
 }
