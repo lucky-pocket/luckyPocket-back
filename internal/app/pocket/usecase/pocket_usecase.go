@@ -29,10 +29,10 @@ func (p *pocketUseCase) GetUserPockets(ctx context.Context, input *input.UserIDI
 		return nil, errors.Wrap(err, "user not found")
 	}
 
-	pockets, err2 := p.PocketRepository.FindListByUserID(ctx, input.UserID, pageInput.Offset, pageInput.Limit)
+	pockets, err := p.PocketRepository.FindListByUserID(ctx, input.UserID, pageInput.Offset, pageInput.Limit)
 
-	if err2 != nil {
-		return nil, errors.Wrap(err2, "unexpected db error")
+	if err != nil {
+		return nil, errors.Wrap(err, "unexpected db error")
 	}
 
 	return mapper.ToPocketListOutput(pockets), nil
