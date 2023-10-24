@@ -1,1 +1,5 @@
 test/mocks
+
+internal/infra/data/ent/*
+!internal/infra/data/ent/schema/
+!internal/infra/data/ent/generate.go

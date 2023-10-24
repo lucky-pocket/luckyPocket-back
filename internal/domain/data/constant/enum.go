@@ -15,6 +15,13 @@ func (g Gender) Valid() bool {
 	return false
 }
 
+func (Gender) Values() (genders []string) {
+	for _, g := range []Gender{GenderMale, GenderFemale} {
+		genders = append(genders, string(g))
+	}
+	return
+}
+
 type Role string
 
 const (
@@ -28,6 +35,13 @@ func (r Role) Valid() bool {
 		return true
 	}
 	return false
+}
+
+func (Role) Values() (roles []string) {
+	for _, r := range []Role{RoleAdmin, RoleMember} {
+		roles = append(roles, string(r))
+	}
+	return
 }
 
 type UserType string
@@ -46,6 +60,13 @@ func (t UserType) Valid() bool {
 	return false
 }
 
+func (UserType) Values() (userTypes []string) {
+	for _, ut := range []UserType{TypeTeacher, TypeGraduate, TypeStudent} {
+		userTypes = append(userTypes, string(ut))
+	}
+	return
+}
+
 type NoticeType string
 
 const (
@@ -59,6 +80,13 @@ func (n NoticeType) Valid() bool {
 		return true
 	}
 	return false
+}
+
+func (NoticeType) Values() (noticeTypes []string) {
+	for _, nt := range []NoticeType{NoticeTypeReceived, NoticeTypeRevealed} {
+		noticeTypes = append(noticeTypes, string(nt))
+	}
+	return
 }
 
 type SortType string
