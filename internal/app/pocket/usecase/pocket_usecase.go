@@ -76,9 +76,7 @@ func (p *pocketUseCase) SendPocket(ctx context.Context, input *input.PocketInput
 		if err4 != nil {
 			return errors.Wrap(err3, "unexpected db error")
 		}
-		break
 	default:
-		break
 	}
 
 	return nil
@@ -162,11 +160,10 @@ func (p *pocketUseCase) SetVisibility(ctx context.Context, input *input.Visibili
 		return errors.Wrap(err, "unexpected db error")
 	}
 
-	if pocket.Receiver == currentUser {
-		p.PocketRepository.UpdateVisible(ctx, pocket.PocketID, input.Visible)
-	} else {
+	if pocket.Receiver != currentUser {
 		return errors.Wrap(err2, "not allowed permission this pocket")
 	}
 
+	p.PocketRepository.UpdateVisible(ctx, pocket.PocketID, input.Visible)
 	return nil
 }

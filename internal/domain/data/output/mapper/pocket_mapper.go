@@ -9,9 +9,7 @@ func ToPocketListOutput(pocketList []*domain.Pocket) *output.PocketListOutput {
 	pockets := &output.PocketListOutput{}
 
 	for _, p := range pocketList {
-
 		isEmpty := true
-
 		if p.Coins == 0 {
 			isEmpty = true
 		} else {
@@ -31,7 +29,7 @@ func ToPocketListOutput(pocketList []*domain.Pocket) *output.PocketListOutput {
 }
 
 func ToPocketOutput(pocket *domain.Pocket, isPublic bool) *output.PocketOutput {
-	userInfo := &output.UserInfo{}
+	var userInfo *output.UserInfo
 
 	if isPublic {
 		sender := pocket.Sender.Name
