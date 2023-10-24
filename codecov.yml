@@ -11,4 +11,5 @@ coverage:
         target: 85
         threshold: null
 ignore:
-  - "internal/infra/data/ent"
+  - "**/ent"
+  - "**/mocks"
