@@ -13,6 +13,7 @@ type Pocket struct {
 	Sender   *User
 	Content  string
 	Coins    int
+	IsPublic bool
 }
 
 func (p Pocket) IsEmpty() bool {
@@ -21,8 +22,8 @@ func (p Pocket) IsEmpty() bool {
 
 type PocketUseCase interface {
 	SendPocket(ctx context.Context, input *input.PocketInput) error
-	RevealSender(ctx context.Context, input *input.UserIDInput) error
-	GetUserPockets(ctx context.Context, input *input.UserIDInput) (*output.PocketListOutput, error)
+	RevealSender(ctx context.Context, input *input.PocketIDInput) error
+	GetUserPockets(ctx context.Context, input *input.Input) (*output.PocketListOutput, error)
 	GetPocketDetail(ctx context.Context, input *input.PocketIDInput) (*output.PocketOutput, error)
 	SetVisibility(ctx context.Context, input *input.VisibilityInput) error
 }
@@ -31,4 +32,5 @@ type PocketRepository interface {
 	Create(ctx context.Context, pocket *Pocket) error
 	FindByID(ctx context.Context, pocketID uint64) (*Pocket, error)
 	FindListByUserID(ctx context.Context, userID uint64, offset, limit int) ([]*Pocket, error)
+	UpdateVisibility(ctx context.Context, pocketID uint64, visible bool) error
 }

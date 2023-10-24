@@ -4,6 +4,7 @@ type PocketInput struct {
 	Receiver string
 	Coins    int
 	Message  string
+	IsPublic bool
 }
 
 type UserIDInput struct {
@@ -17,4 +18,10 @@ type VisibilityInput struct {
 
 type PocketIDInput struct {
 	PocketID uint64
+}
+
+type Input struct {
+	UserID uint64
+	Offset int
+	Limit  int
 }
