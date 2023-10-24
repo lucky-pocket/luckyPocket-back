@@ -63,10 +63,8 @@ func (p *pocketUseCase) SendPocket(ctx context.Context, input *input.PocketInput
 		IsPublic: input.IsPublic,
 	}
 
-	err3 := p.PocketRepository.Create(ctx, &pocket)
-
-	if err3 != nil {
-		return errors.Wrap(err3, "unexpected db error")
+	if err := p.PocketRepository.Create(ctx, &pocket); err != nil {
+		return errors.Wrap(err, "unexpected db error")
 	}
 
 	switch input.IsPublic {
