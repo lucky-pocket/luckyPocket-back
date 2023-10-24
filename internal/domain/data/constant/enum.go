@@ -103,10 +103,3 @@ func (s SortType) Valid() bool {
 	}
 	return false
 }
-
-func (SortType) Values() (sortTypes []string) {
-	for _, st := range []SortType{SortTypeCoins, SortTypePocket} {
-		sortTypes = append(sortTypes, string(st))
-	}
-	return
-}
