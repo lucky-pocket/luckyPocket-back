@@ -67,14 +67,10 @@ func (p *pocketUseCase) SendPocket(ctx context.Context, input *input.PocketInput
 		return errors.Wrap(err, "unexpected db error")
 	}
 
-	switch input.IsPublic {
-	case true:
-		err4 := p.UserRepository.SaveReveal(ctx, currentUser.UserID, pocket.PocketID)
-
-		if err4 != nil {
+	if input.IsPublic {
+		if err := p.UserRepository.SaveReveal(ctx, currentUser.UserID, pocket.PocketID); err != nil {
 			return errors.Wrap(err3, "unexpected db error")
 		}
-	default:
 	}
 
 	return nil
