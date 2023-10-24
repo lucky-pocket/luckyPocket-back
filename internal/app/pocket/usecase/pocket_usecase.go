@@ -20,7 +20,6 @@ type pocketUseCase struct{ *Deps }
 
 func (p *pocketUseCase) GetUserPockets(ctx context.Context, input *input.UserIDInput, pageInput input.PageInput) (*output.PocketListOutput, error) {
 	user, err := p.UserRepository.FindByID(ctx, input.UserID)
-
 	if err != nil {
 		return nil, errors.Wrap(err, "unexpected db error")
 	}
