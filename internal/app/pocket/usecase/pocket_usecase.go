@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/input"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/output"
@@ -17,9 +18,12 @@ type Deps struct {
 
 type pocketUseCase struct{ *Deps }
 
-func (p *pocketUseCase) GetUserPockets(ctx context.Context, input *input.UserIDInput, pageInput input.PageInput) (*output.PocketListOutput, error) {
-	user, err := p.UserRepository.FindByID(ctx, input.UserID)
+func NewPocketUseCase(deps *Deps) domain.PocketUseCase {
+	return &pocketUseCase{deps}
+}
 
+func (p *pocketUseCase) GetUserPockets(ctx context.Context, input *input.Input) (*output.PocketListOutput, error) {
+	user, err := p.UserRepository.FindByID(ctx, input.UserID)
 	if err != nil {
 		return nil, errors.Wrap(err, "unexpected db error")
 	}
@@ -28,55 +32,45 @@ func (p *pocketUseCase) GetUserPockets(ctx context.Context, input *input.UserIDI
 		return nil, errors.Wrap(err, "user not found")
 	}
 
-	pockets, err2 := p.PocketRepository.FindListByUserID(ctx, input.UserID, pageInput.Offset, pageInput.Limit)
-
-	if err2 != nil {
-		return nil, errors.Wrap(err2, "unexpected db error")
+	pockets, err := p.PocketRepository.FindListByUserID(ctx, input.UserID, input.Offset, input.Limit)
+	if err != nil {
+		return nil, errors.Wrap(err, "unexpected db error")
 	}
 
 	return mapper.ToPocketListOutput(pockets), nil
 }
 
-func NewPocketUseCase(deps *Deps) domain.PocketUseCase {
-	return &pocketUseCase{deps}
-}
-
 func (p *pocketUseCase) SendPocket(ctx context.Context, input *input.PocketInput) error {
 	userInfo := auth.MustExtract(ctx)
 
-	currentUser, err := p.UserRepository.FindByID(ctx, userInfo.UserID)
-	receiver, err2 := p.UserRepository.FindByName(ctx, input.Receiver)
-
-	if currentUser == nil && receiver == nil {
-		return errors.Wrap(err, "user not found")
+	receiver, err := p.UserRepository.FindByName(ctx, input.Receiver)
+	if err != nil {
+		return errors.Wrap(err, "unexpected db error")
 	}
 
-	if err != nil && err2 != nil {
-		return errors.Wrap(err, "unexpected db error")
+	if receiver == nil {
+		return errors.Wrap(err, "user not found")
 	}
 
 	pocket := domain.Pocket{
 		Receiver: receiver,
-		Sender:   currentUser,
+		Sender: &domain.User{
+			UserID: userInfo.UserID,
+			Role:   userInfo.Role,
+		},
 		Content:  input.Message,
 		Coins:    input.Coins,
 		IsPublic: input.IsPublic,
 	}
 
-	err3 := p.PocketRepository.Create(ctx, &pocket)
-
-	if err3 != nil {
-		return errors.Wrap(err3, "unexpected db error")
+	if err := p.PocketRepository.Create(ctx, &pocket); err != nil {
+		return errors.Wrap(err, "unexpected db error")
 	}
 
-	switch input.IsPublic {
-	case true:
-		err4 := p.UserRepository.SaveReveal(ctx, currentUser.UserID, pocket.PocketID)
-
-		if err4 != nil {
-			return errors.Wrap(err3, "unexpected db error")
+	if input.IsPublic {
+		if err := p.UserRepository.SaveReveal(ctx, userInfo.UserID, pocket.PocketID); err != nil {
+			return errors.Wrap(err, "unexpected db error")
 		}
-	default:
 	}
 
 	return nil
@@ -86,13 +80,13 @@ func (p *pocketUseCase) RevealSender(ctx context.Context, input *input.PocketIDI
 	userInfo := auth.MustExtract(ctx)
 
 	currentUser, err := p.UserRepository.FindByID(ctx, userInfo.UserID)
-	pocket, err2 := p.PocketRepository.FindByID(ctx, input.PocketID)
+	pocket, err := p.PocketRepository.FindByID(ctx, input.PocketID)
 
 	if currentUser == nil && pocket == nil {
 		return errors.Wrap(err, "user not found")
 	}
 
-	if err != nil && err2 != nil {
+	if err != nil {
 		return errors.Wrap(err, "unexpected db error")
 	}
 
@@ -100,14 +94,14 @@ func (p *pocketUseCase) RevealSender(ctx context.Context, input *input.PocketIDI
 		return errors.Wrap(err, "not allowed permission this pocket")
 	}
 
-	exists, err3 := p.UserRepository.ExistsReveal(ctx, currentUser.UserID, pocket.PocketID)
+	exists, err := p.UserRepository.ExistsReveal(ctx, currentUser.UserID, pocket.PocketID)
 
-	if err3 != nil {
-		return errors.Wrap(err3, "unexpected db error")
+	if err != nil {
+		return errors.Wrap(err, "unexpected db error")
 	}
 
 	if exists {
-		return errors.Wrap(err3, "exists reveal")
+		return errors.Wrap(err, "exists reveal")
 	}
 
 	err = p.UserRepository.SaveReveal(ctx, currentUser.UserID, pocket.PocketID)
@@ -149,19 +143,18 @@ func (p *pocketUseCase) GetPocketDetail(ctx context.Context, input *input.Pocket
 func (p *pocketUseCase) SetVisibility(ctx context.Context, input *input.VisibilityInput) error {
 	userInfo := auth.MustExtract(ctx)
 
-	currentUser, err := p.UserRepository.FindByID(ctx, userInfo.UserID)
-	pocket, err2 := p.PocketRepository.FindByID(ctx, input.PocketID)
+	pocket, err := p.PocketRepository.FindByID(ctx, input.PocketID)
 
-	if currentUser == nil || pocket == nil {
+	if pocket == nil {
 		return errors.Wrap(err, "not found error")
 	}
 
-	if err != nil && err2 != nil {
+	if err != nil {
 		return errors.Wrap(err, "unexpected db error")
 	}
 
-	if pocket.Receiver != currentUser {
-		return errors.Wrap(err2, "not allowed permission this pocket")
+	if pocket.Receiver.UserID != userInfo.UserID {
+		return errors.Wrap(err, "not allowed permission this pocket")
 	}
 
 	err = p.PocketRepository.UpdateVisibility(ctx, pocket.PocketID, input.Visible)

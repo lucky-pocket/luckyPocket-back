@@ -20,7 +20,8 @@ type PocketIDInput struct {
 	PocketID uint64
 }
 
-type PageInput struct {
+type Input struct {
+	UserID uint64
 	Offset int
 	Limit  int
 }
