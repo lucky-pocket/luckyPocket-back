@@ -17,10 +17,6 @@ type Deps struct {
 
 type pocketUseCase struct{ *Deps }
 
-func NewPocketUseCase(deps *Deps) domain.PocketUseCase {
-	return &pocketUseCase{deps}
-}
-
 func (p *pocketUseCase) GetUserPockets(ctx context.Context, input *input.UserIDInput, pageInput input.PageInput) (*output.PocketListOutput, error) {
 	user, err := p.UserRepository.FindByID(ctx, input.UserID)
 
@@ -41,23 +37,27 @@ func (p *pocketUseCase) GetUserPockets(ctx context.Context, input *input.UserIDI
 	return mapper.ToPocketListOutput(pockets), nil
 }
 
+func NewPocketUseCase(deps *Deps) domain.PocketUseCase {
+	return &pocketUseCase{deps}
+}
+
 func (p *pocketUseCase) SendPocket(ctx context.Context, input *input.PocketInput) error {
 	userInfo := auth.MustExtract(ctx)
 
-	receiver, err := p.UserRepository.FindByName(ctx, input.Receiver)
-	if err != nil {
-		return errors.Wrap(err, "unexpected db error")
-	}
-	if receiver == nil {
+	currentUser, err := p.UserRepository.FindByID(ctx, userInfo.UserID)
+	receiver, err2 := p.UserRepository.FindByName(ctx, input.Receiver)
+
+	if currentUser == nil && receiver == nil {
 		return errors.Wrap(err, "user not found")
+	}
+
+	if err != nil && err2 != nil {
+		return errors.Wrap(err, "unexpected db error")
 	}
 
 	pocket := domain.Pocket{
 		Receiver: receiver,
-		Sender: &domain.User{
-			UserID: userInfo.UserID,
-			Role:   userInfo.Role,
-		},
+		Sender:   currentUser,
 		Content:  input.Message,
 		Coins:    input.Coins,
 		IsPublic: input.IsPublic,
@@ -71,7 +71,7 @@ func (p *pocketUseCase) SendPocket(ctx context.Context, input *input.PocketInput
 
 	switch input.IsPublic {
 	case true:
-		err4 := p.UserRepository.SaveReveal(ctx, userInfo.UserID, pocket.PocketID)
+		err4 := p.UserRepository.SaveReveal(ctx, currentUser.UserID, pocket.PocketID)
 
 		if err4 != nil {
 			return errors.Wrap(err3, "unexpected db error")

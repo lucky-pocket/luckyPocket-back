@@ -32,5 +32,5 @@ type PocketRepository interface {
 	Create(ctx context.Context, pocket *Pocket) error
 	FindByID(ctx context.Context, pocketID uint64) (*Pocket, error)
 	FindListByUserID(ctx context.Context, userID uint64, offset, limit int) ([]*Pocket, error)
-	UpdateVisible(ctx context.Context, pocketID uint64, visible bool)
+	UpdateVisibility(ctx context.Context, pocketID uint64, visible bool) error
 }
