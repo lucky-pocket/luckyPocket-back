@@ -7,3 +7,8 @@ const (
 	JwtAccessTTL     = 5 * time.Minute
 	JwtRefreshTTL    = 10 * 24 * time.Hour
 )
+
+const (
+	PriceRevealSender = 2
+	PriceSendPocket   = 2
+)

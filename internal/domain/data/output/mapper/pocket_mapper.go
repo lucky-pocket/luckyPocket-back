@@ -5,45 +5,31 @@ import (
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/output"
 )
 
-func ToPocketListOutput(pocketList []*domain.Pocket) *output.PocketListOutput {
-	pockets := &output.PocketListOutput{}
-
-	for _, p := range pocketList {
-		isEmpty := true
-		if p.Coins == 0 {
-			isEmpty = true
-		} else {
-			isEmpty = false
-		}
-
-		elem := output.PocketElem{
-			PocketID: p.PocketID,
-			IsEmpty:  isEmpty,
-			IsPublic: p.IsPublic,
-		}
-
-		pockets.Pockets = append(pockets.Pockets, elem)
+func ToPocketListOutput(pockets []*domain.Pocket) *output.PocketListOutput {
+	out := &output.PocketListOutput{
+		Pockets: make([]output.PocketElem, 0, len(pockets)),
 	}
 
-	return pockets
+	for _, pocket := range pockets {
+		out.Pockets = append(out.Pockets, output.PocketElem{
+			PocketID: pocket.PocketID,
+			IsEmpty:  pocket.IsEmpty(),
+			IsPublic: pocket.IsPublic,
+		})
+	}
+
+	return out
 }
 
-func ToPocketOutput(pocket *domain.Pocket, isPublic bool) *output.PocketOutput {
-	var userInfo *output.UserInfo
-
-	if isPublic {
-		sender := pocket.Sender.Name
-		userInfo = &output.UserInfo{
-			UserID: pocket.Sender.UserID,
-			Name:   sender,
-		}
-	} else {
-		userInfo = nil
-	}
-
-	return &output.PocketOutput{
+func ToPocketOutput(pocket *domain.Pocket, sender *domain.User) *output.PocketOutput {
+	out := &output.PocketOutput{
 		Content: pocket.Content,
 		Coins:   pocket.Coins,
-		Sender:  userInfo,
 	}
+
+	if sender != nil {
+		out.Sender = ToUserInfo(*sender)
+	}
+
+	return out
 }
