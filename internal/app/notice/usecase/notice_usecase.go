@@ -24,21 +24,10 @@ func NewNoticeUseCase(deps *Deps) domain.NoticeUseCase {
 func (n *noticeUseCase) GetNotice(ctx context.Context) (*output.NoticeListOutput, error) {
 	userInfo := auth.MustExtract(ctx)
 
-	user, err := n.UserRepository.FindByID(ctx, userInfo.UserID)
-
+	notices, err := n.NoticeRepository.FindAllByUserID(ctx, userInfo.UserID)
 	if err != nil {
 		return nil, errors.Wrap(err, "unexpected db error")
 	}
 
-	if user == nil {
-		return nil, errors.Wrap(err, "user not found")
-	}
-
-	notices, err := n.NoticeRepository.FindAllByUserID(ctx, user.UserID)
-
-	if err != nil {
-		return nil, errors.Wrap(err, "unexpected db error")
-	}
-
-	return mapper.ToNoticeListOutPut(*notices), nil
+	return mapper.ToNoticeListOutPut(notices), nil
 }

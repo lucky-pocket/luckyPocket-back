@@ -5,18 +5,19 @@ import (
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/output"
 )
 
-func ToNoticeListOutPut(noticeList []*domain.Notice) *output.NoticeListOutput {
-	notices := &output.NoticeListOutput{}
-
-	for _, n := range noticeList {
-		notices.Notices = append(notices.Notices, output.NoticeElem{
-			NoticeID:  n.NoticeID,
-			Kind:      n.Type,
-			PocketID:  n.Pocket.PocketID,
-			Checked:   n.Checked,
-			CreatedAt: n.CreatedAt,
-		})
+func ToNoticeListOutPut(notices []*domain.Notice) *output.NoticeListOutput {
+	out := &output.NoticeListOutput{
+		Notices: make([]output.NoticeElem, 0, len(notices)),
 	}
 
-	return notices
+	for _, notice := range notices {
+		out.Notices = append(out.Notices, output.NoticeElem{
+			NoticeID:  notice.NoticeID,
+			Kind:      notice.Type,
+			PocketID:  notice.Pocket.PocketID,
+			Checked:   notice.Checked,
+			CreatedAt: notice.CreatedAt,
+		})
+	}
+	return out
 }
