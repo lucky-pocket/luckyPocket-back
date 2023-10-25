@@ -39,8 +39,5 @@ type UserRepository interface {
 	FindStudentsWithFilter(ctx context.Context, sortType constant.SortType, name *string, grade, class *int) ([]output.RankElem, error)
 	FindNonStudentWithFilter(ctx context.Context, sortType constant.SortType, name *string) ([]output.RankElem, error)
 	CountCoinsByUserID(ctx context.Context, userID uint64) (int, error)
-	FindByName(ctx context.Context, name string) (*User, error)
 	UpdateCoin(ctx context.Context, userID uint64, coin int) error
-	SaveReveal(ctx context.Context, userID uint64, pocketID uint64) error
-	ExistsReveal(ctx context.Context, userID uint64, pocketID uint64) (bool, error)
 }
