@@ -9,6 +9,13 @@ const (
 )
 
 const (
-	PriceRevealSender = 2
-	PriceSendPocket   = 2
+	CostRevealSender = 2
+	CostSendPocket   = 2
+
+	PrizeDo     = 1
+	PrizeGae    = 1
+	PrizeGeol   = 2
+	PrizeYut    = 3
+	PrizeMo     = 4
+	PrizeBackDo = -2
 )
