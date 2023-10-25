@@ -2,9 +2,11 @@ package usecase
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/input"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/auth"
+	"github.com/lucky-pocket/luckyPocket-back/internal/global/error/status"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/tx"
 	"github.com/pkg/errors"
 )
@@ -19,11 +21,11 @@ func (uc *pocketUseCase) SetVisibility(ctx context.Context, input *input.Visibil
 		}
 
 		if pocket == nil {
-			return errors.Wrap(err, "pocket not found")
+			return status.NewError(http.StatusNotFound, "pocket not found")
 		}
 
 		if pocket.Receiver.UserID != userInfo.UserID {
-			return errors.New("you have no permission to set visibility of this pocket")
+			return status.NewError(http.StatusForbidden, "you have no permission to set visibility of this pocket")
 		}
 
 		if err := uc.PocketRepository.UpdateVisibility(ctx, pocket.PocketID, input.Visible); err != nil {

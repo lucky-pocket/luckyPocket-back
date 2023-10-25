@@ -2,10 +2,12 @@ package usecase
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/input"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/auth"
+	"github.com/lucky-pocket/luckyPocket-back/internal/global/error/status"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/tx"
 	"github.com/pkg/errors"
 )
@@ -25,11 +27,11 @@ func (uc *pocketUseCase) RevealSender(ctx context.Context, input *input.PocketID
 		}
 
 		if pocket == nil {
-			return errors.New("user not found")
+			return status.NewError(http.StatusNotFound, "user not found")
 		}
 
 		if pocket.Receiver.UserID != userInfo.UserID && !pocket.IsPublic {
-			return errors.New("you have no permission to reveal this pocket")
+			return status.NewError(http.StatusForbidden, "you have no permission to reveal this pocket")
 		}
 
 		exists, err := uc.PocketRepository.RevealExists(ctx, userInfo.UserID, pocket.PocketID)
@@ -38,11 +40,11 @@ func (uc *pocketUseCase) RevealSender(ctx context.Context, input *input.PocketID
 		}
 
 		if exists {
-			return errors.New("reveal exists")
+			return status.NewError(http.StatusConflict, "reveal exists")
 		}
 
 		if coins < constant.CostRevealSender {
-			return errors.New("you don't have enough coins")
+			return status.NewError(http.StatusForbidden, "you don't have enough coins")
 		}
 
 		if err := uc.PocketRepository.CreateReveal(ctx, userInfo.UserID, pocket.PocketID); err != nil {

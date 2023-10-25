@@ -2,10 +2,12 @@ package usecase
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/output"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/output/mapper"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/auth"
+	"github.com/lucky-pocket/luckyPocket-back/internal/global/error/status"
 	"github.com/pkg/errors"
 )
 
@@ -18,7 +20,7 @@ func (uc *userUseCase) GetMyDetail(ctx context.Context) (*output.MyDetailOutput,
 	}
 
 	if user == nil {
-		return nil, errors.Wrap(err, "user notfound")
+		return nil, status.NewError(http.StatusNotFound, "user not found")
 	}
 
 	// TODO : Notice Service 작성시 hasNewNotification 에 대한 로직 추가.

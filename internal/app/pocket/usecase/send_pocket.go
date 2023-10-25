@@ -2,11 +2,13 @@ package usecase
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/input"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/auth"
+	"github.com/lucky-pocket/luckyPocket-back/internal/global/error/status"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/tx"
 	"github.com/pkg/errors"
 )
@@ -21,7 +23,7 @@ func (uc *pocketUseCase) SendPocket(ctx context.Context, input *input.PocketInpu
 		}
 
 		if receiver == nil {
-			return errors.New("user not found")
+			return status.NewError(http.StatusNotFound, "user not found")
 		}
 
 		coins, err := uc.UserRepository.CountCoinsByUserID(ctx, userInfo.UserID)
@@ -42,7 +44,7 @@ func (uc *pocketUseCase) SendPocket(ctx context.Context, input *input.PocketInpu
 
 		price := pocket.Coins + constant.CostSendPocket
 		if coins < price {
-			return errors.New("you don't have enough money")
+			return status.NewError(http.StatusForbidden, "you don't have enough money")
 		}
 
 		if err := uc.PocketRepository.Create(ctx, &pocket); err != nil {
