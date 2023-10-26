@@ -1,10 +1,10 @@
 package input
 
 type PocketInput struct {
-	Receiver string
-	Coins    int
-	Message  string
-	IsPublic bool
+	ReceiverID uint64
+	Coins      int
+	Message    string
+	IsPublic   bool
 }
 
 type UserIDInput struct {
@@ -20,7 +20,7 @@ type PocketIDInput struct {
 	PocketID uint64
 }
 
-type Input struct {
+type PocketQueryInput struct {
 	UserID uint64
 	Offset int
 	Limit  int

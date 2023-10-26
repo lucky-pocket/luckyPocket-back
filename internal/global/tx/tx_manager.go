@@ -27,7 +27,6 @@ func (tm *txManager) WithTx(ctx context.Context, f func(ctx context.Context) err
 	}
 
 	if err := f(ctx); err != nil {
-		err = errs.Wrap(err, "task with transaction failed")
 		if e := mtx.rollback(); e != nil {
 			return errs.Wrapf(err, "transaction rollback failed: %s", e.Error())
 		}

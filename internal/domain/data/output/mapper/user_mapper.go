@@ -24,19 +24,19 @@ func ToUserInfo(user domain.User) *output.UserInfo {
 }
 
 func ToRankOutput(users []output.RankElem) *output.RankOutput {
-	rankElems := make([]output.RankElem, 0, len(users))
+	out := &output.RankOutput{
+		Users: make([]output.RankElem, 0, len(users)),
+	}
 
 	for _, user := range users {
-		rankElems = append(rankElems, output.RankElem{
+		out.Users = append(out.Users, output.RankElem{
 			UserInfo: user.UserInfo,
 			Gender:   user.Gender,
 			Amount:   user.Amount,
 		})
 	}
 
-	return &output.RankOutput{
-		Users: rankElems,
-	}
+	return out
 }
 
 func ToCoinOutput(coins int) *output.CoinOutput {

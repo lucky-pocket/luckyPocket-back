@@ -2,7 +2,7 @@ package input
 
 import "github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 
-type UserInput struct {
+type RankQueryInput struct {
 	SortType constant.SortType
 	UserType constant.UserType
 	Grade    *int
