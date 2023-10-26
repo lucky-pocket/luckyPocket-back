@@ -2,11 +2,14 @@ package usecase_test
 
 import (
 	"context"
+	"net/http"
 
+	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/input"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/auth"
-	"github.com/stretchr/testify/assert"
+	"github.com/lucky-pocket/luckyPocket-back/internal/global/error/status"
+	"github.com/stretchr/testify/mock"
 )
 
 func (s *PocketUseCaseTestSuite) TestSendPocket() {
@@ -22,13 +25,57 @@ func (s *PocketUseCaseTestSuite) TestSendPocket() {
 		assert func(err error)
 	}{
 		{
-			desc:  "success",
-			input: &input.PocketInput{},
+			desc:  "success (not public)",
+			input: &input.PocketInput{Coins: 1, IsPublic: false},
 			on: func() {
-				s.mockUserRepository.On("FindByID", nil, nil).Return(nil, nil).Once()
+				s.mockUserRepository.On("FindByID", mock.Anything, mock.Anything).Return(&domain.User{}, nil).Once()
+				s.mockUserRepository.On("CountCoinsByUserID", mock.Anything, mock.Anything).Return(constant.CostSendPocket+1, nil).Once()
+				s.mockPocketRepository.On("Create", mock.Anything, mock.Anything).Return(nil).Once()
+				s.mockUserRepository.On("UpdateCoin", mock.Anything, mock.Anything, mock.Anything).Return(nil).Once()
 			},
 			assert: func(err error) {
-				assert.Error(s.T(), err)
+				s.Nil(err)
+			},
+		},
+		{
+			desc:  "success (public)",
+			input: &input.PocketInput{Coins: 1, IsPublic: true},
+			on: func() {
+				s.mockUserRepository.On("FindByID", mock.Anything, mock.Anything).Return(&domain.User{}, nil).Once()
+				s.mockUserRepository.On("CountCoinsByUserID", mock.Anything, mock.Anything).Return(constant.CostSendPocket+1, nil).Once()
+				s.mockPocketRepository.On("Create", mock.Anything, mock.Anything).Return(nil).Once()
+				s.mockPocketRepository.On("CreateReveal", mock.Anything, mock.Anything, mock.Anything).Return(nil).Once()
+				s.mockUserRepository.On("UpdateCoin", mock.Anything, mock.Anything, mock.Anything).Return(nil).Once()
+			},
+			assert: func(err error) {
+				s.Nil(err)
+			},
+		},
+		{
+			desc:  "user not found",
+			input: &input.PocketInput{},
+			on: func() {
+				s.mockUserRepository.On("FindByID", mock.Anything, mock.Anything).Return(nil, nil).Once()
+			},
+			assert: func(err error) {
+				e, ok := err.(*status.Err)
+				if s.True(ok) {
+					s.Equal(http.StatusNotFound, e.Code)
+				}
+			},
+		},
+		{
+			desc:  "not enough coins",
+			input: &input.PocketInput{Coins: 0, IsPublic: false},
+			on: func() {
+				s.mockUserRepository.On("FindByID", mock.Anything, mock.Anything).Return(&domain.User{}, nil).Once()
+				s.mockUserRepository.On("CountCoinsByUserID", mock.Anything, mock.Anything).Return(constant.CostSendPocket-1, nil).Once()
+			},
+			assert: func(err error) {
+				e, ok := err.(*status.Err)
+				if s.True(ok) {
+					s.Equal(http.StatusForbidden, e.Code)
+				}
 			},
 		},
 	}
@@ -44,7 +91,6 @@ func (s *PocketUseCaseTestSuite) TestSendPocket() {
 
 			s.mockPocketRepository.AssertExpectations(s.T())
 			s.mockUserRepository.AssertExpectations(s.T())
-			s.mockTxManager.AssertExpectations(s.T())
 		})
 	}
 }
