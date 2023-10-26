@@ -16,11 +16,6 @@ func (uc *pocketUseCase) RevealSender(ctx context.Context, input *input.PocketID
 	userInfo := auth.MustExtract(ctx)
 
 	return uc.TxManager.WithTx(ctx, func(ctx context.Context) error {
-		coins, err := uc.UserRepository.CountCoinsByUserID(ctx, userInfo.UserID)
-		if err != nil {
-			return errors.Wrap(err, "unexpected db error")
-		}
-
 		pocket, err := uc.PocketRepository.FindByID(ctx, input.PocketID)
 		if err != nil {
 			return errors.Wrap(err, "unexpected db error")
@@ -32,6 +27,11 @@ func (uc *pocketUseCase) RevealSender(ctx context.Context, input *input.PocketID
 
 		if pocket.Receiver.UserID != userInfo.UserID && !pocket.IsPublic {
 			return status.NewError(http.StatusForbidden, "you have no permission to reveal this pocket")
+		}
+
+		coins, err := uc.UserRepository.CountCoinsByUserID(ctx, userInfo.UserID)
+		if err != nil {
+			return errors.Wrap(err, "unexpected db error")
 		}
 
 		exists, err := uc.PocketRepository.RevealExists(ctx, userInfo.UserID, pocket.PocketID)
