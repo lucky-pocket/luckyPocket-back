@@ -53,7 +53,7 @@ jobs:
       - name: Unit Test
         run: go test -v -race -coverprofile=unit.out -covermode=atomic ./test/unit/... -coverpkg=./...
 
-      - name: Test with coverage
+      - name: Integration Test
         run: go test -v -race -coverprofile=integration.out -covermode=atomic ./test/integration/... -coverpkg=./...
 
       - name: Upload coverage reports to Codecov
