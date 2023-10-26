@@ -10,7 +10,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func (uc *userUseCase) GetRanking(ctx context.Context, input *input.UserInput) (*output.RankOutput, error) {
+func (uc *userUseCase) GetRanking(ctx context.Context, input *input.RankQueryInput) (*output.RankOutput, error) {
 	var (
 		users []output.RankElem
 		err   error

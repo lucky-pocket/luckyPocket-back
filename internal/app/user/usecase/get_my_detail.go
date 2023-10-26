@@ -23,6 +23,10 @@ func (uc *userUseCase) GetMyDetail(ctx context.Context) (*output.MyDetailOutput,
 		return nil, status.NewError(http.StatusNotFound, "user not found")
 	}
 
-	// TODO : Notice Service 작성시 hasNewNotification 에 대한 로직 추가.
-	return mapper.ToMyDetailOutput(*user, true), nil
+	noticeExists, err := uc.NoticeRepository.ExistsByUserID(ctx, user.UserID)
+	if err != nil {
+		return nil, errors.Wrap(err, "unexpected error occurred")
+	}
+
+	return mapper.ToMyDetailOutput(*user, noticeExists), nil
 }

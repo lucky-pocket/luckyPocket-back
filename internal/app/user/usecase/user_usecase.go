@@ -6,7 +6,7 @@ import (
 
 type Deps struct {
 	UserRepository   domain.UserRepository
-	PocketRepository domain.PocketRepository
+	NoticeRepository domain.NoticeRepository
 }
 
 type userUseCase struct{ *Deps }
