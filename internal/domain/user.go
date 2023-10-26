@@ -27,9 +27,9 @@ func (u User) IsAdmin() bool {
 
 type UserUseCase interface {
 	GetMyDetail(ctx context.Context) (*output.MyDetailOutput, error)
+	GetUserDetail(ctx context.Context, input *input.UserIDInput) (*output.UserInfo, error)
 	CountCoins(ctx context.Context) (*output.CoinOutput, error)
-	GetUserDetail(ctx context.Context) (*output.UserInfo, error)
-	GetRanking(ctx context.Context, input *input.UserInput) (*output.RankOutput, error)
+	GetRanking(ctx context.Context, input *input.RankQueryInput) (*output.RankOutput, error)
 }
 
 type UserRepository interface {
