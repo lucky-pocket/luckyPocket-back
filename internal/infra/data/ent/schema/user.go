@@ -23,6 +23,7 @@ func (User) Fields() []ent.Field {
 			Annotations(entsql.Annotation{
 				Incremental: &t,
 			}),
+		field.String("email").NotEmpty().MaxLen(100),
 		field.String("name").MinLen(2).MaxLen(10),
 		field.Uint64("coins"),
 		field.Uint8("grade").Range(1, 3).Nillable(),
