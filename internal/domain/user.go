@@ -2,6 +2,7 @@ package domain
 
 import (
 	"context"
+	"github.com/onee-only/gauth-go"
 
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/input"
@@ -33,9 +34,10 @@ type UserUseCase interface {
 }
 
 type UserRepository interface {
-	Create(ctx context.Context, user *User) error
+	Create(ctx context.Context, userInfo gauth.UserInfo) (user *User, err error)
 	FindByID(ctx context.Context, userID uint64) (*User, error)
 	Exists(ctx context.Context, userID uint64) (bool, error)
+	ExistsByEmail(ctx context.Context, email string) (bool, error)
 	FindStudentsWithFilter(ctx context.Context, sortType constant.SortType, name *string, grade, class *int) ([]output.RankElem, error)
 	FindNonStudentWithFilter(ctx context.Context, sortType constant.SortType, name *string) ([]output.RankElem, error)
 	CountCoinsByUserID(ctx context.Context, userID uint64) (int, error)
