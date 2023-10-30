@@ -72,7 +72,7 @@ func (a *authUseCase) Logout(ctx context.Context, input *input.RefreshInput) err
 	}
 
 	if exist {
-		return status.NewError(http.StatusForbidden, "token already expired")
+		return status.NewError(http.StatusUnauthorized, "token already expired")
 	}
 
 	_, err = a.JwtParser.Parse(input.RefreshToken)
