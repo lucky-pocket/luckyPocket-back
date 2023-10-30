@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"net/http"
+	"time"
 
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
@@ -35,8 +36,8 @@ func (l *AuthUseCaseTestSuite) TestLogin() {
 				l.mockGAuthClient.On("GetUserInfo", mock.Anything).Return(&gauth.UserInfo{}, nil).Once()
 				l.mockUserRepository.On("ExistsByEmail", mock.Anything, mock.Anything).Return(false, nil).Once()
 				l.mockUserRepository.On("Create", mock.Anything, mock.Anything).Return(&domain.User{UserID: 1, Role: constant.RoleMember}, nil).Once()
-				l.mockJwtIssuer.On("IssueAccess", mock.Anything).Return("AccessToken").Once()
-				l.mockJwtIssuer.On("IssueRefresh", mock.Anything).Return("RefreshToken").Once()
+				l.mockJwtIssuer.On("IssueAccess", mock.Anything).Return("AccessToken", time.Time{}).Once()
+				l.mockJwtIssuer.On("IssueRefresh", mock.Anything).Return("RefreshToken", time.Time{}).Once()
 			},
 			assert: func(output *output.TokenOutput, err error) {
 				if l.Nil(err) {
@@ -54,8 +55,8 @@ func (l *AuthUseCaseTestSuite) TestLogin() {
 				l.mockGAuthClient.On("GetUserInfo", mock.Anything).Return(&gauth.UserInfo{}, nil).Once()
 				l.mockUserRepository.On("ExistsByEmail", mock.Anything, mock.Anything).Return(true, nil).Once()
 				l.mockUserRepository.On("FindByEmail", mock.Anything, mock.Anything).Return(&domain.User{}, nil).Once()
-				l.mockJwtIssuer.On("IssueAccess", mock.Anything).Return("AccessToken").Once()
-				l.mockJwtIssuer.On("IssueRefresh", mock.Anything).Return("RefreshToken").Once()
+				l.mockJwtIssuer.On("IssueAccess", mock.Anything).Return("AccessToken", time.Time{}).Once()
+				l.mockJwtIssuer.On("IssueRefresh", mock.Anything).Return("RefreshToken", time.Time{}).Once()
 			},
 			assert: func(output *output.TokenOutput, err error) {
 				if l.Nil(err) {
