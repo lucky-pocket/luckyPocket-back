@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"net/http"
+	"time"
 
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/input"
@@ -33,8 +34,8 @@ func (l *AuthUseCaseTestSuite) TestRefresh() {
 				l.mockJwtParser.On("Parse", mock.Anything).Return(&jwt.Token{}, nil).Once()
 				l.mockBlackListRepository.On("Exists", mock.Anything, mock.Anything).Return(false, nil).Once()
 				l.mockBlackListRepository.On("Save", mock.Anything, mock.Anything).Return(nil).Once()
-				l.mockJwtIssuer.On("IssueAccess", mock.Anything).Return("AccessToken").Once()
-				l.mockJwtIssuer.On("IssueRefresh", mock.Anything).Return("RefreshToken").Once()
+				l.mockJwtIssuer.On("IssueAccess", mock.Anything).Return("AccessToken", time.Time{}).Once()
+				l.mockJwtIssuer.On("IssueRefresh", mock.Anything).Return("RefreshToken", time.Time{}).Once()
 			},
 			assert: func(output *output.TokenOutput, err error) {
 				if l.Nil(err) {
