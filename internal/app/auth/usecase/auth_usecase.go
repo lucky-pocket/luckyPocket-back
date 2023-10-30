@@ -66,6 +66,11 @@ func (a *authUseCase) Login(ctx context.Context, input *input.CodeInput) (*outpu
 }
 
 func (a *authUseCase) Logout(ctx context.Context, input *input.RefreshInput) error {
+	_, err := a.JwtParser.Parse(input.RefreshToken)
+	if err != nil {
+		return status.NewError(http.StatusUnauthorized, "token is invalid")
+	}
+
 	exist, err := a.BlackListRepository.Exists(ctx, input.RefreshToken)
 	if err != nil {
 		return errors.Wrap(err, "unexpected error")
@@ -73,11 +78,6 @@ func (a *authUseCase) Logout(ctx context.Context, input *input.RefreshInput) err
 
 	if exist {
 		return status.NewError(http.StatusUnauthorized, "token is blacklisted")
-	}
-
-	_, err = a.JwtParser.Parse(input.RefreshToken)
-	if err != nil {
-		return status.NewError(http.StatusForbidden, "token is invalid")
 	}
 
 	err = a.BlackListRepository.Save(ctx, input.RefreshToken)
@@ -92,6 +92,15 @@ func (a *authUseCase) RefreshToken(ctx context.Context, input *input.RefreshInpu
 	token, err := a.JwtParser.Parse(input.RefreshToken)
 	if err != nil {
 		return nil, status.NewError(http.StatusUnauthorized, "token is not valid")
+	}
+
+	exist, err := a.BlackListRepository.Exists(ctx, input.RefreshToken)
+	if err != nil {
+		return nil, errors.Wrap(err, "unexpected error")
+	}
+
+	if exist {
+		return nil, status.NewError(http.StatusUnauthorized, "token is blacklisted")
 	}
 
 	err = a.BlackListRepository.Save(ctx, input.RefreshToken)
