@@ -36,6 +36,7 @@ type UserUseCase interface {
 type UserRepository interface {
 	Create(ctx context.Context, userInfo gauth.UserInfo) (user *User, err error)
 	FindByID(ctx context.Context, userID uint64) (*User, error)
+	FindByEmail(ctx context.Context, email string) (*User, error)
 	Exists(ctx context.Context, userID uint64) (bool, error)
 	ExistsByEmail(ctx context.Context, email string) (bool, error)
 	FindStudentsWithFilter(ctx context.Context, sortType constant.SortType, name *string, grade, class *int) ([]output.RankElem, error)
