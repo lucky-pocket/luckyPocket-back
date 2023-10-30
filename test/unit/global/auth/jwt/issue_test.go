@@ -29,7 +29,7 @@ func TestIssue(t *testing.T) {
 	}
 
 	t.Run("access", func(t *testing.T) {
-		accessToken := issuer.IssueAccess(info)
+		accessToken, _ := issuer.IssueAccess(info)
 
 		err := validate(accessToken)
 
@@ -37,7 +37,7 @@ func TestIssue(t *testing.T) {
 	})
 
 	t.Run("refresh", func(t *testing.T) {
-		refreshToken := issuer.IssueRefresh(info)
+		refreshToken, _ := issuer.IssueRefresh(info)
 
 		err := validate(refreshToken)
 

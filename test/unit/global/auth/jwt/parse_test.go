@@ -21,7 +21,7 @@ func TestParse(t *testing.T) {
 	parser := jwt.NewParser(secret)
 
 	t.Run("success", func(t *testing.T) {
-		token := issuer.Issue(info, time.Minute)
+		token, _ := issuer.Issue(info, time.Minute)
 
 		tokn, err := parser.Parse(token)
 
@@ -30,7 +30,7 @@ func TestParse(t *testing.T) {
 	})
 
 	t.Run("expired", func(t *testing.T) {
-		token := issuer.Issue(info, -time.Minute)
+		token, _ := issuer.Issue(info, -time.Minute)
 
 		_, err := parser.Parse(token)
 
