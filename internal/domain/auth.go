@@ -5,12 +5,22 @@ import (
 
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/input"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/output"
+	"github.com/onee-only/gauth-go"
 )
+
+type GAuthUser struct {
+	Email string
+}
 
 type AuthUseCase interface {
 	Login(ctx context.Context, input *input.CodeInput) (*output.TokenOutput, error)
 	Logout(ctx context.Context, input *input.RefreshInput) error
 	RefreshToken(ctx context.Context, input *input.RefreshInput) (*output.TokenOutput, error)
+}
+
+type GAuthClient interface {
+	IssueToken(code string) (access, refresh string, err error)
+	GetUserInfo(accessToken string) (*gauth.UserInfo, error)
 }
 
 type BlackListRepository interface {
