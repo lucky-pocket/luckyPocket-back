@@ -8,6 +8,7 @@ require (
 	entgo.io/ent v0.12.4
 	github.com/golang-jwt/jwt/v5 v5.0.0
 	github.com/mattn/go-sqlite3 v1.14.17
+	github.com/onee-only/gauth-go v0.0.0-20231018150424-afdda7d3f230
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/viper v1.17.0
 	github.com/stretchr/testify v1.8.4
@@ -27,7 +28,6 @@ require (
 	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mitchellh/go-wordwrap v0.0.0-20150314170334-ad45545899c7 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
-	github.com/onee-only/gauth-go v0.0.0-20231018150424-afdda7d3f230 // indirect
 	github.com/pelletier/go-toml/v2 v2.1.0 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/sagikazarmark/locafero v0.3.0 // indirect
