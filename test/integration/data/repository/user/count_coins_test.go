@@ -7,7 +7,6 @@ import (
 )
 
 func (s *UserRepositoryTestSuite) TestCountCoinsByUserID() {
-
 	info := gauth.UserInfo{
 		Email:  "l",
 		Name:   ptr("aef"),

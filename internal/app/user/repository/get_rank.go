@@ -42,7 +42,7 @@ func (r *userRepository) FindNonStudentWithFilter(ctx context.Context, sortType 
 	return r.getRank(ctx, builder, sortType)
 }
 
-func (f *userRepository) getRank(ctx context.Context, builder *ent.UserQuery, sortType constant.SortType) ([]output.RankElem, error) {
+func (r *userRepository) getRank(ctx context.Context, builder *ent.UserQuery, sortType constant.SortType) ([]output.RankElem, error) {
 	switch sortType {
 	case constant.SortTypeCoins:
 		builder = builder.Modify(func(s *sql.Selector) {

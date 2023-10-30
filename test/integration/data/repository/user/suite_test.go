@@ -47,10 +47,6 @@ func (s *UserRepositoryTestSuite) TearDownSuite() {
 	}
 }
 
-// func (s *UserRepositoryTestSuite) SetupTest() {
-
-// }
-
 func (s *UserRepositoryTestSuite) TearDownTest() {
 	ctx := context.Background()
 

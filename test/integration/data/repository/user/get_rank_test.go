@@ -8,7 +8,6 @@ import (
 )
 
 func (s *UserRepositoryTestSuite) TestGetRank() {
-
 	infos := []gauth.UserInfo{
 		{
 			Email:  "1",

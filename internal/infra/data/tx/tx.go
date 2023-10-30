@@ -15,7 +15,7 @@ type entTX struct {
 type entTxKey struct{}
 
 func New(client *ent.Client) *entTX {
-	return &entTX{}
+	return &entTX{c: client}
 }
 
 func FromContext(ctx context.Context) (tx *ent.Tx, err error) {
@@ -31,7 +31,7 @@ func (entTX) Transactor() any {
 }
 
 func (etx *entTX) Begin() (any, error) {
-	// might have to inject ctx
+	// might have to inject ctx.
 	tranx, err := etx.c.Tx(context.Background())
 	if err != nil {
 		return nil, errors.Wrap(err, "ent transaciton begin failed")
