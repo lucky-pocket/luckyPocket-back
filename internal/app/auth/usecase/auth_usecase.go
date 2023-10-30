@@ -72,7 +72,7 @@ func (a *authUseCase) Logout(ctx context.Context, input *input.RefreshInput) err
 	}
 
 	if exist {
-		return status.NewError(http.StatusUnauthorized, "token already expired")
+		return status.NewError(http.StatusUnauthorized, "token is blacklisted")
 	}
 
 	_, err = a.JwtParser.Parse(input.RefreshToken)
@@ -89,14 +89,17 @@ func (a *authUseCase) Logout(ctx context.Context, input *input.RefreshInput) err
 }
 
 func (a *authUseCase) RefreshToken(ctx context.Context, input *input.RefreshInput) (*output.TokenOutput, error) {
-	var userInfo = auth.Info{}
-
 	token, err := a.JwtParser.Parse(input.RefreshToken)
 	if err != nil {
 		return nil, status.NewError(http.StatusUnauthorized, "token is not valid")
 	}
 
-	userInfo = auth.Info{
+	err = a.BlackListRepository.Save(ctx, input.RefreshToken)
+	if err != nil {
+		return nil, errors.Wrap(err, "unexpected error")
+	}
+
+	userInfo := auth.Info{
 		UserID: token.UserID,
 		Role:   token.Role,
 	}
