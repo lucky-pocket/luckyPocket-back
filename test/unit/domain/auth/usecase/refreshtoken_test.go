@@ -31,6 +31,8 @@ func (l *AuthUseCaseTestSuite) TestRefresh() {
 			input: &input.RefreshInput{RefreshToken: "secret"},
 			on: func() {
 				l.mockJwtParser.On("Parse", mock.Anything).Return(&jwt.Token{}, nil).Once()
+				l.mockBlackListRepository.On("Exists", mock.Anything, mock.Anything).Return(false, nil).Once()
+				l.mockBlackListRepository.On("Save", mock.Anything, mock.Anything).Return(nil).Once()
 				l.mockJwtIssuer.On("IssueAccess", mock.Anything).Return("AccessToken").Once()
 				l.mockJwtIssuer.On("IssueRefresh", mock.Anything).Return("RefreshToken").Once()
 			},
@@ -43,10 +45,25 @@ func (l *AuthUseCaseTestSuite) TestRefresh() {
 		},
 
 		{
-			desc:  "token is not valid",
+			desc:  "token is invalid",
 			input: &input.RefreshInput{RefreshToken: "secret"},
 			on: func() {
 				l.mockJwtParser.On("Parse", mock.Anything).Return(nil, errors.New("token is not valid")).Once()
+			},
+			assert: func(output *output.TokenOutput, err error) {
+				e, ok := err.(*status.Err)
+				if l.True(ok) {
+					l.Equal(http.StatusUnauthorized, e.Code)
+				}
+			},
+		},
+
+		{
+			desc:  "token expired",
+			input: &input.RefreshInput{RefreshToken: "secret"},
+			on: func() {
+				l.mockJwtParser.On("Parse", mock.Anything).Return(&jwt.Token{}, nil).Once()
+				l.mockBlackListRepository.On("Exists", mock.Anything, mock.Anything).Return(true, nil).Once()
 			},
 			assert: func(output *output.TokenOutput, err error) {
 				e, ok := err.(*status.Err)

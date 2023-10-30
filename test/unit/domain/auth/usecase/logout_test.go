@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"github.com/pkg/errors"
 	"net/http"
 
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
@@ -38,15 +39,30 @@ func (l *AuthUseCaseTestSuite) TestLogout() {
 		},
 
 		{
+			desc:  "token is invalid",
+			input: &input.RefreshInput{RefreshToken: "secret"},
+			on: func() {
+				l.mockJwtParser.On("Parse", mock.Anything).Return(nil, errors.New("token is invalid")).Once()
+			},
+			assert: func(err error) {
+				e, ok := err.(*status.Err)
+				if l.True(ok) {
+					l.Equal(http.StatusUnauthorized, e.Code)
+				}
+			},
+		},
+
+		{
 			desc:  "token expired",
 			input: &input.RefreshInput{RefreshToken: "secret"},
 			on: func() {
+				l.mockJwtParser.On("Parse", mock.Anything).Return(&jwt.Token{}, nil).Once()
 				l.mockBlackListRepository.On("Exists", mock.Anything, mock.Anything).Return(true, nil).Once()
 			},
 			assert: func(err error) {
 				e, ok := err.(*status.Err)
 				if l.True(ok) {
-					l.Equal(http.StatusForbidden, e.Code)
+					l.Equal(http.StatusUnauthorized, e.Code)
 				}
 			},
 		},
