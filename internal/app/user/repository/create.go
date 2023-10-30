@@ -2,35 +2,38 @@ package repository
 
 import (
 	"context"
-	"fmt"
+	"strings"
 
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
+	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/mapper"
+	"github.com/onee-only/gauth-go"
 )
 
-var justForTest = 1
+func (r *userRepository) Create(ctx context.Context, userInfo gauth.UserInfo) (*domain.User, error) {
+	usrType, _ := strings.CutPrefix(string(userInfo.Role), "ROLE_")
 
-func (r *userRepository) Create(ctx context.Context, user *domain.User) error {
+	userType := constant.UserType(usrType)
+	gender := constant.Gender(userInfo.Gender)
+
 	builder := r.getClient(ctx).User.Create().
-		SetEmail(fmt.Sprint(justForTest)).
-		SetName(user.Name).
+		SetEmail(userInfo.Email).
+		SetName(*userInfo.Name).
 		SetRole(constant.RoleMember).
-		SetUserType(user.UserType).
-		SetGender(user.Gender).
+		SetUserType(userType).
+		SetGender(gender).
 		SetCoins(0)
 
-	justForTest++
-
-	if user.UserType == constant.TypeStudent {
+	if userType == constant.TypeStudent {
 		builder = builder.
-			SetGrade(*user.Grade).
-			SetClass(*user.Class).
-			SetNumber(*user.Number)
+			SetGrade(*userInfo.Grade).
+			SetClass(*userInfo.ClassNum).
+			SetNumber(*userInfo.Num)
 	}
 
-	_, err := builder.Save(ctx)
+	user, err := builder.Save(ctx)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return mapper.ToUserDomain(user), err
 }
