@@ -1,11 +1,14 @@
 module github.com/lucky-pocket/luckyPocket-back
 
-go 1.21
+go 1.21.0
+
+toolchain go1.21.3
 
 require (
 	entgo.io/ent v0.12.4
 	github.com/golang-jwt/jwt/v5 v5.0.0
 	github.com/mattn/go-sqlite3 v1.14.17
+	github.com/onee-only/gauth-go v0.0.0-20231018150424-afdda7d3f230
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/viper v1.17.0
 	github.com/stretchr/testify v1.8.4

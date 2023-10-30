@@ -41,3 +41,15 @@ func NewNoticeRepository(t *testing.T) *NoticeRepository {
 		NoticeRepository: mocks.NewNoticeRepository(t),
 	}
 }
+
+type BlackListRepository struct {
+	*mocks.BlackListRepository
+	*stubTransactor
+}
+
+func NewBlackListRepository(t *testing.T) *BlackListRepository {
+	return &BlackListRepository{
+		stubTransactor:      &stubTransactor{},
+		BlackListRepository: mocks.NewBlackListRepository(t),
+	}
+}

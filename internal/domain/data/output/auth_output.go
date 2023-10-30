@@ -2,8 +2,12 @@ package output
 
 import "time"
 
+type TokenElem struct {
+	Token     string
+	ExpiresAt time.Time
+}
+
 type TokenOutput struct {
-	AccessToken  string    `json:"accessToken"`
-	RefreshToken string    `json:"refreshToken"`
-	ExpiresAt    time.Time `json:"expiresAt"`
+	Access  TokenElem
+	Refresh TokenElem
 }
