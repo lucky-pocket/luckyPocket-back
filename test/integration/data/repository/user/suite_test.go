@@ -58,3 +58,7 @@ func (s *UserRepositoryTestSuite) TearDownTest() {
 	_, _ = s.client.Pocket.Delete().Exec(ctx)
 	_, _ = s.client.User.Delete().Exec(ctx)
 }
+
+func ptr[T any](i T) *T {
+	return &i
+}

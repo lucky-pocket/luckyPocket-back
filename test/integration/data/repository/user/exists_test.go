@@ -3,20 +3,18 @@ package user_test
 import (
 	"context"
 
-	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
-	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
+	"github.com/onee-only/gauth-go"
 )
 
 func (s *UserRepositoryTestSuite) TestExists() {
-	user := domain.User{
-		UserID:   1,
-		Name:     "aef",
-		Coins:    50,
-		Gender:   constant.GenderFemale,
-		UserType: constant.TypeTeacher,
+	info := gauth.UserInfo{
+		Email:  "l",
+		Name:   ptr("aef"),
+		Gender: gauth.GenderFemale,
+		Role:   gauth.RoleTeacher,
 	}
 
-	err := s.r.Create(context.Background(), &user)
+	user, err := s.r.Create(context.Background(), info)
 	s.NoError(err)
 
 	s.Run("found", func() {
@@ -28,6 +26,32 @@ func (s *UserRepositoryTestSuite) TestExists() {
 
 	s.Run("not found", func() {
 		exists, err := s.r.Exists(context.Background(), user.UserID+1)
+
+		s.NoError(err)
+		s.False(exists)
+	})
+}
+
+func (s *UserRepositoryTestSuite) TestExistsByEmail() {
+	info := gauth.UserInfo{
+		Email:  "l",
+		Name:   ptr("aef"),
+		Gender: gauth.GenderFemale,
+		Role:   gauth.RoleTeacher,
+	}
+
+	_, err := s.r.Create(context.Background(), info)
+	s.NoError(err)
+
+	s.Run("found", func() {
+		exists, err := s.r.ExistsByEmail(context.Background(), info.Email)
+
+		s.NoError(err)
+		s.True(exists)
+	})
+
+	s.Run("not found", func() {
+		exists, err := s.r.ExistsByEmail(context.Background(), info.Email+"l")
 
 		s.NoError(err)
 		s.False(exists)

@@ -6,8 +6,7 @@ import (
 	"github.com/onee-only/gauth-go"
 )
 
-func (s *UserRepositoryTestSuite) TestCountCoinsByUserID() {
-
+func (s *UserRepositoryTestSuite) TestFindByEmail() {
 	info := gauth.UserInfo{
 		Email:  "l",
 		Name:   ptr("aef"),
@@ -18,20 +17,18 @@ func (s *UserRepositoryTestSuite) TestCountCoinsByUserID() {
 	user, err := s.r.Create(context.Background(), info)
 	s.NoError(err)
 
-	err = s.r.UpdateCoin(context.Background(), user.UserID, 40)
-	s.NoError(err)
-
 	s.Run("found", func() {
-		coins, err := s.r.CountCoinsByUserID(context.Background(), user.UserID)
+		found, err := s.r.FindByEmail(context.Background(), info.Email)
 
-		s.NoError(err)
-		s.Equal(40, coins)
+		if s.NoError(err) && s.NotNil(found) {
+			s.Equal(user.UserID, found.UserID)
+		}
 	})
 
 	s.Run("not found", func() {
-		coins, err := s.r.CountCoinsByUserID(context.Background(), user.UserID+1)
+		found, err := s.r.FindByEmail(context.Background(), info.Email+"1")
 
 		s.NoError(err)
-		s.Zero(coins)
+		s.Nil(found)
 	})
 }
