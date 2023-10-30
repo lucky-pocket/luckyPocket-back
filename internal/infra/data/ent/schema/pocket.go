@@ -1,6 +1,8 @@
 package schema
 
 import (
+	"time"
+
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema/edge"
@@ -23,8 +25,9 @@ func (Pocket) Fields() []ent.Field {
 				Incremental: &t,
 			}),
 		field.String("content").MaxLen(300),
-		field.Uint64("coins"),
+		field.Int("coins").Min(0),
 		field.Bool("isPublic"),
+		field.Time("createdAt").Default(time.Now),
 	}
 }
 
