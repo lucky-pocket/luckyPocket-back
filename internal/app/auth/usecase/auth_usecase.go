@@ -59,9 +59,12 @@ func (a *authUseCase) Login(ctx context.Context, input *input.CodeInput) (*outpu
 
 	info := auth.Info{UserID: user.UserID, Role: user.Role}
 
+	access, accessExp := a.JwtIssuer.IssueAccess(info)
+	refresh, refreshExp := a.JwtIssuer.IssueRefresh(info)
+
 	return mapper.ToTokenOutput(
-		a.JwtIssuer.IssueAccess(info),
-		a.JwtIssuer.IssueRefresh(info),
+		access, refresh,
+		accessExp, refreshExp,
 	), nil
 }
 
@@ -108,13 +111,16 @@ func (a *authUseCase) RefreshToken(ctx context.Context, input *input.RefreshInpu
 		return nil, errors.Wrap(err, "unexpected error")
 	}
 
-	userInfo := auth.Info{
+	info := auth.Info{
 		UserID: token.UserID,
 		Role:   token.Role,
 	}
 
+	access, accessExp := a.JwtIssuer.IssueAccess(info)
+	refresh, refreshExp := a.JwtIssuer.IssueRefresh(info)
+
 	return mapper.ToTokenOutput(
-		a.JwtIssuer.IssueAccess(userInfo),
-		a.JwtIssuer.IssueRefresh(userInfo),
+		access, refresh,
+		accessExp, refreshExp,
 	), nil
 }
