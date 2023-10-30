@@ -1,11 +1,11 @@
 package usecase
 
 import (
-	"github.com/lucky-pocket/luckyPocket-back/test/mocks"
 	"testing"
 
 	"github.com/lucky-pocket/luckyPocket-back/internal/app/auth/usecase"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
+	"github.com/lucky-pocket/luckyPocket-back/test/mocks"
 	"github.com/lucky-pocket/luckyPocket-back/test/stubs"
 	"github.com/stretchr/testify/suite"
 )

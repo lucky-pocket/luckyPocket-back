@@ -47,7 +47,6 @@ func (a *authUseCase) Login(ctx context.Context, input *input.CodeInput) (*outpu
 	}
 
 	var user *domain.User
-
 	if !exists {
 		user, err = a.UserRepository.Create(ctx, *userInfo)
 	} else {
@@ -73,12 +72,12 @@ func (a *authUseCase) Logout(ctx context.Context, input *input.RefreshInput) err
 	}
 
 	if exist {
-		return status.NewError(403, "token already expired")
+		return status.NewError(http.StatusForbidden, "token already expired")
 	}
 
 	_, err = a.JwtParser.Parse(input.RefreshToken)
 	if err != nil {
-		return errors.Wrap(err, "token is invalid")
+		return status.NewError(http.StatusForbidden, "token is invalid")
 	}
 
 	err = a.BlackListRepository.Save(ctx, input.RefreshToken)
