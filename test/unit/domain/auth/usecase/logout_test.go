@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/input"
@@ -9,7 +10,6 @@ import (
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/auth/jwt"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/error/status"
 	"github.com/stretchr/testify/mock"
-	"net/http"
 )
 
 func (l *AuthUseCaseTestSuite) TestLogout() {

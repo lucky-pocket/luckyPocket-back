@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/input"
@@ -12,7 +13,6 @@ import (
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/error/status"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/tx"
 	"github.com/pkg/errors"
-	"net/http"
 )
 
 type Deps struct {
@@ -38,7 +38,7 @@ func (a *authUseCase) Login(ctx context.Context, input *input.CodeInput) (*outpu
 
 	userInfo, err := a.GAuthClient.GetUserInfo(access)
 	if err != nil {
-		return nil, errors.Wrap(err, "unexpected error")
+		return nil, errors.Wrap(err, "gauth client error")
 	}
 
 	exists, err := a.UserRepository.ExistsByEmail(ctx, userInfo.Email)
@@ -46,15 +46,24 @@ func (a *authUseCase) Login(ctx context.Context, input *input.CodeInput) (*outpu
 		return nil, errors.Wrap(err, "unexpected error")
 	}
 
-	if exists {
-		return nil, status.NewError(http.StatusConflict, "exist user")
+	var user *domain.User
+
+	if !exists {
+		user, err = a.UserRepository.Create(ctx, *userInfo)
+	} else {
+		user, err = a.UserRepository.FindByEmail(ctx, userInfo.Email)
 	}
 
-	user, err := a.UserRepository.Create(ctx, *userInfo)
+	if err != nil {
+		return nil, errors.Wrap(err, "unexpected error")
+	}
 
 	info := auth.Info{UserID: user.UserID, Role: user.Role}
 
-	return mapper.ToTokenOutput(a.JwtIssuer.IssueAccess(info), a.JwtIssuer.IssueRefresh(info)), nil
+	return mapper.ToTokenOutput(
+		a.JwtIssuer.IssueAccess(info),
+		a.JwtIssuer.IssueRefresh(info),
+	), nil
 }
 
 func (a *authUseCase) Logout(ctx context.Context, input *input.RefreshInput) error {
@@ -69,7 +78,7 @@ func (a *authUseCase) Logout(ctx context.Context, input *input.RefreshInput) err
 
 	_, err = a.JwtParser.Parse(input.RefreshToken)
 	if err != nil {
-		return errors.Wrap(err, "unexpected error")
+		return errors.Wrap(err, "token is invalid")
 	}
 
 	err = a.BlackListRepository.Save(ctx, input.RefreshToken)
@@ -93,5 +102,8 @@ func (a *authUseCase) RefreshToken(ctx context.Context, input *input.RefreshInpu
 		Role:   token.Role,
 	}
 
-	return mapper.ToTokenOutput(a.JwtIssuer.IssueAccess(userInfo), a.JwtIssuer.IssueRefresh(userInfo)), nil
+	return mapper.ToTokenOutput(
+		a.JwtIssuer.IssueAccess(userInfo),
+		a.JwtIssuer.IssueRefresh(userInfo),
+	), nil
 }

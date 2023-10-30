@@ -8,10 +8,6 @@ import (
 	"github.com/onee-only/gauth-go"
 )
 
-type GAuthUser struct {
-	Email string
-}
-
 type AuthUseCase interface {
 	Login(ctx context.Context, input *input.CodeInput) (*output.TokenOutput, error)
 	Logout(ctx context.Context, input *input.RefreshInput) error

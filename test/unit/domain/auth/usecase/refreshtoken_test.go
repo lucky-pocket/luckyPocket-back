@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/input"
@@ -11,7 +12,6 @@ import (
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/error/status"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/mock"
-	"net/http"
 )
 
 func (l *AuthUseCaseTestSuite) TestRefresh() {
@@ -31,13 +31,13 @@ func (l *AuthUseCaseTestSuite) TestRefresh() {
 			input: &input.RefreshInput{RefreshToken: "secret"},
 			on: func() {
 				l.mockJwtParser.On("Parse", mock.Anything).Return(&jwt.Token{}, nil).Once()
-				l.mockJwtIssuer.On("IssueAccess", mock.Anything).Return(mock.Anything).Once()
-				l.mockJwtIssuer.On("IssueRefresh", mock.Anything).Return(mock.Anything).Once()
+				l.mockJwtIssuer.On("IssueAccess", mock.Anything).Return("AccessToken").Once()
+				l.mockJwtIssuer.On("IssueRefresh", mock.Anything).Return("RefreshToken").Once()
 			},
 			assert: func(output *output.TokenOutput, err error) {
 				if l.Nil(err) {
-					l.NotNil(output.Access)
-					l.NotNil(output.Refresh)
+					l.Equal(output.Access.Token, "AccessToken")
+					l.Equal(output.Refresh.Token, "RefreshToken")
 				}
 			},
 		},

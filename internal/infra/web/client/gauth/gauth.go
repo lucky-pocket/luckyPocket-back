@@ -1,10 +1,11 @@
 package gauth
 
 import (
-	"github.com/onee-only/gauth-go"
 	"net/http"
+
+	"github.com/onee-only/gauth-go"
 )
 
 func NewClient(httpClient *http.Client, opts gauth.ClientOpts) *gauth.Client {
-	return gauth.NewClient(http.DefaultClient, opts)
+	return gauth.NewClient(httpClient, opts)
 }

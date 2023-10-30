@@ -1,9 +1,10 @@
 package mapper
 
 import (
+	"time"
+
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/output"
-	"time"
 )
 
 func ToTokenOutput(access, refresh string) *output.TokenOutput {
