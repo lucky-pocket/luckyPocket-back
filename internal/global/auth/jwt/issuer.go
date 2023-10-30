@@ -9,9 +9,9 @@ import (
 )
 
 type Issuer interface {
-	IssueAccess(userInfo auth.Info) string
-	IssueRefresh(userInfo auth.Info) string
-	Issue(userInfo auth.Info, expiresIn time.Duration) string
+	IssueAccess(userInfo auth.Info) (string, time.Time)
+	IssueRefresh(userInfo auth.Info) (string, time.Time)
+	Issue(userInfo auth.Info, expiresIn time.Duration) (string, time.Time)
 }
 
 type issuer struct {
@@ -33,24 +33,25 @@ func NewIssuer(secret []byte) Issuer {
 }
 
 // IssueAccess issues token with pre-defined accessTTL.
-func (i *issuer) IssueAccess(userInfo auth.Info) string {
+func (i *issuer) IssueAccess(userInfo auth.Info) (string, time.Time) {
 	return i.Issue(userInfo, i.accessTTL)
 }
 
 // IssueRefresh issues token with pre-defined refreshTTL.
-func (i *issuer) IssueRefresh(userInfo auth.Info) string {
+func (i *issuer) IssueRefresh(userInfo auth.Info) (string, time.Time) {
 	return i.Issue(userInfo, i.refreshTTL)
 }
 
 // Issue issues jwt token with given userInfo and expiresIn.
-func (i *issuer) Issue(userInfo auth.Info, expiresIn time.Duration) string {
+func (i *issuer) Issue(userInfo auth.Info, expiresIn time.Duration) (string, time.Time) {
+	expiresAt := time.Now().Add(expiresIn)
 	claims := Token{
 		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(expiresIn)),
+			ExpiresAt: jwt.NewNumericDate(expiresAt),
 		},
 		Info: userInfo,
 	}
 
 	token, _ := jwt.NewWithClaims(i.signingMethod, claims).SignedString(i.secret)
-	return token
+	return token, expiresAt
 }
