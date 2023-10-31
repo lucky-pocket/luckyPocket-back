@@ -3,8 +3,8 @@ package repository
 import (
 	"context"
 
-	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent"
-	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/user"
+	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/ent"
+	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/ent/user"
 )
 
 func (r *userRepository) CountCoinsByUserID(ctx context.Context, userID uint64) (int, error) {

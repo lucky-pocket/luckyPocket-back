@@ -5,9 +5,9 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
-	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent"
-	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/user"
-	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/mapper"
+	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/ent"
+	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/ent/user"
+	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/mapper"
 )
 
 func (r *userRepository) FindByID(ctx context.Context, userID uint64) (*domain.User, error) {

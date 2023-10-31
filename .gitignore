@@ -1,5 +1,5 @@
 test/mocks
 
-internal/infra/data/ent/*
-!internal/infra/data/ent/schema/
-!internal/infra/data/ent/generate.go
+internal/infra/data/ent/ent/*
+!internal/infra/data/ent/ent/schema/
+!internal/infra/data/ent/ent/generate.go

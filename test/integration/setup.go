@@ -1,8 +1,8 @@
 package integration
 
 import (
-	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/client"
-	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent"
+	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/client"
+	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/ent"
 	"github.com/pkg/errors"
 )
 

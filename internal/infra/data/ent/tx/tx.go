@@ -3,7 +3,7 @@ package tx
 import (
 	"context"
 
-	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent"
+	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/ent"
 	"github.com/pkg/errors"
 )
 

@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 
-	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/pocket"
+	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/ent/pocket"
 )
 
 func (r *pocketRepository) UpdateVisibility(ctx context.Context, pocketID uint64, visible bool) error {

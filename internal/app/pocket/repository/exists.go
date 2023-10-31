@@ -3,8 +3,8 @@ package repository
 import (
 	"context"
 
-	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/pocket"
-	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/user"
+	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/ent/pocket"
+	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/ent/user"
 )
 
 func (r *pocketRepository) RevealExists(ctx context.Context, userID uint64, pocketID uint64) (bool, error) {

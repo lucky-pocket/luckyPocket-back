@@ -5,8 +5,8 @@ import (
 
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/tx"
-	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent"
-	ent_tx "github.com/lucky-pocket/luckyPocket-back/internal/infra/data/tx"
+	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/ent"
+	ent_tx "github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/tx"
 )
 
 type pocketRepository struct {
