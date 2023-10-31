@@ -16,9 +16,9 @@ func ToYutOutput(marked bool, yutPieces [3]bool, coinsEarned int) *output.YutOut
 	}
 }
 
-func ToFreeTicketOutput(count int, reFillAt time.Time) *output.TicketOutput {
+func ToFreeTicketOutput(count int, refillAt time.Time) *output.TicketOutput {
 	return &output.TicketOutput{
-		RefillAt:    reFillAt,
+		RefillAt:    refillAt,
 		TicketCount: count,
 	}
 }
