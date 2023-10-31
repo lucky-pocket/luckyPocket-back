@@ -12,7 +12,7 @@ import (
 	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/user"
 )
 
-func (r *userRepository) FindStudentsWithFilter(ctx context.Context, sortType constant.SortType, name *string, grade, class *int) ([]output.RankElem, error) {
+func (r *userRepository) RankStudents(ctx context.Context, sortType constant.SortType, name *string, grade, class *int) ([]output.RankElem, error) {
 	builder := r.getClient(ctx).User.Query()
 
 	if name != nil {
@@ -31,7 +31,7 @@ func (r *userRepository) FindStudentsWithFilter(ctx context.Context, sortType co
 	return r.getRank(ctx, builder, sortType)
 }
 
-func (r *userRepository) FindNonStudentWithFilter(ctx context.Context, sortType constant.SortType, name *string) ([]output.RankElem, error) {
+func (r *userRepository) RankNonStudents(ctx context.Context, sortType constant.SortType, name *string) ([]output.RankElem, error) {
 	builder := r.getClient(ctx).User.Query()
 
 	if name != nil {
@@ -65,7 +65,8 @@ func (r *userRepository) getRank(ctx context.Context, builder *ent.UserQuery, so
 	err := builder.
 		Modify(func(s *sql.Selector) {
 			s.AppendSelectAs(user.FieldID, "userId")
-			s.AppendSelect(user.FieldName, user.FieldGender)
+			s.AppendSelectAs(user.FieldUserType, "userType")
+			s.AppendSelect(user.FieldName, user.FieldGender, user.FieldGrade, user.FieldClass)
 			s.OrderBy(sql.Desc("amount"))
 		}).
 		Scan(ctx, &elems)
