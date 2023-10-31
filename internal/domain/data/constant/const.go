@@ -19,3 +19,8 @@ const (
 	PrizeMo     = 4
 	PrizeBackDo = -2
 )
+
+const (
+	TicketLimit = 1
+	TicketCost  = 2
+)
