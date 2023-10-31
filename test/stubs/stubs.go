@@ -53,3 +53,27 @@ func NewBlackListRepository(t *testing.T) *BlackListRepository {
 		BlackListRepository: mocks.NewBlackListRepository(t),
 	}
 }
+
+type GameLogRepository struct {
+	*mocks.GameLogRepository
+	*stubTransactor
+}
+
+func NewGameLogRepository(t *testing.T) *GameLogRepository {
+	return &GameLogRepository{
+		stubTransactor:    &stubTransactor{},
+		GameLogRepository: mocks.NewGameLogRepository(t),
+	}
+}
+
+type TicketRepository struct {
+	*mocks.TicketRepository
+	*stubTransactor
+}
+
+func NewTicketRepository(t *testing.T) *TicketRepository {
+	return &TicketRepository{
+		stubTransactor:   &stubTransactor{},
+		TicketRepository: mocks.NewTicketRepository(t),
+	}
+}
