@@ -10,6 +10,7 @@ require (
 	github.com/mattn/go-sqlite3 v1.14.17
 	github.com/onee-only/gauth-go v0.0.0-20231018150424-afdda7d3f230
 	github.com/pkg/errors v0.9.1
+	github.com/redis/go-redis/v9 v9.2.1
 	github.com/spf13/viper v1.17.0
 	github.com/stretchr/testify v1.8.4
 )
@@ -18,7 +19,9 @@ require (
 	ariga.io/atlas v0.14.1-0.20230918065911-83ad451a4935 // indirect
 	github.com/agext/levenshtein v1.2.1 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
+	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
+	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/go-openapi/inflect v0.19.0 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
