@@ -51,7 +51,6 @@ func (g *gameUseCase) PlayYut(ctx context.Context, input *input.FreeInput) (*out
 			if err != nil {
 				return errors.Wrap(err, "unexpected error")
 			}
-
 		} else {
 			coins, err := g.UserRepository.CountCoinsByUserID(ctx, user.UserID)
 			if err != nil {
@@ -98,7 +97,6 @@ func (g *gameUseCase) PlayYut(ctx context.Context, input *input.FreeInput) (*out
 }
 
 func (g *gameUseCase) evaluateYutResult(marked bool, yutPieces [3]bool) (coinsEarned int) {
-
 	yutCount := 0
 	for _, value := range yutPieces {
 		if value {
@@ -143,5 +141,7 @@ func (g *gameUseCase) GetTicketInfo(ctx context.Context) (*output.TicketOutput, 
 		return nil, errors.Wrap(err, "unexpected error")
 	}
 
-	return mapper.ToFreeTicketOutput(constant.TicketLimit-count, refillAt), nil
+	ticket := constant.TicketLimit - count
+
+	return mapper.ToFreeTicketOutput(ticket, refillAt), nil
 }
