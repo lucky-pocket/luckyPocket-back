@@ -12,7 +12,7 @@ import (
 )
 
 func TestNewClient(t *testing.T) {
-	c, closeFunc, err := integration.CreateTestClient()
+	c, closeFunc, err := integration.CreateTestEntClient()
 
 	if assert.NoError(t, err) {
 		defer closeFunc()

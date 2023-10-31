@@ -26,7 +26,7 @@ func TestUserRepository(t *testing.T) {
 }
 
 func (s *UserRepositoryTestSuite) SetupSuite() {
-	c, closeFunc, err := integration.CreateTestClient()
+	c, closeFunc, err := integration.CreateTestEntClient()
 	if err != nil {
 		s.T().Fatal(err)
 	}
