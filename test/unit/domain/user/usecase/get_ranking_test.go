@@ -32,7 +32,7 @@ func (s *UserUseCaseTestSuite) TestGetRanking() {
 			desc:  "success (student)",
 			input: &input.RankQueryInput{UserType: constant.TypeStudent},
 			on: func() {
-				s.mockUserRepository.On("FindStudentsWithFilter",
+				s.mockUserRepository.On("RankStudents",
 					mock.Anything,
 					mock.Anything,
 					mock.Anything,
@@ -50,7 +50,7 @@ func (s *UserUseCaseTestSuite) TestGetRanking() {
 			desc:  "success (non-student)",
 			input: &input.RankQueryInput{UserType: constant.TypeTeacher},
 			on: func() {
-				s.mockUserRepository.On("FindNonStudentWithFilter",
+				s.mockUserRepository.On("RankNonStudents",
 					mock.Anything,
 					mock.Anything,
 					mock.Anything,
