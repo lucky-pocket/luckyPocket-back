@@ -11,6 +11,7 @@ const (
 const (
 	CostRevealSender = 2
 	CostSendPocket   = 2
+	CostPlayYut      = 2
 
 	PrizeDo     = 1
 	PrizeGae    = 1
@@ -22,5 +23,4 @@ const (
 
 const (
 	TicketLimit = 1
-	TicketCost  = 2
 )

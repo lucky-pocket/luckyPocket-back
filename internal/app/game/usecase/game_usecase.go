@@ -58,11 +58,11 @@ func (g *gameUseCase) PlayYut(ctx context.Context, input *input.FreeInput) (*out
 				return errors.Wrap(err, "unexpected error")
 			}
 
-			if coins < constant.TicketCost {
+			if coins < constant.CostPlayYut {
 				return status.NewError(http.StatusForbidden, "insufficient coins")
 			}
 
-			err = g.UserRepository.UpdateCoin(ctx, user.UserID, coins-constant.TicketCost)
+			err = g.UserRepository.UpdateCoin(ctx, user.UserID, coins-constant.CostPlayYut)
 			if err != nil {
 				return errors.Wrap(err, "unexpected error")
 			}
@@ -138,14 +138,10 @@ func (g *gameUseCase) GetTicketInfo(ctx context.Context) (*output.TicketOutput, 
 		return nil, errors.Wrap(err, "unexpected error")
 	}
 
-	if count >= 1 {
-		count = 0
-	}
-
 	refillAt, err := g.TicketRepository.GetRefillAt(ctx, user.UserID)
 	if err != nil {
 		return nil, errors.Wrap(err, "unexpected error")
 	}
 
-	return mapper.ToFreeTicketOutput(count, refillAt), nil
+	return mapper.ToFreeTicketOutput(constant.TicketLimit-count, refillAt), nil
 }
