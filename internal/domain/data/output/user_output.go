@@ -19,8 +19,11 @@ type CoinOutput struct {
 
 type RankElem struct {
 	UserInfo
-	Gender constant.Gender `json:"gender"`
-	Amount int             `json:"amount"`
+	Gender   constant.Gender   `json:"gender"`
+	Amount   int               `json:"amount"`
+	UserType constant.UserType `json:"userType"`
+	Grade    *int              `json:"grade"`
+	Class    *int              `json:"class"`
 }
 
 type RankOutput struct {

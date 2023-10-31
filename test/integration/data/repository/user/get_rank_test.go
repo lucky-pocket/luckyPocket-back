@@ -54,13 +54,13 @@ func (s *UserRepositoryTestSuite) TestGetRank() {
 	s.NoError(err)
 
 	name := "ae"
-	rank, err := s.r.FindNonStudentWithFilter(context.Background(), constant.SortTypeCoins, &name)
+	rank, err := s.r.RankNonStudents(context.Background(), constant.SortTypeCoins, &name)
 	if s.NoError(err) && s.Len(rank, 1) {
 		s.Equal("aef", rank[0].Name)
 	}
 
 	grade := 1
-	rank, err = s.r.FindStudentsWithFilter(context.Background(), constant.SortTypePocket, nil, &grade, nil)
+	rank, err = s.r.RankStudents(context.Background(), constant.SortTypePocket, nil, &grade, nil)
 	if s.NoError(err) && s.Len(rank, 2) {
 		s.Equal("hi?", rank[0].Name)
 	}
