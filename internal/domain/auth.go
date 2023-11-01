@@ -17,7 +17,7 @@ type GAuthUser struct {
 	Num        *int
 	Gender     constant.Gender
 	ProfileURL *string
-	Role       constant.Role
+	Role       constant.UserType
 }
 
 type AuthUseCase interface {
