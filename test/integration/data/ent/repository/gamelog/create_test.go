@@ -8,7 +8,6 @@ import (
 )
 
 func (s *GameLogRepositoryTestSuite) TestCreate() {
-
 	user, err := s.client.User.Create().
 		SetEmail("221312").
 		SetName("hi").
