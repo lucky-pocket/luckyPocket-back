@@ -55,6 +55,7 @@ func (s *PocketRepositoryTestSuite) TearDownTest() {
 	_, _ = s.client.Notice.Delete().Exec(ctx)
 	_, _ = s.client.Pocket.Delete().Exec(ctx)
 	_, _ = s.client.User.Delete().Exec(ctx)
+	_, _ = s.client.GameLog.Delete().Exec(ctx)
 }
 
 func createTwoPeople(c *ent.Client, t *testing.T) (_, _ uint64) {
