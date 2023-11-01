@@ -10,6 +10,7 @@ import (
 
 type GameLog struct {
 	User      *User
+	UserID    uint64
 	TimeStamp time.Time
 	GameType  string
 }

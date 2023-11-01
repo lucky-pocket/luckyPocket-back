@@ -24,7 +24,7 @@ func (uc *pocketUseCase) SetVisibility(ctx context.Context, input *input.Visibil
 			return status.NewError(http.StatusNotFound, "pocket not found")
 		}
 
-		if pocket.Receiver.UserID != userInfo.UserID {
+		if pocket.ReceiverID != userInfo.UserID {
 			return status.NewError(http.StatusForbidden, "you have no permission to set visibility of this pocket")
 		}
 

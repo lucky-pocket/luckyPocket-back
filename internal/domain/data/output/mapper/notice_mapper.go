@@ -14,7 +14,7 @@ func ToNoticeListOutPut(notices []*domain.Notice) *output.NoticeListOutput {
 		out.Notices = append(out.Notices, output.NoticeElem{
 			NoticeID:  notice.NoticeID,
 			Kind:      notice.Type,
-			PocketID:  notice.Pocket.PocketID,
+			PocketID:  notice.PocketID,
 			Checked:   notice.Checked,
 			CreatedAt: notice.CreatedAt,
 		})

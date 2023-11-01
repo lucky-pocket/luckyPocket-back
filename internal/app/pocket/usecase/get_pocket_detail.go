@@ -25,12 +25,12 @@ func (uc *pocketUseCase) GetPocketDetail(ctx context.Context, input *input.Pocke
 		return nil, status.NewError(http.StatusNotFound, "pocket not found")
 	}
 
-	isReceiver := userInfo != nil && pocket.Receiver.UserID == userInfo.UserID
+	isReceiver := userInfo != nil && pocket.ReceiverID == userInfo.UserID
 	if !(pocket.IsPublic || isReceiver) {
 		return nil, status.NewError(http.StatusForbidden, "you cannot open this pocket")
 	}
 
-	exists, err := uc.PocketRepository.RevealExists(ctx, pocket.Receiver.UserID, pocket.PocketID)
+	exists, err := uc.PocketRepository.RevealExists(ctx, pocket.ReceiverID, pocket.PocketID)
 	if err != nil {
 		return nil, errors.Wrap(err, "unexpected db error")
 	}

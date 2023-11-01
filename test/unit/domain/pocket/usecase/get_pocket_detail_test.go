@@ -20,9 +20,11 @@ func (s *PocketUseCaseTestSuite) TestGetPocketDetail() {
 	}
 
 	pocket := domain.Pocket{
-		PocketID: 123,
-		Receiver: &receiver,
-		Sender:   &receiver,
+		PocketID:   123,
+		Receiver:   &receiver,
+		Sender:     &receiver,
+		ReceiverID: 1,
+		SenderID:   1,
 	}
 
 	testcases := []struct {

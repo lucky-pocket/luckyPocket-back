@@ -8,12 +8,14 @@ import (
 )
 
 type Pocket struct {
-	PocketID uint64
-	Receiver *User
-	Sender   *User
-	Content  string
-	Coins    int
-	IsPublic bool
+	PocketID   uint64
+	Receiver   *User
+	ReceiverID uint64
+	Sender     *User
+	SenderID   uint64
+	Content    string
+	Coins      int
+	IsPublic   bool
 }
 
 func (p Pocket) IsEmpty() bool {
