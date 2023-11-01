@@ -29,13 +29,13 @@ func (s *UserUseCaseTestSuite) TestSearch() {
 	}{
 		{
 			desc:  "success",
-			input: &input.SearchInput{SearchQuery: "김"},
+			input: &input.SearchInput{Query: "김"},
 			on: func() {
 				s.mockUserRepository.On("FindByNameContains", mock.Anything, mock.Anything).Return(outputs, nil).Once()
 			},
 			assert: func(output *output.SearchOutput, err error) {
 				if s.Nil(err) {
-					s.NotNil(output)
+					s.Assertions.Len(output.Users, 2)
 				}
 			},
 		},

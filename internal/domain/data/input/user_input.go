@@ -11,5 +11,5 @@ type RankQueryInput struct {
 }
 
 type SearchInput struct {
-	SearchQuery string
+	Query string
 }

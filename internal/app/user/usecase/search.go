@@ -10,7 +10,7 @@ import (
 )
 
 func (uc *userUseCase) Search(ctx context.Context, input *input.SearchInput) (*output.SearchOutput, error) {
-	users, err := uc.UserRepository.FindByNameContains(ctx, input.SearchQuery)
+	users, err := uc.UserRepository.FindByNameContains(ctx, input.Query)
 	if err != nil {
 		return nil, errors.Wrap(err, "unexpected error occurred")
 	}
