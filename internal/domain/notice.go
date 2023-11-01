@@ -11,12 +11,12 @@ import (
 type Notice struct {
 	NoticeID  uint64
 	User      *User
+	UserID    uint64
 	Pocket    *Pocket
+	PocketID  uint64
 	Type      constant.NoticeType
 	Checked   bool
 	CreatedAt time.Time
-	UserID    uint64
-	PocketID  uint64
 }
 
 type NoticeUseCase interface {
