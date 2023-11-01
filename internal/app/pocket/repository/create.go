@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
-	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/pocket"
+	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/ent/pocket"
 )
 
 func (r *pocketRepository) Create(ctx context.Context, pocket *domain.Pocket) error {

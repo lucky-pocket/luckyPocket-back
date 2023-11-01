@@ -9,8 +9,8 @@ import (
 	"github.com/lucky-pocket/luckyPocket-back/internal/app/pocket/repository"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
-	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/client"
-	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent"
+	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/client"
+	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/ent"
 	"github.com/lucky-pocket/luckyPocket-back/test/integration"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
@@ -28,7 +28,7 @@ func TestPocketRepository(t *testing.T) {
 }
 
 func (s *PocketRepositoryTestSuite) SetupSuite() {
-	c, closeFunc, err := integration.CreateTestClient()
+	c, closeFunc, err := integration.CreateTestEntClient()
 	if err != nil {
 		s.T().Fatal(err)
 	}

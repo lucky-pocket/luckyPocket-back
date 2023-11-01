@@ -6,13 +6,13 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 
-	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/client"
+	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/client"
 	"github.com/lucky-pocket/luckyPocket-back/test/integration"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestNewClient(t *testing.T) {
-	c, closeFunc, err := integration.CreateTestClient()
+	c, closeFunc, err := integration.CreateTestEntClient()
 
 	if assert.NoError(t, err) {
 		defer closeFunc()

@@ -3,7 +3,7 @@ package pocket_test
 import (
 	"context"
 
-	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/pocket"
+	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/ent/pocket"
 )
 
 func (s *PocketRepositoryTestSuite) TestRevealExists() {

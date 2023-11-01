@@ -2,7 +2,7 @@ package mapper
 
 import (
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
-	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent"
+	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/ent"
 )
 
 func ToUserDomain(entity *ent.User) *domain.User {

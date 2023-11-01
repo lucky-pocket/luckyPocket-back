@@ -6,7 +6,7 @@ import (
 
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
-	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/mapper"
+	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/mapper"
 	"github.com/onee-only/gauth-go"
 )
 
