@@ -31,6 +31,7 @@ type UserUseCase interface {
 	GetUserDetail(ctx context.Context, input *input.UserIDInput) (*output.UserInfo, error)
 	CountCoins(ctx context.Context) (*output.CoinOutput, error)
 	GetRanking(ctx context.Context, input *input.RankQueryInput) (*output.RankOutput, error)
+	Search(ctx context.Context, input *input.SearchInput) (*output.SearchOutput, error)
 }
 
 type UserRepository interface {

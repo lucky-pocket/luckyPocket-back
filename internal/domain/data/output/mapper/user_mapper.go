@@ -44,3 +44,23 @@ func ToCoinOutput(coins int) *output.CoinOutput {
 		Coins: coins,
 	}
 }
+
+func ToSearchOutput(users []*domain.User) *output.SearchOutput {
+	out := &output.SearchOutput{
+		Users: make([]output.SearchElem, 0, len(users)),
+	}
+
+	for _, user := range users {
+		out.Users = append(out.Users, output.SearchElem{
+			UserInfo: output.UserInfo{
+				UserID: user.UserID,
+				Name:   user.Name,
+			},
+			UserType: user.UserType,
+			Grade:    user.Grade,
+			Class:    user.Class,
+		})
+	}
+
+	return out
+}

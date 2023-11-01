@@ -9,3 +9,7 @@ type RankQueryInput struct {
 	Class    *int
 	Name     *string
 }
+
+type SearchInput struct {
+	Query string
+}
