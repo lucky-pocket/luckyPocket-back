@@ -7,10 +7,9 @@ import (
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/mapper"
-	"github.com/onee-only/gauth-go"
 )
 
-func (r *userRepository) Create(ctx context.Context, userInfo gauth.UserInfo) (*domain.User, error) {
+func (r *userRepository) Create(ctx context.Context, userInfo domain.GAuthUser) (*domain.User, error) {
 	usrType, _ := strings.CutPrefix(string(userInfo.Role), "ROLE_")
 
 	userType := constant.UserType(usrType)
