@@ -35,7 +35,7 @@ func (s *UserUseCaseTestSuite) TestSearch() {
 			},
 			assert: func(output *output.SearchOutput, err error) {
 				if s.Nil(err) {
-					s.Assertions.Len(output.Users, 2)
+					s.Len(output.Users, 2)
 				}
 			},
 		},
