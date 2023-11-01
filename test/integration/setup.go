@@ -18,10 +18,10 @@ func CreateTestEntClient() (c *ent.Client, closeFunc func(), err error) {
 	return
 }
 
-func CreateTestRedisClient() (c *redis.Client, err error) {
-	c, err = redis_client.NewClient("localhost:6379", "", 0)
+func CreateTestRedisClient() (c *redis.Client, closeFunc func(), err error) {
+	c, closeFunc, err = redis_client.NewClient("localhost:6379", "", 0)
 	if err != nil {
-		return nil, errors.Wrap(err, "error createing test client")
+		return nil, nil, errors.Wrap(err, "error createing test client")
 	}
 	return
 }
