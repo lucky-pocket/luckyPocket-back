@@ -53,6 +53,7 @@ func (s *UserRepositoryTestSuite) TearDownTest() {
 	_, _ = s.client.Notice.Delete().Exec(ctx)
 	_, _ = s.client.Pocket.Delete().Exec(ctx)
 	_, _ = s.client.User.Delete().Exec(ctx)
+	_, _ = s.client.GameLog.Delete().Exec(ctx)
 }
 
 func ptr[T any](i T) *T {

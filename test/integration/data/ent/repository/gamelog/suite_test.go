@@ -1,4 +1,4 @@
-package pocket_test
+package gamelog_test
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 
-	"github.com/lucky-pocket/luckyPocket-back/internal/app/pocket/repository"
+	repository "github.com/lucky-pocket/luckyPocket-back/internal/app/game/repository/gamelog"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/client"
@@ -16,18 +16,18 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
-type PocketRepositoryTestSuite struct {
+type GameLogRepositoryTestSuite struct {
 	suite.Suite
 	client   *ent.Client
-	r        domain.PocketRepository
+	r        domain.GameLogRepository
 	deferred []func()
 }
 
-func TestPocketRepository(t *testing.T) {
-	suite.Run(t, new(PocketRepositoryTestSuite))
+func TestGameLogRepository(t *testing.T) {
+	suite.Run(t, new(GameLogRepositoryTestSuite))
 }
 
-func (s *PocketRepositoryTestSuite) SetupSuite() {
+func (s *GameLogRepositoryTestSuite) SetupSuite() {
 	c, closeFunc, err := integration.CreateTestEntClient()
 	if err != nil {
 		s.T().Fatal(err)
@@ -40,16 +40,16 @@ func (s *PocketRepositoryTestSuite) SetupSuite() {
 		s.T().Fatal(err)
 	}
 
-	s.r = repository.NewPocketRepository(s.client)
+	s.r = repository.NewGameLogRepository(s.client)
 }
 
-func (s *PocketRepositoryTestSuite) TearDownSuite() {
+func (s *GameLogRepositoryTestSuite) TearDownSuite() {
 	for _, f := range s.deferred {
 		f()
 	}
 }
 
-func (s *PocketRepositoryTestSuite) TearDownTest() {
+func (s *GameLogRepositoryTestSuite) TearDownTest() {
 	ctx := context.Background()
 
 	_, _ = s.client.Notice.Delete().Exec(ctx)
@@ -58,8 +58,8 @@ func (s *PocketRepositoryTestSuite) TearDownTest() {
 	_, _ = s.client.GameLog.Delete().Exec(ctx)
 }
 
-func createTwoPeople(c *ent.Client, t *testing.T) (_, _ uint64) {
-	user1, err := c.User.Create().
+func createPerson(c *ent.Client, t *testing.T) uint64 {
+	user, err := c.User.Create().
 		SetEmail("1").
 		SetName("hi").
 		SetCoins(0).
@@ -69,21 +69,8 @@ func createTwoPeople(c *ent.Client, t *testing.T) (_, _ uint64) {
 		Save(context.Background())
 
 	if !assert.Nil(t, err) {
-		return 0, 0
+		return 0
 	}
 
-	user2, err := c.User.Create().
-		SetEmail("2").
-		SetName("hei").
-		SetCoins(0).
-		SetGender(constant.GenderFemale).
-		SetRole(constant.RoleMember).
-		SetUserType(constant.TypeTeacher).
-		Save(context.Background())
-
-	if !assert.Nil(t, err) {
-		return 0, 0
-	}
-
-	return user1.ID, user2.ID
+	return user.ID
 }
