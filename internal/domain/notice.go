@@ -15,6 +15,8 @@ type Notice struct {
 	Type      constant.NoticeType
 	Checked   bool
 	CreatedAt time.Time
+	UserID    uint64
+	PocketID  uint64
 }
 
 type NoticeUseCase interface {

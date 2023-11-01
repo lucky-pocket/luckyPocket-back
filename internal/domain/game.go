@@ -12,6 +12,7 @@ type GameLog struct {
 	User      *User
 	TimeStamp time.Time
 	GameType  string
+	UserID    uint64
 }
 
 type GameUseCase interface {
