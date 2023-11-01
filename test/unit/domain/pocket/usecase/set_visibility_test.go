@@ -23,6 +23,7 @@ func (s *PocketUseCaseTestSuite) TestSetVisibility() {
 		Receiver: &domain.User{
 			UserID: userInfo.UserID,
 		},
+		ReceiverID: 1,
 	}
 
 	otherPocket := domain.Pocket{
@@ -30,6 +31,7 @@ func (s *PocketUseCaseTestSuite) TestSetVisibility() {
 		Receiver: &domain.User{
 			UserID: userInfo.UserID + 1,
 		},
+		ReceiverID: 2,
 	}
 
 	testcases := []struct {

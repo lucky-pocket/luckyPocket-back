@@ -23,6 +23,8 @@ func (s *PocketUseCaseTestSuite) TestRevealSender() {
 		Receiver: &domain.User{
 			UserID: userInfo.UserID,
 		},
+		ReceiverID: 2,
+		SenderID:   1,
 	}
 
 	otherPocket := domain.Pocket{
@@ -30,6 +32,8 @@ func (s *PocketUseCaseTestSuite) TestRevealSender() {
 		Receiver: &domain.User{
 			UserID: userInfo.UserID + 1,
 		},
+		ReceiverID: 2,
+		SenderID:   1,
 	}
 
 	testcases := []struct {
