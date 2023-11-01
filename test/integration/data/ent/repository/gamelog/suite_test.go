@@ -8,11 +8,9 @@ import (
 
 	repository "github.com/lucky-pocket/luckyPocket-back/internal/app/game/repository/gamelog"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
-	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/client"
 	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/ent"
 	"github.com/lucky-pocket/luckyPocket-back/test/integration"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -56,21 +54,4 @@ func (s *GameLogRepositoryTestSuite) TearDownTest() {
 	_, _ = s.client.Pocket.Delete().Exec(ctx)
 	_, _ = s.client.User.Delete().Exec(ctx)
 	_, _ = s.client.GameLog.Delete().Exec(ctx)
-}
-
-func createPerson(c *ent.Client, t *testing.T) uint64 {
-	user, err := c.User.Create().
-		SetEmail("1").
-		SetName("hi").
-		SetCoins(0).
-		SetGender(constant.GenderFemale).
-		SetRole(constant.RoleMember).
-		SetUserType(constant.TypeTeacher).
-		Save(context.Background())
-
-	if !assert.Nil(t, err) {
-		return 0
-	}
-
-	return user.ID
 }

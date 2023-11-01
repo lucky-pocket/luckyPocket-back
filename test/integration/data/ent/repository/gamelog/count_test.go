@@ -3,15 +3,28 @@ package gamelog_test
 import (
 	"context"
 	"time"
+
+	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 )
 
 func (s *GameLogRepositoryTestSuite) TestCountByUserID() {
-	userID := createPerson(s.client, s.T())
+	user, err := s.client.User.Create().
+		SetEmail("12321").
+		SetName("hi").
+		SetCoins(0).
+		SetGender(constant.GenderFemale).
+		SetRole(constant.RoleMember).
+		SetUserType(constant.TypeTeacher).
+		Save(context.Background())
 
-	err := s.client.GameLog.Create().
+	if !s.Nil(err) {
+		return
+	}
+
+	err = s.client.GameLog.Create().
 		SetGameType("yut").
 		SetTimestamp(time.Now()).
-		SetUserID(userID).Exec(context.Background())
+		SetUserID(user.ID).Exec(context.Background())
 
 	if !s.NoError(err) {
 		return
@@ -20,13 +33,13 @@ func (s *GameLogRepositoryTestSuite) TestCountByUserID() {
 	err = s.client.GameLog.Create().
 		SetGameType("yut").
 		SetTimestamp(time.Now().Truncate(24 * time.Hour).Add(24*time.Hour + 1)).
-		SetUserID(userID).Exec(context.Background())
+		SetUserID(user.ID).Exec(context.Background())
 
 	if !s.NoError(err) {
 		return
 	}
 
-	count, err := s.r.CountByUserID(context.Background(), userID)
+	count, err := s.r.CountByUserID(context.Background(), user.ID)
 	if s.NoError(err) {
 		s.Equal(1, count)
 	}
