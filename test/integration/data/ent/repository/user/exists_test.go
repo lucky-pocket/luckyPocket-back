@@ -3,15 +3,16 @@ package user_test
 import (
 	"context"
 
-	"github.com/onee-only/gauth-go"
+	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
+	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 )
 
 func (s *UserRepositoryTestSuite) TestExists() {
-	info := gauth.UserInfo{
+	info := domain.GAuthUser{
 		Email:  "l",
 		Name:   ptr("aef"),
-		Gender: gauth.GenderFemale,
-		Role:   gauth.RoleTeacher,
+		Gender: constant.GenderFemale,
+		Role:   constant.RoleMember,
 	}
 
 	user, err := s.r.Create(context.Background(), info)
@@ -33,11 +34,11 @@ func (s *UserRepositoryTestSuite) TestExists() {
 }
 
 func (s *UserRepositoryTestSuite) TestExistsByEmail() {
-	info := gauth.UserInfo{
+	info := domain.GAuthUser{
 		Email:  "l",
 		Name:   ptr("aef"),
-		Gender: gauth.GenderFemale,
-		Role:   gauth.RoleTeacher,
+		Gender: constant.GenderFemale,
+		Role:   constant.RoleMember,
 	}
 
 	_, err := s.r.Create(context.Background(), info)

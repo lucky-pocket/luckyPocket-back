@@ -3,15 +3,13 @@ package user_test
 import (
 	"context"
 
-	"github.com/onee-only/gauth-go"
+	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
 )
 
 func (s *UserRepositoryTestSuite) TestCountCoinsByUserID() {
-	info := gauth.UserInfo{
-		Email:  "l",
-		Name:   ptr("aef"),
-		Gender: gauth.GenderFemale,
-		Role:   gauth.RoleTeacher,
+	info := domain.GAuthUser{
+		Email: "l",
+		Name:  ptr("aef"),
 	}
 
 	user, err := s.r.Create(context.Background(), info)
