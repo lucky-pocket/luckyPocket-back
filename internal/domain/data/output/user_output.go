@@ -29,3 +29,14 @@ type RankElem struct {
 type RankOutput struct {
 	Users []RankElem `json:"users"`
 }
+
+type SearchElem struct {
+	UserInfo
+	UserType constant.UserType `json:"userType"`
+	Grade    *int              `json:"grade"`
+	Class    *int              `json:"class"`
+}
+
+type SearchOutput struct {
+	Users []SearchElem `json:"users"`
+}
