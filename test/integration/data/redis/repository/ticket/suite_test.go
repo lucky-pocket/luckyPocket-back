@@ -1,4 +1,4 @@
-package blacklist_test
+package ticket_test
 
 import (
 	"context"
@@ -7,24 +7,24 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/redis/go-redis/v9"
 
-	repository "github.com/lucky-pocket/luckyPocket-back/internal/app/auth/repository/blacklist"
+	repository "github.com/lucky-pocket/luckyPocket-back/internal/app/game/repository/ticket"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
 	"github.com/lucky-pocket/luckyPocket-back/test/integration"
 	"github.com/stretchr/testify/suite"
 )
 
-type BlacklistRepositoryTestSuite struct {
+type TicketRepositoryTestSuite struct {
 	suite.Suite
 	client   *redis.Client
-	r        domain.BlackListRepository
+	r        domain.TicketRepository
 	deferred []func()
 }
 
-func TestBlackListRepository(t *testing.T) {
-	suite.Run(t, new(BlacklistRepositoryTestSuite))
+func TestTicketRepository(t *testing.T) {
+	suite.Run(t, new(TicketRepositoryTestSuite))
 }
 
-func (s *BlacklistRepositoryTestSuite) SetupSuite() {
+func (s *TicketRepositoryTestSuite) SetupSuite() {
 	c, closeFunc, err := integration.CreateTestRedisClient()
 	if err != nil {
 		s.T().Fatal(err)
@@ -33,16 +33,16 @@ func (s *BlacklistRepositoryTestSuite) SetupSuite() {
 
 	s.client = c
 
-	s.r = repository.NewBlackListRepository(s.client)
+	s.r = repository.NewTicketRepository(s.client)
 }
 
-func (s *BlacklistRepositoryTestSuite) TearDownSuite() {
+func (s *TicketRepositoryTestSuite) TearDownSuite() {
 	for _, f := range s.deferred {
 		f()
 	}
 }
 
-func (s *BlacklistRepositoryTestSuite) TearDownTest() {
+func (s *TicketRepositoryTestSuite) TearDownTest() {
 	ctx := context.Background()
 
 	s.client.FlushAll(ctx)
