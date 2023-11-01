@@ -34,8 +34,8 @@ func (Pocket) Fields() []ent.Field {
 // Edges of the Pocket.
 func (Pocket) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("receiver", User.Type).Ref("received").Unique(),
-		edge.From("sender", User.Type).Ref("sent").Unique(),
+		edge.From("receiver", User.Type).Ref("received").Unique().Required(),
+		edge.From("sender", User.Type).Ref("sent").Unique().Required(),
 		edge.From("revealers", User.Type).Ref("revealed"),
 	}
 }

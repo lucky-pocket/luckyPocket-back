@@ -31,7 +31,7 @@ func (Notice) Fields() []ent.Field {
 // Edges of the Notice.
 func (Notice) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("user", User.Type).Ref("notices").Unique(),
-		edge.To("pocket", Pocket.Type).Unique(),
+		edge.From("user", User.Type).Ref("notices").Unique().Required(),
+		edge.To("pocket", Pocket.Type).Unique().Required(),
 	}
 }

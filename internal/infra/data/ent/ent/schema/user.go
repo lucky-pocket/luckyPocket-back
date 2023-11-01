@@ -42,5 +42,6 @@ func (User) Edges() []ent.Edge {
 		edge.To("received", Pocket.Type),
 		edge.To("sent", Pocket.Type),
 		edge.To("revealed", Pocket.Type),
+		edge.To("logs", GameLog.Type),
 	}
 }
