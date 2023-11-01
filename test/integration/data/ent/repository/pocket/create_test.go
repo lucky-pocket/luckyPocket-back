@@ -35,5 +35,5 @@ func (s *PocketRepositoryTestSuite) TestCreateReveal() {
 	}
 
 	err = s.r.CreateReveal(context.Background(), user1ID, pocket.ID)
-	s.NoError(err)  
+	s.NoError(err)
 }
