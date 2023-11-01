@@ -7,15 +7,13 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-type redisTx struct {
-	c  *redis.Client
-	tx redis.Pipeliner
-}
+// cannot implement tx we want with redis. just creating stub for it.
+type redisTx struct{}
 
 type redisTxKey struct{}
 
 func New(client *redis.Client) *redisTx {
-	return &redisTx{c: client}
+	return &redisTx{}
 }
 
 func FromContext(ctx context.Context) (tx redis.Pipeliner, err error) {
@@ -31,7 +29,7 @@ func (redisTx) Transactor() any {
 }
 
 func (rtx *redisTx) Begin() (any, error) {
-	return rtx.c.Pipeline(), nil
+	return nil, nil
 }
 
 func (rtx *redisTx) Commit() error {
@@ -39,6 +37,5 @@ func (rtx *redisTx) Commit() error {
 }
 
 func (rtx *redisTx) Rollback() error {
-	rtx.tx.Discard()
 	return nil
 }
