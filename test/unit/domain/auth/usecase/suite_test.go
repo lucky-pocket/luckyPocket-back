@@ -2,9 +2,13 @@ package usecase
 
 import (
 	"testing"
+	"time"
 
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/lucky-pocket/luckyPocket-back/internal/app/auth/usecase"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
+	"github.com/lucky-pocket/luckyPocket-back/internal/global/auth"
+	myjwt "github.com/lucky-pocket/luckyPocket-back/internal/global/auth/jwt"
 	"github.com/lucky-pocket/luckyPocket-back/test/mocks"
 	"github.com/lucky-pocket/luckyPocket-back/test/stubs"
 	"github.com/stretchr/testify/suite"
@@ -38,4 +42,13 @@ func (l *AuthUseCaseTestSuite) SetupSuite() {
 		JwtParser:           l.mockJwtParser,
 		GAuthClient:         l.mockGAuthClient,
 	})
+}
+
+func generateTestToken() *myjwt.Token {
+	return &myjwt.Token{
+		Info: auth.Info{},
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour)),
+		},
+	}
 }

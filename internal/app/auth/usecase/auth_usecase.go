@@ -69,7 +69,7 @@ func (a *authUseCase) Login(ctx context.Context, input *input.CodeInput) (*outpu
 }
 
 func (a *authUseCase) Logout(ctx context.Context, input *input.RefreshInput) error {
-	_, err := a.JwtParser.Parse(input.RefreshToken)
+	token, err := a.JwtParser.Parse(input.RefreshToken)
 	if err != nil {
 		return status.NewError(http.StatusUnauthorized, "token is invalid")
 	}
@@ -83,7 +83,7 @@ func (a *authUseCase) Logout(ctx context.Context, input *input.RefreshInput) err
 		return status.NewError(http.StatusUnauthorized, "token is blacklisted")
 	}
 
-	err = a.BlackListRepository.Save(ctx, input.RefreshToken)
+	err = a.BlackListRepository.Save(ctx, input.RefreshToken, token.ExpiresAt.Time)
 	if err != nil {
 		return errors.Wrap(err, "unexpected error")
 	}
@@ -106,7 +106,7 @@ func (a *authUseCase) RefreshToken(ctx context.Context, input *input.RefreshInpu
 		return nil, status.NewError(http.StatusUnauthorized, "token is blacklisted")
 	}
 
-	err = a.BlackListRepository.Save(ctx, input.RefreshToken)
+	err = a.BlackListRepository.Save(ctx, input.RefreshToken, token.ExpiresAt.Time)
 	if err != nil {
 		return nil, errors.Wrap(err, "unexpected error")
 	}

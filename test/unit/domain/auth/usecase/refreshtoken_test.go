@@ -9,7 +9,6 @@ import (
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/input"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/output"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/auth"
-	"github.com/lucky-pocket/luckyPocket-back/internal/global/auth/jwt"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/error/status"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/mock"
@@ -31,9 +30,9 @@ func (l *AuthUseCaseTestSuite) TestRefresh() {
 			desc:  "success",
 			input: &input.RefreshInput{RefreshToken: "secret"},
 			on: func() {
-				l.mockJwtParser.On("Parse", mock.Anything).Return(&jwt.Token{}, nil).Once()
+				l.mockJwtParser.On("Parse", mock.Anything).Return(generateTestToken(), nil).Once()
 				l.mockBlackListRepository.On("Exists", mock.Anything, mock.Anything).Return(false, nil).Once()
-				l.mockBlackListRepository.On("Save", mock.Anything, mock.Anything).Return(nil).Once()
+				l.mockBlackListRepository.On("Save", mock.Anything, mock.Anything, mock.Anything).Return(nil).Once()
 				l.mockJwtIssuer.On("IssueAccess", mock.Anything).Return("AccessToken", time.Time{}).Once()
 				l.mockJwtIssuer.On("IssueRefresh", mock.Anything).Return("RefreshToken", time.Time{}).Once()
 			},
@@ -63,7 +62,7 @@ func (l *AuthUseCaseTestSuite) TestRefresh() {
 			desc:  "token expired",
 			input: &input.RefreshInput{RefreshToken: "secret"},
 			on: func() {
-				l.mockJwtParser.On("Parse", mock.Anything).Return(&jwt.Token{}, nil).Once()
+				l.mockJwtParser.On("Parse", mock.Anything).Return(generateTestToken(), nil).Once()
 				l.mockBlackListRepository.On("Exists", mock.Anything, mock.Anything).Return(true, nil).Once()
 			},
 			assert: func(output *output.TokenOutput, err error) {

@@ -2,6 +2,7 @@ package domain
 
 import (
 	"context"
+	"time"
 
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/input"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/output"
@@ -21,5 +22,5 @@ type GAuthClient interface {
 
 type BlackListRepository interface {
 	Exists(ctx context.Context, refreshToken string) (bool, error)
-	Save(ctx context.Context, refreshToken string) error
+	Save(ctx context.Context, refreshToken string, expiresAt time.Time) error
 }

@@ -8,7 +8,8 @@ import (
 )
 
 func TestNewClient(t *testing.T) {
-	_, err := integration.CreateTestRedisClient()
+	_, closeFunc, err := integration.CreateTestRedisClient()
+	defer closeFunc()
 
 	assert.NoError(t, err)
 }

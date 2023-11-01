@@ -7,8 +7,8 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-func NewClient(addr, password string, db int) (*redis.Client, error) {
-	c := redis.NewClient(&redis.Options{
+func NewClient(addr, password string, db int) (c *redis.Client, closeFunc func(), err error) {
+	c = redis.NewClient(&redis.Options{
 		Addr:     addr,
 		Password: password,
 		DB:       db,
@@ -16,8 +16,12 @@ func NewClient(addr, password string, db int) (*redis.Client, error) {
 
 	cmd := c.Ping(context.Background())
 	if err := cmd.Err(); err != nil {
-		return nil, errors.Wrap(err, "client ping failed")
+		return nil, nil, errors.Wrap(err, "client ping failed")
 	}
 
-	return c, nil
+	closeFunc = func() {
+		c.Close()
+	}
+
+	return c, closeFunc, nil
 }
