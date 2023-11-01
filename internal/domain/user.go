@@ -6,7 +6,6 @@ import (
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/input"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/output"
-	"github.com/onee-only/gauth-go"
 )
 
 type User struct {
@@ -35,7 +34,7 @@ type UserUseCase interface {
 }
 
 type UserRepository interface {
-	Create(ctx context.Context, userInfo gauth.UserInfo) (*User, error)
+	Create(ctx context.Context, userInfo GAuthUser) (*User, error)
 	FindByID(ctx context.Context, userID uint64) (*User, error)
 	FindByEmail(ctx context.Context, email string) (*User, error)
 	FindByNameContains(ctx context.Context, name string) ([]*User, error)
