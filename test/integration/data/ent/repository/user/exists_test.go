@@ -12,7 +12,7 @@ func (s *UserRepositoryTestSuite) TestExists() {
 		Email:  "l",
 		Name:   ptr("aef"),
 		Gender: constant.GenderFemale,
-		Role:   constant.RoleMember,
+		Role:   constant.TypeStudent,
 	}
 
 	user, err := s.r.Create(context.Background(), info)
@@ -38,7 +38,7 @@ func (s *UserRepositoryTestSuite) TestExistsByEmail() {
 		Email:  "l",
 		Name:   ptr("aef"),
 		Gender: constant.GenderFemale,
-		Role:   constant.RoleMember,
+		Role:   constant.TypeStudent,
 	}
 
 	_, err := s.r.Create(context.Background(), info)

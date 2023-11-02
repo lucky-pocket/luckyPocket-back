@@ -12,7 +12,7 @@ func (s *UserRepositoryTestSuite) TestFindByNameContains() {
 		Email:  "l",
 		Name:   ptr("aef"),
 		Gender: constant.GenderFemale,
-		Role:   constant.RoleMember,
+		Role:   constant.TypeStudent,
 	}
 
 	_, err := s.r.Create(context.Background(), info)

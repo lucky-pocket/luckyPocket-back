@@ -14,7 +14,7 @@ func (s *UserRepositoryTestSuite) TestCreate() {
 		Email:    "l",
 		Name:     ptr("aef"),
 		Gender:   constant.GenderFemale,
-		Role:     constant.RoleMember,
+		Role:     constant.TypeStudent,
 		Grade:    &grade,
 		ClassNum: &class,
 		Num:      &num,
