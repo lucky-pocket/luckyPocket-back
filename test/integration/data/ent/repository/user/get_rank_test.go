@@ -13,7 +13,7 @@ func (s *UserRepositoryTestSuite) TestGetRank() {
 			Email:  "1",
 			Name:   ptr("aef"),
 			Gender: constant.GenderFemale,
-			Role:   constant.TypeStudent,
+			Role:   constant.TypeTeacher,
 		},
 		{
 			Email:    "2",
@@ -62,6 +62,6 @@ func (s *UserRepositoryTestSuite) TestGetRank() {
 	grade := 1
 	rank, err = s.r.RankStudents(context.Background(), constant.SortTypePocket, nil, &grade, nil)
 	if s.NoError(err) && s.Len(rank, 2) {
-		s.Equal("hi?", rank[0].Name)
+		s.Equal("aefas", rank[0].Name)
 	}
 }
