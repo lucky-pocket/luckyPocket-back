@@ -22,9 +22,9 @@ func (Notice) Fields() []ent.Field {
 		field.Uint64("id").
 			Positive().
 			Immutable().
-			Annotations(entsql.Annotation{
-				Incremental: &t,
-			}),
+			Annotations(entsql.Annotation{Incremental: &t}),
+		field.Uint64("userID"),
+		field.Uint64("pocketID"),
 		field.Enum("type").GoType(constant.NoticeType("")),
 		field.Bool("checked"),
 		field.Time("createdAt").Default(time.Now),
@@ -34,7 +34,12 @@ func (Notice) Fields() []ent.Field {
 // Edges of the Notice.
 func (Notice) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("user", User.Type).Ref("notices").Unique().Required(),
-		edge.To("pocket", Pocket.Type).Unique().Required(),
+		edge.From("user", User.Type).
+			Ref("notices").
+			Field("userID").
+			Unique().Required(),
+		edge.To("pocket", Pocket.Type).
+			Field("pocketID").
+			Unique().Required(),
 	}
 }

@@ -7,11 +7,11 @@ import (
 
 func ToPocketDomain(entity *ent.Pocket) *domain.Pocket {
 	return &domain.Pocket{
-		PocketID: entity.ID,
-		Receiver: &domain.User{UserID: entity.Edges.Receiver.ID},
-		Sender:   &domain.User{UserID: entity.Edges.Sender.ID},
-		Content:  entity.Content,
-		Coins:    entity.Coins,
-		IsPublic: entity.IsPublic,
+		PocketID:   entity.ID,
+		ReceiverID: entity.ReceiverID,
+		SenderID:   entity.SenderID,
+		Content:    entity.Content,
+		Coins:      entity.Coins,
+		IsPublic:   entity.IsPublic,
 	}
 }
