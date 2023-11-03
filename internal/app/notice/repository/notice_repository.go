@@ -51,8 +51,6 @@ func (r *noticeRepository) CreateBulk(ctx context.Context, notices []*domain.Not
 func (r *noticeRepository) FindAllByUserID(ctx context.Context, userID uint64) ([]*domain.Notice, error) {
 	entities, err := r.getClient(ctx).Notice.Query().
 		Where(notice.HasUserWith(user.ID(userID))).
-		WithPocket().
-		WithUser().
 		All(ctx)
 
 	if err != nil {
@@ -68,11 +66,7 @@ func (r *noticeRepository) FindAllByUserID(ctx context.Context, userID uint64) (
 }
 
 func (r *noticeRepository) FindByID(ctx context.Context, noticeID uint64) (*domain.Notice, error) {
-	notice, err := r.getClient(ctx).Notice.Query().
-		Where(notice.ID(noticeID)).
-		WithPocket().
-		WithUser().
-		First(ctx)
+	notice, err := r.getClient(ctx).Notice.Get(ctx, noticeID)
 	if err != nil {
 		if ent.IsNotFound(err) {
 			return nil, nil
@@ -85,7 +79,5 @@ func (r *noticeRepository) FindByID(ctx context.Context, noticeID uint64) (*doma
 func (r *noticeRepository) ExistsByUserID(ctx context.Context, userID uint64) (bool, error) {
 	return r.getClient(ctx).Notice.Query().
 		Where(notice.HasUserWith(user.ID(userID))).
-		WithPocket().
-		WithUser().
 		Exist(ctx)
 }

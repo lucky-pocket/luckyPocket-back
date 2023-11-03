@@ -14,8 +14,6 @@ import (
 func (r *pocketRepository) FindByID(ctx context.Context, pocketID uint64) (*domain.Pocket, error) {
 	pocket, err := r.getClient(ctx).Pocket.Query().
 		Where(pocket.ID(pocketID)).
-		WithReceiver().
-		WithSender().
 		First(ctx)
 	if err != nil {
 		if ent.IsNotFound(err) {
@@ -31,8 +29,6 @@ func (r *pocketRepository) FindListByUserID(ctx context.Context, userID uint64, 
 		Where(
 			pocket.HasReceiverWith(user.ID(userID)),
 		).
-		WithReceiver().
-		WithSender().
 		Order(pocket.ByCreatedAt(sql.OrderAsc())).
 		Offset(offset).
 		Limit(limit).

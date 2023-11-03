@@ -13,8 +13,8 @@ func (r *pocketRepository) Create(ctx context.Context, pocket *domain.Pocket) er
 		SetCoins(pocket.Coins).
 		SetContent(pocket.Content).
 		SetIsPublic(pocket.IsPublic).
-		SetReceiverID(pocket.Receiver.UserID).
-		SetSenderID(pocket.Sender.UserID).
+		SetReceiverID(pocket.ReceiverID).
+		SetSenderID(pocket.SenderID).
 		Exec(ctx)
 }
 
