@@ -10,11 +10,11 @@ func (s *PocketRepositoryTestSuite) TestCreate() {
 	user1ID, user2ID := createTwoPeople(s.client, s.T())
 
 	err := s.r.Create(context.Background(), &domain.Pocket{
-		Receiver: &domain.User{UserID: user1ID},
-		Sender:   &domain.User{UserID: user2ID},
-		Content:  "haha go pocket",
-		Coins:    0,
-		IsPublic: false,
+		ReceiverID: user1ID,
+		SenderID:   user2ID,
+		Content:    "haha go pocket",
+		Coins:      0,
+		IsPublic:   false,
 	})
 	s.NoError(err)
 }
