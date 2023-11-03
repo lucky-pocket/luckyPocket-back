@@ -24,7 +24,7 @@ type NoticeUseCase interface {
 }
 
 type NoticeRepository interface {
-	Create(ctx context.Context, notices []*Notice) error
+	CreateBulk(ctx context.Context, notices []*Notice) error
 	FindAllByUserID(ctx context.Context, userID uint64) ([]*Notice, error)
 	FindByID(ctx context.Context, noticeID uint64) (*Notice, error)
 	ExistsByUserID(ctx context.Context, userID uint64) (bool, error)
