@@ -1,6 +1,8 @@
 package schema
 
 import (
+	"time"
+
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema/edge"
@@ -25,6 +27,7 @@ func (Notice) Fields() []ent.Field {
 			}),
 		field.Enum("type").GoType(constant.NoticeType("")),
 		field.Bool("checked"),
+		field.Time("createdAt").Default(time.Now),
 	}
 }
 
