@@ -20,9 +20,7 @@ func (User) Fields() []ent.Field {
 		field.Uint64("id").
 			Positive().
 			Immutable().
-			Annotations(entsql.Annotation{
-				Incremental: &t,
-			}),
+			Annotations(entsql.Annotation{Incremental: &t}),
 		field.String("email").NotEmpty().MaxLen(100).Unique(),
 		field.String("name").MinLen(2).MaxLen(10),
 		field.Int("coins").Min(0),

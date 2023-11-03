@@ -21,9 +21,9 @@ func (Pocket) Fields() []ent.Field {
 		field.Uint64("id").
 			Positive().
 			Immutable().
-			Annotations(entsql.Annotation{
-				Incremental: &t,
-			}),
+			Annotations(entsql.Annotation{Incremental: &t}),
+		field.Uint64("receiverID"),
+		field.Uint64("senderID"),
 		field.String("content").MaxLen(300),
 		field.Int("coins").Min(0),
 		field.Bool("isPublic"),
@@ -34,8 +34,14 @@ func (Pocket) Fields() []ent.Field {
 // Edges of the Pocket.
 func (Pocket) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("receiver", User.Type).Ref("received").Unique().Required(),
-		edge.From("sender", User.Type).Ref("sent").Unique().Required(),
+		edge.From("receiver", User.Type).
+			Ref("received").
+			Field("receiverID").
+			Unique().Required(),
+		edge.From("sender", User.Type).
+			Ref("sent").
+			Field("senderID").
+			Unique().Required(),
 		edge.From("revealers", User.Type).Ref("revealed"),
 	}
 }
