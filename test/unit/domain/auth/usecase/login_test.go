@@ -12,7 +12,6 @@ import (
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/output"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/auth"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/error/status"
-	"github.com/onee-only/gauth-go"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -33,7 +32,7 @@ func (l *AuthUseCaseTestSuite) TestLogin() {
 			input: &input.CodeInput{Code: "secret"},
 			on: func() {
 				l.mockGAuthClient.On("IssueToken", mock.Anything).Return("", "", nil).Once()
-				l.mockGAuthClient.On("GetUserInfo", mock.Anything).Return(&gauth.UserInfo{}, nil).Once()
+				l.mockGAuthClient.On("GetUserInfo", mock.Anything).Return(&domain.GAuthUser{}, nil).Once()
 				l.mockUserRepository.On("ExistsByEmail", mock.Anything, mock.Anything).Return(false, nil).Once()
 				l.mockUserRepository.On("Create", mock.Anything, mock.Anything).Return(&domain.User{UserID: 1, Role: constant.RoleMember}, nil).Once()
 				l.mockJwtIssuer.On("IssueAccess", mock.Anything).Return("AccessToken", time.Time{}).Once()
@@ -52,7 +51,7 @@ func (l *AuthUseCaseTestSuite) TestLogin() {
 			input: &input.CodeInput{Code: "secret"},
 			on: func() {
 				l.mockGAuthClient.On("IssueToken", mock.Anything).Return("", "", nil).Once()
-				l.mockGAuthClient.On("GetUserInfo", mock.Anything).Return(&gauth.UserInfo{}, nil).Once()
+				l.mockGAuthClient.On("GetUserInfo", mock.Anything).Return(&domain.GAuthUser{}, nil).Once()
 				l.mockUserRepository.On("ExistsByEmail", mock.Anything, mock.Anything).Return(true, nil).Once()
 				l.mockUserRepository.On("FindByEmail", mock.Anything, mock.Anything).Return(&domain.User{}, nil).Once()
 				l.mockJwtIssuer.On("IssueAccess", mock.Anything).Return("AccessToken", time.Time{}).Once()

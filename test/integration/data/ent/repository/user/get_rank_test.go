@@ -3,32 +3,32 @@ package user_test
 import (
 	"context"
 
+	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
-	"github.com/onee-only/gauth-go"
 )
 
 func (s *UserRepositoryTestSuite) TestGetRank() {
-	infos := []gauth.UserInfo{
+	infos := []domain.GAuthUser{
 		{
 			Email:  "1",
 			Name:   ptr("aef"),
-			Gender: gauth.GenderFemale,
-			Role:   gauth.RoleTeacher,
+			Gender: constant.GenderFemale,
+			Role:   constant.TypeTeacher,
 		},
 		{
 			Email:    "2",
-			Name:     ptr("hi?"),
-			Gender:   gauth.GenderFemale,
-			Role:     gauth.RoleStudent,
+			Name:     ptr("aefas"),
+			Gender:   constant.GenderFemale,
+			Role:     constant.TypeStudent,
 			Grade:    ptr(1),
 			ClassNum: ptr(3),
 			Num:      ptr(2),
 		},
 		{
 			Email:    "3",
-			Name:     ptr("aef"),
-			Gender:   gauth.GenderFemale,
-			Role:     gauth.RoleStudent,
+			Name:     ptr("aefas"),
+			Gender:   constant.GenderFemale,
+			Role:     constant.TypeStudent,
 			Grade:    ptr(1),
 			ClassNum: ptr(2),
 			Num:      ptr(2),
@@ -62,6 +62,6 @@ func (s *UserRepositoryTestSuite) TestGetRank() {
 	grade := 1
 	rank, err = s.r.RankStudents(context.Background(), constant.SortTypePocket, nil, &grade, nil)
 	if s.NoError(err) && s.Len(rank, 2) {
-		s.Equal("hi?", rank[0].Name)
+		s.Equal("aefas", rank[0].Name)
 	}
 }

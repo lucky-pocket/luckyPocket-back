@@ -3,17 +3,18 @@ package user_test
 import (
 	"context"
 
-	"github.com/onee-only/gauth-go"
+	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
+	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 )
 
 func (s *UserRepositoryTestSuite) TestCreate() {
 	grade, class, num := 1, 1, 1
 
-	user := gauth.UserInfo{
+	user := domain.GAuthUser{
 		Email:    "l",
 		Name:     ptr("aef"),
-		Gender:   gauth.GenderFemale,
-		Role:     gauth.RoleStudent,
+		Gender:   constant.GenderFemale,
+		Role:     constant.TypeStudent,
 		Grade:    &grade,
 		ClassNum: &class,
 		Num:      &num,
