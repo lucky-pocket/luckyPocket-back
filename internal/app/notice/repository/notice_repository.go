@@ -12,17 +12,13 @@ import (
 	ent_tx "github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/tx"
 )
 
-type noticeRepository struct {
-	client *ent.Client
-}
+type noticeRepository struct{ client *ent.Client }
 
 func NewNoticeRepository(client *ent.Client) domain.NoticeRepository {
 	return &noticeRepository{client}
 }
 
-func (r *noticeRepository) NewTx() tx.Tx {
-	return ent_tx.New(r.client)
-}
+func (r *noticeRepository) NewTx() tx.Tx { return ent_tx.New(r.client) }
 
 func (r *noticeRepository) getClient(ctx context.Context) *ent.Client {
 	tx, err := ent_tx.FromContext(ctx)

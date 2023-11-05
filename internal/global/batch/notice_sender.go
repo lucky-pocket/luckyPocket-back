@@ -11,16 +11,19 @@ type NoticeSenderDeps struct {
 	NoticePool       domain.NoticePool
 }
 
-type noticeSender struct{ *NoticeSenderDeps }
+type noticeSender struct {
+	*NoticeSenderDeps
+	batchSize int
+}
 
 func NewNoticeSender(deps *NoticeSenderDeps) Processor {
-	return &noticeSender{deps}
+	return &noticeSender{deps, 100}
 }
 
 func (n *noticeSender) Do() {
 	ctx := context.Background()
 
-	notices, err := n.NoticePool.TakeAll(ctx)
+	notices, err := n.NoticePool.Take(ctx, n.batchSize)
 	if err != nil {
 		// TODO: log the error.
 		return

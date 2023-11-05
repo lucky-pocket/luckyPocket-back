@@ -13,21 +13,15 @@ import (
 
 const prefix = "blacklist"
 
-func buildKey(key string) string {
-	return fmt.Sprintf("%s:%s", prefix, key)
-}
+func buildKey(key string) string { return fmt.Sprintf("%s:%s", prefix, key) }
 
-type blackListRepository struct {
-	client *redis.Client
-}
+type blackListRepository struct{ client *redis.Client }
 
 func NewBlackListRepository(client *redis.Client) domain.BlackListRepository {
 	return &blackListRepository{client}
 }
 
-func (r *blackListRepository) NewTx() tx.Tx {
-	return redis_tx.New(r.client)
-}
+func (r *blackListRepository) NewTx() tx.Tx { return redis_tx.New(r.client) }
 
 func (r *blackListRepository) getClient(ctx context.Context) redis.Cmdable {
 	tx, err := redis_tx.FromContext(ctx)
