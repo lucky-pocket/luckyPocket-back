@@ -13,21 +13,15 @@ import (
 
 const prefix = "ticket"
 
-func buildKey(key string) string {
-	return fmt.Sprintf("%s:%s", prefix, key)
-}
+func buildKey(key string) string { return fmt.Sprintf("%s:%s", prefix, key) }
 
-type ticketRepository struct {
-	client *redis.Client
-}
+type ticketRepository struct{ client *redis.Client }
 
 func NewTicketRepository(client *redis.Client) domain.TicketRepository {
 	return &ticketRepository{client}
 }
 
-func (r *ticketRepository) NewTx() tx.Tx {
-	return redis_tx.New(r.client)
-}
+func (r *ticketRepository) NewTx() tx.Tx { return redis_tx.New(r.client) }
 
 func (r *ticketRepository) getClient(ctx context.Context) redis.Cmdable {
 	tx, err := redis_tx.FromContext(ctx)
