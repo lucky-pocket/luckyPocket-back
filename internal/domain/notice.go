@@ -32,5 +32,5 @@ type NoticeRepository interface {
 
 type NoticePool interface {
 	Put(ctx context.Context, notice *Notice) error
-	TakeAll(ctx context.Context) ([]*Notice, error)
+	Take(ctx context.Context, count int) ([]*Notice, error)
 }

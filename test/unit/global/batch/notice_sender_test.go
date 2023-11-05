@@ -18,7 +18,7 @@ func TestNoticeSender(t *testing.T) {
 		NoticePool:       mockNoticePool,
 	})
 
-	mockNoticePool.On("TakeAll", mock.Anything).Return([]*domain.Notice{}, nil)
+	mockNoticePool.On("Take", mock.Anything, mock.Anything).Return([]*domain.Notice{}, nil)
 	mockNoticeRepository.On("CreateBulk", mock.Anything, mock.Anything).Return(nil)
 
 	// TODO: add test for log when it is added.
