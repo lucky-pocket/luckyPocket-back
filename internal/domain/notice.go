@@ -29,3 +29,8 @@ type NoticeRepository interface {
 	FindByID(ctx context.Context, noticeID uint64) (*Notice, error)
 	ExistsByUserID(ctx context.Context, userID uint64) (bool, error)
 }
+
+type NoticePool interface {
+	Put(ctx context.Context, notice *Notice) error
+	TakeAll(ctx context.Context) ([]*Notice, error)
+}

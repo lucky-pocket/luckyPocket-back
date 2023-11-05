@@ -2,6 +2,7 @@ package user_test
 
 import (
 	"context"
+
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
