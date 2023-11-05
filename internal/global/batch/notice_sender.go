@@ -22,7 +22,7 @@ func (n *noticeSender) Do() {
 
 	notices, err := n.NoticePool.TakeAll(ctx)
 	if err != nil {
-		// TODO: log the error
+		// TODO: log the error.
 		return
 	}
 

@@ -11,7 +11,7 @@ import (
 
 type psuedoEventDispatcher struct{}
 
-func (d *psuedoEventDispatcher) Dispatch(ctx context.Context, topic string, payload any) error {
+func (d *psuedoEventDispatcher) Dispatch(_ context.Context, _ string, payload any) error {
 	if payload != nil {
 		return errors.New("haha")
 	}
