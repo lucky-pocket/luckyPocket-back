@@ -51,6 +51,7 @@ func (s *PocketUseCaseTestSuite) TestRevealSender() {
 				s.mockPocketRepository.On("RevealExists", mock.Anything, mock.Anything, mock.Anything).Return(false, nil).Once()
 				s.mockPocketRepository.On("CreateReveal", mock.Anything, mock.Anything, mock.Anything).Return(nil).Once()
 				s.mockUserRepository.On("UpdateCoin", mock.Anything, mock.Anything, mock.Anything).Return(nil).Once()
+				s.mockEventManager.On("Publish", mock.Anything, mock.Anything, mock.Anything).Return(nil).Once()
 			},
 			assert: func(err error) {
 				s.Nil(err)
@@ -125,6 +126,7 @@ func (s *PocketUseCaseTestSuite) TestRevealSender() {
 
 			s.mockPocketRepository.AssertExpectations(s.T())
 			s.mockUserRepository.AssertExpectations(s.T())
+			s.mockEventManager.AssertExpectations(s.T())
 		})
 	}
 }

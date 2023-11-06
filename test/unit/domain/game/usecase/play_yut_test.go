@@ -31,6 +31,8 @@ func (g *GameUseCaseTestSuite) TestYutPlay() {
 				g.mockTicketRepository.On("CountByUserID", mock.Anything, mock.Anything).Return(0, nil).Once()
 				g.mockTicketRepository.On("Increase", mock.Anything, mock.Anything).Return(nil).Once()
 				g.mockGameLogRepository.On("Create", mock.Anything, mock.Anything).Return(nil).Once()
+				g.mockUserRepository.On("CountCoinsByUserID", mock.Anything, mock.Anything).Return(10, nil).Once()
+				g.mockUserRepository.On("UpdateCoin", mock.Anything, mock.Anything, mock.Anything).Return(nil).Once()
 			},
 			assert: func(output *output.YutOutput, err error) {
 				if g.Nil(err) {
@@ -43,8 +45,8 @@ func (g *GameUseCaseTestSuite) TestYutPlay() {
 			desc:  "success (use coin)",
 			input: &input.FreeInput{Free: false},
 			on: func() {
-				g.mockUserRepository.On("CountCoinsByUserID", mock.Anything, mock.Anything).Return(10, nil).Once()
-				g.mockUserRepository.On("UpdateCoin", mock.Anything, mock.Anything, mock.Anything).Return(nil).Once()
+				g.mockUserRepository.On("CountCoinsByUserID", mock.Anything, mock.Anything).Return(10, nil).Twice()
+				g.mockUserRepository.On("UpdateCoin", mock.Anything, mock.Anything, mock.Anything).Return(nil).Twice()
 				g.mockGameLogRepository.On("Create", mock.Anything, mock.Anything).Return(nil).Once()
 			},
 			assert: func(output *output.YutOutput, err error) {

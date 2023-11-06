@@ -3,8 +3,11 @@ package usecase
 import (
 	"context"
 	"net/http"
+	"time"
 
+	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
+	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/event"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/input"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/auth"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/error/status"
@@ -54,6 +57,18 @@ func (uc *pocketUseCase) RevealSender(ctx context.Context, input *input.PocketID
 		err = uc.UserRepository.UpdateCoin(ctx, userInfo.UserID, coins-constant.CostRevealSender)
 		if err != nil {
 			return errors.Wrap(err, "unexpected db error")
+		}
+
+		notice := domain.Notice{
+			UserID:    pocket.SenderID,
+			PocketID:  pocket.PocketID,
+			Type:      constant.NoticeTypeRevealed,
+			Checked:   false,
+			CreatedAt: time.Now(),
+		}
+
+		if err := uc.EventManager.Publish(ctx, string(event.TopicRevealCreated), &notice); err != nil {
+			return errors.Wrap(err, "event publishing failed")
 		}
 
 		return nil

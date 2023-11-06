@@ -3,9 +3,11 @@ package usecase
 import (
 	"context"
 	"net/http"
+	"time"
 
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
+	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/event"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/input"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/auth"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/error/status"
@@ -32,14 +34,11 @@ func (uc *pocketUseCase) SendPocket(ctx context.Context, input *input.PocketInpu
 		}
 
 		pocket := domain.Pocket{
-			Receiver: receiver,
-			Sender: &domain.User{
-				UserID: userInfo.UserID,
-				Role:   userInfo.Role,
-			},
-			Content:  input.Message,
-			Coins:    input.Coins,
-			IsPublic: input.IsPublic,
+			ReceiverID: receiver.UserID,
+			SenderID:   userInfo.UserID,
+			Content:    input.Message,
+			Coins:      input.Coins,
+			IsPublic:   input.IsPublic,
 		}
 
 		price := pocket.Coins + constant.CostSendPocket
@@ -59,6 +58,22 @@ func (uc *pocketUseCase) SendPocket(ctx context.Context, input *input.PocketInpu
 
 		if err := uc.UserRepository.UpdateCoin(ctx, userInfo.UserID, coins-price); err != nil {
 			return errors.Wrap(err, "unexpected db error")
+		}
+
+		if err := uc.UserRepository.UpdateCoin(ctx, receiver.UserID, receiver.Coins+input.Coins); err != nil {
+			return errors.Wrap(err, "unexpected db error")
+		}
+
+		notice := domain.Notice{
+			UserID:    receiver.UserID,
+			PocketID:  pocket.PocketID,
+			Type:      constant.NoticeTypeReceived,
+			Checked:   false,
+			CreatedAt: time.Now(),
+		}
+
+		if err := uc.EventManager.Publish(ctx, string(event.TopicPocketReceived), &notice); err != nil {
+			return errors.Wrap(err, "event publishing failed")
 		}
 
 		return nil

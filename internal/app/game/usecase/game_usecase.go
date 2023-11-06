@@ -76,7 +76,17 @@ func (g *gameUseCase) PlayYut(ctx context.Context, input *input.FreeInput) (*out
 
 		coinsEarned := g.evaluateYutResult(marked, yutPieces)
 
-		err := g.GameLogRepository.Create(ctx, domain.GameLog{
+		coins, err := g.UserRepository.CountCoinsByUserID(ctx, user.UserID)
+		if err != nil {
+			return errors.Wrap(err, "unexpected error")
+		}
+
+		err = g.UserRepository.UpdateCoin(ctx, user.UserID, coins+coinsEarned)
+		if err != nil {
+			return errors.Wrap(err, "unexpected error")
+		}
+
+		err = g.GameLogRepository.Create(ctx, domain.GameLog{
 			User:      &domain.User{UserID: user.UserID},
 			TimeStamp: time.Now(),
 			GameType:  "Yut",
