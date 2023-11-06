@@ -37,7 +37,7 @@ func (uc *pocketUseCase) GetPocketDetail(ctx context.Context, input *input.Pocke
 
 	var sender *domain.User
 	if exists {
-		sender, err = uc.UserRepository.FindByID(ctx, pocket.Sender.UserID)
+		sender, err = uc.UserRepository.FindByID(ctx, pocket.SenderID)
 		if err != nil {
 			return nil, errors.Wrap(err, "unexpected db error")
 		}
