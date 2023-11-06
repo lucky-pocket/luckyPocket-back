@@ -31,7 +31,8 @@ func (s *PocketUseCaseTestSuite) TestSendPocket() {
 				s.mockUserRepository.On("FindByID", mock.Anything, mock.Anything).Return(&domain.User{}, nil).Once()
 				s.mockUserRepository.On("CountCoinsByUserID", mock.Anything, mock.Anything).Return(constant.CostSendPocket+1, nil).Once()
 				s.mockPocketRepository.On("Create", mock.Anything, mock.Anything).Return(nil).Once()
-				s.mockUserRepository.On("UpdateCoin", mock.Anything, mock.Anything, mock.Anything).Return(nil).Once()
+				s.mockUserRepository.On("UpdateCoin", mock.Anything, mock.Anything, mock.Anything).Return(nil).Twice()
+				s.mockEventManager.On("Publish", mock.Anything, mock.Anything, mock.Anything).Return(nil).Once()
 			},
 			assert: func(err error) {
 				s.Nil(err)
@@ -45,7 +46,8 @@ func (s *PocketUseCaseTestSuite) TestSendPocket() {
 				s.mockUserRepository.On("CountCoinsByUserID", mock.Anything, mock.Anything).Return(constant.CostSendPocket+1, nil).Once()
 				s.mockPocketRepository.On("Create", mock.Anything, mock.Anything).Return(nil).Once()
 				s.mockPocketRepository.On("CreateReveal", mock.Anything, mock.Anything, mock.Anything).Return(nil).Once()
-				s.mockUserRepository.On("UpdateCoin", mock.Anything, mock.Anything, mock.Anything).Return(nil).Once()
+				s.mockUserRepository.On("UpdateCoin", mock.Anything, mock.Anything, mock.Anything).Return(nil).Twice()
+				s.mockEventManager.On("Publish", mock.Anything, mock.Anything, mock.Anything).Return(nil).Once()
 			},
 			assert: func(err error) {
 				s.Nil(err)
