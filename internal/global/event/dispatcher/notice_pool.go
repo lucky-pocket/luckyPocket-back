@@ -22,7 +22,7 @@ func NewNoticePoolDumper(deps *NoticePoolDumperDeps) event.Dispatcher {
 func (d *noticePoolDumper) Dispatch(ctx context.Context, _ string, payload any) error {
 	notice, ok := payload.(*domain.Notice)
 	if !ok {
-		return fmt.Errorf("payload assertion failed. expected: %T actual: %T", domain.Notice{}, payload)
+		return fmt.Errorf("payload assertion failed. expected: %T actual: %T", &domain.Notice{}, payload)
 	}
 
 	if err := d.NoticePool.Put(ctx, notice); err != nil {

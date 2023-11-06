@@ -11,7 +11,7 @@ type Dispatcher interface {
 	Dispatch(ctx context.Context, topic string, payload any) error
 }
 
-type Manager interface {
+type EvntManager interface {
 	// Register registers dispatcher to specific topic.
 	Register(topic string, dst Dispatcher)
 
@@ -23,7 +23,7 @@ type manager struct {
 	topics map[string][]Dispatcher
 }
 
-func NewManager() Manager {
+func NewManager() EvntManager {
 	return &manager{
 		topics: map[string][]Dispatcher{},
 	}
