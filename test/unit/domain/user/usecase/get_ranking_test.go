@@ -22,6 +22,9 @@ func (s *UserUseCaseTestSuite) TestGetRanking() {
 		},
 	}
 
+	userStudent := constant.UserType("STUDENT")
+	userTeacher := constant.UserType("TEACHER")
+
 	testcases := []struct {
 		desc   string
 		input  *input.RankQueryInput
@@ -30,7 +33,7 @@ func (s *UserUseCaseTestSuite) TestGetRanking() {
 	}{
 		{
 			desc:  "success (student)",
-			input: &input.RankQueryInput{UserType: constant.TypeStudent},
+			input: &input.RankQueryInput{UserType: &userStudent},
 			on: func() {
 				s.mockUserRepository.On("RankStudents",
 					mock.Anything,
@@ -48,7 +51,7 @@ func (s *UserUseCaseTestSuite) TestGetRanking() {
 		},
 		{
 			desc:  "success (non-student)",
-			input: &input.RankQueryInput{UserType: constant.TypeTeacher},
+			input: &input.RankQueryInput{UserType: &userTeacher},
 			on: func() {
 				s.mockUserRepository.On("RankNonStudents",
 					mock.Anything,
