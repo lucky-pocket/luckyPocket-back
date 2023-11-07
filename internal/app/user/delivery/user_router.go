@@ -44,7 +44,7 @@ func (r *UserRouter) getUserDetail(c *gin.Context) {
 
 	userID, err := strconv.ParseUint(id, 10, 64)
 	if err != nil {
-		status.NewError(http.StatusBadRequest, "not valid")
+		c.Error(status.NewError(http.StatusBadRequest, "not valid"))
 		return
 	}
 
@@ -81,7 +81,7 @@ func (r *UserRouter) getRanking(c *gin.Context) {
 	var rank RankRequest
 
 	if err := c.ShouldBindQuery(&rank); err != nil {
-		status.NewError(http.StatusBadRequest, "not valid param")
+		c.Error(status.NewError(http.StatusBadRequest, "not valid param"))
 		return
 	}
 
@@ -104,7 +104,7 @@ func (r *UserRouter) search(c *gin.Context) {
 	var query QueryRequest
 
 	if err := c.ShouldBindQuery(&query); err != nil {
-		status.NewError(http.StatusBadRequest, "not valid param")
+		c.Error(status.NewError(http.StatusBadRequest, "not valid param"))
 		return
 	}
 
