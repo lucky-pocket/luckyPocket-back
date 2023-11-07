@@ -23,7 +23,7 @@ func (r *UserRouter) Register(engine *gin.Engine) {
 	engine.GET("/users/me/coins", r.countCoins)
 	engine.GET("/users/me", r.getMyDetail)
 	engine.GET("/rank", r.getRanking)
-	engine.GET("/search", r.search)
+	engine.GET("/users", r.search)
 }
 
 func (r *UserRouter) getUserDetail(c *gin.Context) {
