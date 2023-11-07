@@ -1,5 +1,9 @@
 package constant
 
+type Enum interface {
+	Valid() bool
+}
+
 type Gender string
 
 const (
