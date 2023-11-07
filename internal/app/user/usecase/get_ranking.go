@@ -16,8 +16,8 @@ func (uc *userUseCase) GetRanking(ctx context.Context, input *input.RankQueryInp
 		err   error
 	)
 
-	if input.UserType == constant.TypeStudent {
-		users, err = uc.UserRepository.RankStudents(ctx, input.SortType, input.Name, input.Class, input.Grade)
+	if *input.UserType == constant.TypeStudent {
+		users, err = uc.UserRepository.RankStudents(ctx, input.SortType, input.Name, input.Grade, input.Class)
 	} else {
 		users, err = uc.UserRepository.RankNonStudents(ctx, input.SortType, input.Name)
 	}
