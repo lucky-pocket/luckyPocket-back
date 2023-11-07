@@ -1,8 +1,9 @@
 package router_test
 
 import (
-	"github.com/gin-gonic/gin/binding"
 	"testing"
+
+	"github.com/gin-gonic/gin/binding"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -35,6 +36,6 @@ func (s *UserRouterTestSuite) SetupSuite() {
 	s.r = delivery.NewUserRouter(s.mockUserUseCase)
 
 	s.engine = gin.Default()
-	s.engine.Use(filter.NewErrorFilter())
+	s.engine.Use(filter.NewErrorFilter().Register())
 	s.r.Register(s.engine)
 }
