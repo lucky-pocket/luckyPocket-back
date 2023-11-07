@@ -85,7 +85,7 @@ func (r *UserRouter) getRanking(c *gin.Context) {
 		return
 	}
 
-	res, err := r.userUseCase.GetRanking(c, &input.RankQueryInput{
+	rankOutput, err := r.userUseCase.GetRanking(c, &input.RankQueryInput{
 		SortType: rank.SortType,
 		UserType: rank.UserType,
 		Grade:    rank.grade,
@@ -97,7 +97,7 @@ func (r *UserRouter) getRanking(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, res)
+	c.JSON(http.StatusOK, rankOutput)
 }
 
 func (r *UserRouter) search(c *gin.Context) {
