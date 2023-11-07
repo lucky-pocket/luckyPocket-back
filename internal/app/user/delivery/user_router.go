@@ -104,7 +104,7 @@ func (r *UserRouter) search(c *gin.Context) {
 	var query QueryRequest
 
 	if err := c.ShouldBindQuery(&query); err != nil {
-		status.NewError(http.StatusBadRequest, "not valid param")
+		c.Error(status.NewError(http.StatusBadRequest, "not valid param"))
 		return
 	}
 
