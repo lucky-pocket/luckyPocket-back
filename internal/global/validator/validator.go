@@ -1,16 +1,14 @@
 package validator
 
 import (
-	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
+	"github.com/pkg/errors"
 )
 
-func Initialize() error {
-	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
-		if err := v.RegisterValidation("enum", enum); err != nil {
-			return err
-		}
+func Initialize(v *validator.Validate) error {
+	if err := v.RegisterValidation("enum", enum); err != nil {
+		return errors.Wrap(err, "not valid")
 	}
 
 	return nil
