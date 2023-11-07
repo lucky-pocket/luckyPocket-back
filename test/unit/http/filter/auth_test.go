@@ -28,7 +28,7 @@ func TestAuthFilter(t *testing.T) {
 	validToken, _ := jwtIssuer.Issue(info, 5*time.Minute)
 
 	r := gin.Default()
-	r.Use(filter.NewErrorFilter())
+	r.Use(filter.NewErrorFilter().Register())
 	r.GET("/true", authFilter.WithRequired(true), func(ctx *gin.Context) { auth.MustExtract(ctx.Request.Context()) })
 	r.GET("/false", authFilter.WithRequired(false))
 

@@ -16,7 +16,7 @@ import (
 func TestErrorFilter(t *testing.T) {
 	r := gin.Default()
 
-	r.Use(filter.NewErrorFilter())
+	r.Use(filter.NewErrorFilter().Register())
 	r.GET("/pass", func(ctx *gin.Context) {})
 	r.GET("/err", func(ctx *gin.Context) {
 		ctx.Error(errors.New("haha new error"))
