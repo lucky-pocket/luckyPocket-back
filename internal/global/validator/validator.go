@@ -6,13 +6,14 @@ import (
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 )
 
-func Initialize() {
+func Initialize() error {
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
-		err := v.RegisterValidation("enum", enum)
-		if err != nil {
-			return
+		if err := v.RegisterValidation("enum", enum); err != nil {
+			return err
 		}
 	}
+
+	return nil
 }
 
 func enum(fl validator.FieldLevel) bool {

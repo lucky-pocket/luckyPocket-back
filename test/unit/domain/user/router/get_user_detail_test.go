@@ -12,13 +12,11 @@ import (
 func (s *UserRouterTestSuite) TestUserDetail() {
 	testcases := []struct {
 		desc       string
-		path       string
 		on         func()
 		statusCode int
 	}{
 		{
 			desc: "success",
-			path: "1",
 			on: func() {
 				s.mockUserUseCase.On("GetUserDetail", mock.Anything, mock.Anything).Return(&output.UserInfo{}, nil).Once()
 			},
@@ -26,7 +24,6 @@ func (s *UserRouterTestSuite) TestUserDetail() {
 		},
 		{
 			desc: "failed (not found)",
-			path: "1",
 			on: func() {
 				s.mockUserUseCase.On("GetUserDetail", mock.Anything, mock.Anything).Return(nil, status.NewError(http.StatusNotFound, "not found")).Once()
 			},

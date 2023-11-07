@@ -23,7 +23,11 @@ func TestUserRouterSuite(t *testing.T) {
 }
 
 func (s *UserRouterTestSuite) SetupSuite() {
-	validator.Initialize()
+	err := validator.Initialize()
+	if err != nil {
+		return
+	}
+
 	s.mockUserUseCase = mocks.NewUserUseCase(s.T())
 
 	s.r = delivery.NewUserRouter(s.mockUserUseCase)
