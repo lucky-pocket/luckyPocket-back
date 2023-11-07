@@ -7,7 +7,13 @@ import (
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/error/status"
 )
 
-func NewErrorFilter() gin.HandlerFunc {
+type ErrorFilter struct{}
+
+func NewErrorFilter() *ErrorFilter {
+	return &ErrorFilter{}
+}
+
+func (f *ErrorFilter) Register() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Next()
 
