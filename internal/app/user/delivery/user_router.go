@@ -48,7 +48,7 @@ func (r *UserRouter) getUserDetail(c *gin.Context) {
 		return
 	}
 
-	userInfo, err := r.userUseCase.GetUserDetail(c, &input.UserIDInput{UserID: userID})
+	userInfo, err := r.userUseCase.GetUserDetail(c.Request.Context(), &input.UserIDInput{UserID: userID})
 	if err != nil {
 		c.Error(err)
 		return
@@ -58,7 +58,7 @@ func (r *UserRouter) getUserDetail(c *gin.Context) {
 }
 
 func (r *UserRouter) countCoins(c *gin.Context) {
-	coins, err := r.userUseCase.CountCoins(c)
+	coins, err := r.userUseCase.CountCoins(c.Request.Context())
 	if err != nil {
 		c.Error(err)
 		return
@@ -68,7 +68,7 @@ func (r *UserRouter) countCoins(c *gin.Context) {
 }
 
 func (r *UserRouter) getMyDetail(c *gin.Context) {
-	userInfo, err := r.userUseCase.GetMyDetail(c)
+	userInfo, err := r.userUseCase.GetMyDetail(c.Request.Context())
 	if err != nil {
 		c.Error(err)
 		return
@@ -85,7 +85,7 @@ func (r *UserRouter) getRanking(c *gin.Context) {
 		return
 	}
 
-	rankOutput, err := r.userUseCase.GetRanking(c, &input.RankQueryInput{
+	rankOutput, err := r.userUseCase.GetRanking(c.Request.Context(), &input.RankQueryInput{
 		SortType: rank.SortType,
 		UserType: rank.UserType,
 		Grade:    rank.grade,
@@ -108,7 +108,7 @@ func (r *UserRouter) search(c *gin.Context) {
 		return
 	}
 
-	res, err := r.userUseCase.Search(c, &input.SearchInput{
+	res, err := r.userUseCase.Search(c.Request.Context(), &input.SearchInput{
 		Query: query.Query,
 	})
 	if err != nil {
