@@ -44,7 +44,7 @@ func (r *UserRouter) getUserDetail(c *gin.Context) {
 
 	userID, err := strconv.ParseUint(id, 10, 64)
 	if err != nil {
-		status.NewError(http.StatusBadRequest, "not valid")
+		c.Error(status.NewError(http.StatusBadRequest, "not valid"))
 		return
 	}
 
