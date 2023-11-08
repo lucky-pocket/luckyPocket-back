@@ -54,7 +54,7 @@ func (s *UserRepositoryTestSuite) TestGetRank() {
 	s.NoError(err)
 
 	name := "ae"
-	rank, err := s.r.RankNonStudents(context.Background(), constant.SortTypeCoins, &name)
+	rank, err := s.r.RankNonStudents(context.Background(), constant.SortTypeCoins, nil, &name)
 	if s.NoError(err) && s.Len(rank, 1) {
 		s.Equal("aef", rank[0].Name)
 	}
