@@ -33,7 +33,6 @@ func (r *NoticeRouter) getNotice(c *gin.Context) {
 }
 
 func (r *NoticeRouter) checkNotice(c *gin.Context) {
-
 	id := c.Param("noticeID")
 
 	noticeID, err := strconv.ParseUint(id, 10, 64)
