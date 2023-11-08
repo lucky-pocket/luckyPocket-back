@@ -31,8 +31,12 @@ func (r *userRepository) RankStudents(ctx context.Context, sortType constant.Sor
 	return r.getRank(ctx, builder, sortType)
 }
 
-func (r *userRepository) RankNonStudents(ctx context.Context, sortType constant.SortType, name *string) ([]output.RankElem, error) {
+func (r *userRepository) RankNonStudents(ctx context.Context, sortType constant.SortType, userType *constant.UserType, name *string) ([]output.RankElem, error) {
 	builder := r.getClient(ctx).User.Query()
+
+	if userType != nil {
+		builder = builder.Where(user.UserTypeEQ(*userType))
+	}
 
 	if name != nil {
 		builder = builder.Where(user.NameContains(*name))
