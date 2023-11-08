@@ -25,13 +25,16 @@ func NewScheduler(loc *time.Location) *Scheduler {
 	}
 }
 
-// Register registers task with given duration.
 func (s *Scheduler) Start() { s.s.StartAsync() }
 
 func (s *Scheduler) Stop() { s.s.Stop() }
 
+// Register registers task with given duration.
 func (s *Scheduler) Register(duration time.Duration, p Processor) error {
-	job, err := s.s.Every(duration).WaitForSchedule().Do(p.Do)
+	job, err := s.s.Every(duration).
+		StartAt(
+			time.Now().Truncate(time.Minute).Add(time.Minute),
+		).WaitForSchedule().Do(p.Do)
 	if err != nil {
 		return errors.Wrap(err, "job registration failed")
 	}

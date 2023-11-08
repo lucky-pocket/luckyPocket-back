@@ -1,3 +1,15 @@
 web:
   http:
     port: ${HTTP_PORT}
+
+data:
+  redis:
+    addr: ${REDIS_ADDR}
+    pass: ${REDIS_PASS}
+    db: ${REDIS_DB_NUM}
+  mysql:
+    user: ${MYSQL_USER}
+    pass: ${MYSQL_PASS}
+    host: ${MYSQL_HOST}
+    port: ${MYSQL_PORT}
+    db: ${MYSQL_DB}
