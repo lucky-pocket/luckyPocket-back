@@ -115,7 +115,7 @@ func (p *PocketRouter) sendPocket(c *gin.Context) {
 		return
 	}
 
-	c.Status(http.StatusOK)
+	c.Status(http.StatusCreated)
 }
 
 func (p *PocketRouter) getPocketDetail(c *gin.Context) {
