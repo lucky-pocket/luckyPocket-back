@@ -135,7 +135,7 @@ func (p *PocketRouter) getPocketDetail(c *gin.Context) {
 }
 
 func (p *PocketRouter) setVisibility(c *gin.Context) {
-	var visible Visible
+	var visible VisibilityRequest
 
 	id := c.Param("pocketID")
 
