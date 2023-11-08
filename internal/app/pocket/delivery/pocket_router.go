@@ -23,7 +23,7 @@ type PocketRequest struct {
 	IsPublic   bool   `json:"isPublic" binding:"required"`
 }
 
-type Visible struct {
+type VisibilityRequest struct {
 	Visible bool `json:"visible" binding:"required"`
 }
 
