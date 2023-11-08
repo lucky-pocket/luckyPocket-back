@@ -12,13 +12,13 @@ import (
 )
 
 type PocketQuery struct {
-	Offset int `form:"offset" binding:"number"`
-	Limit  int `form:"limit" binding:"number"`
+	Offset int `form:"offset" binding:"required,number"`
+	Limit  int `form:"limit" binding:"required,number"`
 }
 
 type PocketRequest struct {
 	ReceiverID uint64 `json:"receiverID" binding:"required"`
-	Coins      int    `json:"coins" binding:"number"`
+	Coins      int    `json:"coins" binding:"required,number"`
 	Message    string `json:"message" binding:"required"`
 	IsPublic   bool   `json:"isPublic" binding:"required"`
 }
