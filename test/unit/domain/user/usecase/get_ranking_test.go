@@ -57,6 +57,7 @@ func (s *UserUseCaseTestSuite) TestGetRanking() {
 					mock.Anything,
 					mock.Anything,
 					mock.Anything,
+					mock.Anything,
 				).Return(users, nil).Once()
 			},
 			assert: func(output *output.RankOutput, err error) {
