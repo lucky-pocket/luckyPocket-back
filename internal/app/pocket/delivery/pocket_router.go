@@ -114,6 +114,8 @@ func (p *PocketRouter) sendPocket(c *gin.Context) {
 		c.Error(err)
 		return
 	}
+
+	c.Status(http.StatusOK)
 }
 
 func (p *PocketRouter) getPocketDetail(c *gin.Context) {
@@ -156,6 +158,8 @@ func (p *PocketRouter) setVisibility(c *gin.Context) {
 		c.Error(err)
 		return
 	}
+
+	c.Status(http.StatusOK)
 }
 
 func (p *PocketRouter) revealSender(c *gin.Context) {
@@ -172,4 +176,6 @@ func (p *PocketRouter) revealSender(c *gin.Context) {
 		c.Error(err)
 		return
 	}
+
+	c.Status(http.StatusOK)
 }
