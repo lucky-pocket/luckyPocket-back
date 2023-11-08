@@ -35,6 +35,6 @@ func (p *PocketRouterTestSuite) SetupSuite() {
 	p.r = delivery.NewPocketRouter(p.mockPocketUseCase)
 
 	p.engine = gin.Default()
-	p.engine.Use(filter.NewErrorFilter())
+	p.engine.Use(filter.NewErrorFilter().Register())
 	p.r.Register(p.engine)
 }
