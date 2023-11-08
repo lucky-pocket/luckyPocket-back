@@ -41,7 +41,7 @@ type UserRepository interface {
 	Exists(ctx context.Context, userID uint64) (bool, error)
 	ExistsByEmail(ctx context.Context, email string) (bool, error)
 	RankStudents(ctx context.Context, sortType constant.SortType, name *string, grade, class *int) ([]output.RankElem, error)
-	RankNonStudents(ctx context.Context, sortType constant.SortType, name *string) ([]output.RankElem, error)
+	RankNonStudents(ctx context.Context, sortType constant.SortType, userType *constant.UserType, name *string) ([]output.RankElem, error)
 	CountCoinsByUserID(ctx context.Context, userID uint64) (int, error)
 	UpdateCoin(ctx context.Context, userID uint64, coin int) error
 }
