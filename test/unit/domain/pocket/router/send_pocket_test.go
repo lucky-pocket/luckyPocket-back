@@ -28,7 +28,7 @@ func (p *PocketRouterTestSuite) TestSendPocket() {
 			on: func() {
 				p.mockPocketUseCase.On("SendPocket", mock.Anything, mock.Anything).Return(nil).Once()
 			},
-			statusCode: http.StatusOK,
+			statusCode: http.StatusCreated,
 		},
 		{
 			desc: "failed (BAD-REQUEST)",
