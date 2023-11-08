@@ -77,3 +77,10 @@ func (r *noticeRepository) ExistsByUserID(ctx context.Context, userID uint64) (b
 		Where(notice.HasUserWith(user.ID(userID))).
 		Exist(ctx)
 }
+
+func (r *noticeRepository) SetChecked(ctx context.Context, noticeID uint64, checked bool) error {
+	return r.getClient(ctx).Notice.Update().
+		SetChecked(checked).
+		Where(notice.ID(noticeID)).
+		Exec(ctx)
+}
