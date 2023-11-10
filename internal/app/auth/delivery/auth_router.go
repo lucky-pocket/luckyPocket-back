@@ -13,10 +13,6 @@ type CodeQuery struct {
 	Code string `form:"code" binding:"required"`
 }
 
-type RefreshRequest struct {
-	RefreshToken string `header:"Cookie"`
-}
-
 type AuthRouter struct {
 	authUseCase domain.AuthUseCase
 }
