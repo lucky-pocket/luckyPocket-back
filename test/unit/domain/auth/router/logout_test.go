@@ -27,7 +27,7 @@ func (s *AuthRouterTestSuite) TestLogout() {
 			desc:  "failed (BAD-REQUEST)",
 			token: "",
 			on: func() {
-				s.mockAuthUseCase.On("RefreshToken", mock.Anything, mock.Anything).Return(nil, status.NewError(http.StatusUnauthorized, "invalid token")).Once()
+				s.mockAuthUseCase.On("Logout", mock.Anything, mock.Anything).Return(status.NewError(http.StatusUnauthorized, "invalid token")).Once()
 			},
 			statusCode: http.StatusUnauthorized,
 		},
