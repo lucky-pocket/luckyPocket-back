@@ -1,0 +1,68 @@
+name: CD
+
+on:
+  push:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+jobs:
+  push-to-dockerhub:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+          cache: true
+
+      - name: Generate files
+        run: make generate
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+          
+      - name: Build and push "app" process
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          
+          file: ./deploy/Dockerfile.app
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/lucky-pocket/app:latest
+
+      - name: Build and push "batch" process
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./deploy/Dockerfile.batch
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/lucky-pocket/batch:latest
+  
+  deploy-to-cloudtype:
+    runs-on: ubuntu-latest
+    needs: [push-to-dockerhub]
+
+    steps:
+      - name: Deploy "app" using cloudtype
+        uses: cloudtype-github-actions/deploy@v1
+        with:
+          token: ${{ secrets.CLOUDTYPE_TOKEN }}
+          project: lucky-pocket
+          stage: main
+          file: ./deploy/cloudtype/app.yml
+
+      - name: Deploy "batch" using cloudtype
+        uses: cloudtype-github-actions/deploy@v1
+        with:
+          token: ${{ secrets.CLOUDTYPE_TOKEN }}
+          project: lucky-pocket
+          stage: main
+          file: ./deploy/cloudtype/batch.yml
