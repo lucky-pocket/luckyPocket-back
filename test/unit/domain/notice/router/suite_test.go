@@ -3,9 +3,8 @@ package router_test
 import (
 	"testing"
 
-	"github.com/gin-gonic/gin/binding"
-
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
 	"github.com/lucky-pocket/luckyPocket-back/internal/app/notice/delivery"
 	v "github.com/lucky-pocket/luckyPocket-back/internal/global/validator"
@@ -37,5 +36,7 @@ func (s *NoticeRouterTestSuite) SetupSuite() {
 
 	s.engine = gin.Default()
 	s.engine.Use(filter.NewErrorFilter().Register())
-	s.r.Register(s.engine)
+
+	s.engine.GET("/users/me/notices", s.r.GetNotice)
+	s.engine.PATCH("/users/me/notices/:noticeID", s.r.CheckNotice)
 }

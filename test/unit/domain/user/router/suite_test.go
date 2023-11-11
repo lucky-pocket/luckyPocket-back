@@ -3,9 +3,8 @@ package router_test
 import (
 	"testing"
 
-	"github.com/gin-gonic/gin/binding"
-
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
 	"github.com/lucky-pocket/luckyPocket-back/internal/app/user/delivery"
 	v "github.com/lucky-pocket/luckyPocket-back/internal/global/validator"
@@ -37,5 +36,10 @@ func (s *UserRouterTestSuite) SetupSuite() {
 
 	s.engine = gin.Default()
 	s.engine.Use(filter.NewErrorFilter().Register())
-	s.r.Register(s.engine)
+
+	s.engine.GET("/users/:userID", s.r.GetUserDetail)
+	s.engine.GET("/users/me/coins", s.r.CountCoins)
+	s.engine.GET("/users/me", s.r.GetMyDetail)
+	s.engine.GET("/rank", s.r.GetRanking)
+	s.engine.GET("/users", s.r.Search)
 }
