@@ -1,7 +1,6 @@
 package delivery
 
 import (
-	"github.com/lucky-pocket/luckyPocket-back/internal/infra/web/http/middleware"
 	"net/http"
 	"strconv"
 
@@ -36,18 +35,7 @@ func NewPocketRouter(pc domain.PocketUseCase) *PocketRouter {
 	return &PocketRouter{pc}
 }
 
-func (p *PocketRouter) Register(engine *gin.Engine, m middleware.Middlewares) {
-	engine.Use(m.AuthFilter.WithRequired(true), m.LogInterceptor.Register())
-
-	engine.POST("/pockets", p.sendPocket)
-	engine.GET("/pockets/:pocketID", p.getPocketDetail)
-	engine.PATCH("/users/me/pockets/:pocketID/visibility", p.setVisibility)
-	engine.POST("/users/me/pockets/:pocketID/sender", p.revealSender)
-	engine.GET("/users/me/pockets/received", p.getMyPockets)
-	engine.GET("/users/:userID/pockets", p.getUserPockets)
-}
-
-func (p *PocketRouter) getMyPockets(c *gin.Context) {
+func (p *PocketRouter) GetMyPockets(c *gin.Context) {
 	var pocketQuery PocketQuery
 
 	userInfo := auth.MustExtract(c.Request.Context())
@@ -70,7 +58,7 @@ func (p *PocketRouter) getMyPockets(c *gin.Context) {
 	c.JSON(http.StatusOK, pocketsList)
 }
 
-func (p *PocketRouter) getUserPockets(c *gin.Context) {
+func (p *PocketRouter) GetUserPockets(c *gin.Context) {
 	var pocketQuery PocketQuery
 
 	id := c.Param("userID")
@@ -99,7 +87,7 @@ func (p *PocketRouter) getUserPockets(c *gin.Context) {
 	c.JSON(http.StatusOK, pocketsList)
 }
 
-func (p *PocketRouter) sendPocket(c *gin.Context) {
+func (p *PocketRouter) SendPocket(c *gin.Context) {
 	var pocketRequest PocketRequest
 
 	if err := c.ShouldBindJSON(&pocketRequest); err != nil {
@@ -121,7 +109,7 @@ func (p *PocketRouter) sendPocket(c *gin.Context) {
 	c.Status(http.StatusCreated)
 }
 
-func (p *PocketRouter) getPocketDetail(c *gin.Context) {
+func (p *PocketRouter) GetPocketDetail(c *gin.Context) {
 	id := c.Param("pocketID")
 
 	pocketID, err := strconv.ParseUint(id, 10, 64)
@@ -139,7 +127,7 @@ func (p *PocketRouter) getPocketDetail(c *gin.Context) {
 	c.JSON(http.StatusOK, pocketOutput)
 }
 
-func (p *PocketRouter) setVisibility(c *gin.Context) {
+func (p *PocketRouter) SetVisibility(c *gin.Context) {
 	var visible VisibilityRequest
 
 	id := c.Param("pocketID")
@@ -165,7 +153,7 @@ func (p *PocketRouter) setVisibility(c *gin.Context) {
 	c.Status(http.StatusOK)
 }
 
-func (p *PocketRouter) revealSender(c *gin.Context) {
+func (p *PocketRouter) RevealSender(c *gin.Context) {
 	id := c.Param("pocketID")
 
 	pocketID, err := strconv.ParseUint(id, 10, 64)

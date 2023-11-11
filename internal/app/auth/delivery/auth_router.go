@@ -7,7 +7,6 @@ import (
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/input"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/error/status"
-	"github.com/lucky-pocket/luckyPocket-back/internal/infra/web/http/middleware"
 )
 
 type CodeQuery struct {
@@ -22,15 +21,7 @@ func NewAuthRouter(ac domain.AuthUseCase) *AuthRouter {
 	return &AuthRouter{ac}
 }
 
-func (a *AuthRouter) Register(engine *gin.Engine, m middleware.Middlewares) {
-	engine.Use(m.LogInterceptor.Register())
-
-	engine.GET("/auth/gauth", a.login)
-	engine.POST("/auth/logout", a.logout)
-	engine.POST("/auth/refresh", a.refreshToken)
-}
-
-func (a *AuthRouter) login(c *gin.Context) {
+func (a *AuthRouter) Login(c *gin.Context) {
 	var codeQuery CodeQuery
 
 	if err := c.ShouldBindQuery(&codeQuery); err != nil {
@@ -49,7 +40,7 @@ func (a *AuthRouter) login(c *gin.Context) {
 	c.JSON(http.StatusOK, tokenOutput)
 }
 
-func (a *AuthRouter) logout(c *gin.Context) {
+func (a *AuthRouter) Logout(c *gin.Context) {
 	refreshToken, err := c.Cookie("refreshToken")
 	if err != nil {
 		c.Error(status.NewError(http.StatusUnauthorized, "no cookie"))
@@ -67,7 +58,7 @@ func (a *AuthRouter) logout(c *gin.Context) {
 	c.Status(http.StatusOK)
 }
 
-func (a *AuthRouter) refreshToken(c *gin.Context) {
+func (a *AuthRouter) RefreshToken(c *gin.Context) {
 	refreshToken, err := c.Cookie("refreshToken")
 	if err != nil {
 		c.Error(status.NewError(http.StatusUnauthorized, "no cookie"))

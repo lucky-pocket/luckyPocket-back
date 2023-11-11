@@ -9,7 +9,6 @@ import (
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/input"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/error/status"
-	"github.com/lucky-pocket/luckyPocket-back/internal/infra/web/http/middleware"
 )
 
 type RankRequest struct {
@@ -32,17 +31,7 @@ func NewUserRouter(uc domain.UserUseCase) *UserRouter {
 	return &UserRouter{uc}
 }
 
-func (r *UserRouter) Register(engine *gin.Engine, m middleware.Middlewares) {
-	engine.Use(m.AuthFilter.WithRequired(true), m.LogInterceptor.Register())
-
-	engine.GET("/users/:userID", r.getUserDetail)
-	engine.GET("/users/me/coins", r.countCoins)
-	engine.GET("/users/me", r.getMyDetail)
-	engine.GET("/rank", r.getRanking)
-	engine.GET("/users", r.search)
-}
-
-func (r *UserRouter) getUserDetail(c *gin.Context) {
+func (r *UserRouter) GetUserDetail(c *gin.Context) {
 	id := c.Param("userID")
 
 	userID, err := strconv.ParseUint(id, 10, 64)
@@ -60,7 +49,7 @@ func (r *UserRouter) getUserDetail(c *gin.Context) {
 	c.JSON(http.StatusOK, userInfo)
 }
 
-func (r *UserRouter) countCoins(c *gin.Context) {
+func (r *UserRouter) CountCoins(c *gin.Context) {
 	coins, err := r.userUseCase.CountCoins(c.Request.Context())
 	if err != nil {
 		c.Error(err)
@@ -70,7 +59,7 @@ func (r *UserRouter) countCoins(c *gin.Context) {
 	c.JSON(http.StatusOK, coins)
 }
 
-func (r *UserRouter) getMyDetail(c *gin.Context) {
+func (r *UserRouter) GetMyDetail(c *gin.Context) {
 	userInfo, err := r.userUseCase.GetMyDetail(c.Request.Context())
 	if err != nil {
 		c.Error(err)
@@ -80,7 +69,7 @@ func (r *UserRouter) getMyDetail(c *gin.Context) {
 	c.JSON(http.StatusOK, userInfo)
 }
 
-func (r *UserRouter) getRanking(c *gin.Context) {
+func (r *UserRouter) GetRanking(c *gin.Context) {
 	var rank RankRequest
 
 	if err := c.ShouldBindQuery(&rank); err != nil {
@@ -103,7 +92,7 @@ func (r *UserRouter) getRanking(c *gin.Context) {
 	c.JSON(http.StatusOK, rankOutput)
 }
 
-func (r *UserRouter) search(c *gin.Context) {
+func (r *UserRouter) Search(c *gin.Context) {
 	var query QueryRequest
 
 	if err := c.ShouldBindQuery(&query); err != nil {
