@@ -19,6 +19,7 @@ func (l *Logger) Register() gin.HandlerFunc {
 		c.Next()
 
 		if len(c.Errors) > 0 {
+			defer l.log.Sync()
 			for _, e := range c.Errors {
 				if _, ok := e.Err.(*status.Err); !ok {
 					l.log.Error("unexpected internal error",

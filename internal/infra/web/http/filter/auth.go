@@ -28,7 +28,6 @@ func (f *AuthFilter) WithRequired(required bool) gin.HandlerFunc {
 		if err != nil {
 			if required {
 				c.Error(errInvalidAuthToken)
-				c.Abort()
 				return
 			}
 		} else {
