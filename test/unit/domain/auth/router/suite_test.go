@@ -36,5 +36,8 @@ func (s *AuthRouterTestSuite) SetupSuite() {
 
 	s.engine = gin.Default()
 	s.engine.Use(filter.NewErrorFilter().Register())
-	s.r.Register(s.engine)
+
+	s.engine.GET("/auth/gauth", s.r.Login)
+	s.engine.POST("/auth/logout", s.r.Logout)
+	s.engine.POST("/auth/refresh", s.r.RefreshToken)
 }
