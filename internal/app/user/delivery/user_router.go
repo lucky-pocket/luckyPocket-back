@@ -1,14 +1,15 @@
 package delivery
 
 import (
-	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
+	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/input"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/error/status"
+	"github.com/lucky-pocket/luckyPocket-back/internal/infra/web/http/middleware"
 )
 
 type RankRequest struct {
@@ -31,7 +32,9 @@ func NewUserRouter(uc domain.UserUseCase) *UserRouter {
 	return &UserRouter{uc}
 }
 
-func (r *UserRouter) Register(engine *gin.Engine) {
+func (r *UserRouter) Register(engine *gin.Engine, m middleware.Middlewares) {
+	engine.Use(m.AuthFilter.WithRequired(true), m.LogInterceptor.Register())
+
 	engine.GET("/users/:userID", r.getUserDetail)
 	engine.GET("/users/me/coins", r.countCoins)
 	engine.GET("/users/me", r.getMyDetail)

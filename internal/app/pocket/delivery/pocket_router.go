@@ -1,6 +1,7 @@
 package delivery
 
 import (
+	"github.com/lucky-pocket/luckyPocket-back/internal/infra/web/http/middleware"
 	"net/http"
 	"strconv"
 
@@ -35,7 +36,9 @@ func NewPocketRouter(pc domain.PocketUseCase) *PocketRouter {
 	return &PocketRouter{pc}
 }
 
-func (p *PocketRouter) Register(engine *gin.Engine) {
+func (p *PocketRouter) Register(engine *gin.Engine, m middleware.Middlewares) {
+	engine.Use(m.AuthFilter.WithRequired(true), m.LogInterceptor.Register())
+
 	engine.POST("/pockets", p.sendPocket)
 	engine.GET("/pockets/:pocketID", p.getPocketDetail)
 	engine.PATCH("/users/me/pockets/:pocketID/visibility", p.setVisibility)

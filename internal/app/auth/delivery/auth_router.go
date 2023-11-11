@@ -7,6 +7,7 @@ import (
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/input"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/error/status"
+	"github.com/lucky-pocket/luckyPocket-back/internal/infra/web/http/middleware"
 )
 
 type CodeQuery struct {
@@ -21,7 +22,9 @@ func NewAuthRouter(ac domain.AuthUseCase) *AuthRouter {
 	return &AuthRouter{ac}
 }
 
-func (a *AuthRouter) Register(engine *gin.Engine) {
+func (a *AuthRouter) Register(engine *gin.Engine, m middleware.Middlewares) {
+	engine.Use(m.LogInterceptor.Register())
+
 	engine.GET("/auth/gauth", a.login)
 	engine.POST("/auth/logout", a.logout)
 	engine.POST("/auth/refresh", a.refreshToken)

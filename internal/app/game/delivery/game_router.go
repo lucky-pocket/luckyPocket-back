@@ -7,6 +7,7 @@ import (
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/input"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/error/status"
+	"github.com/lucky-pocket/luckyPocket-back/internal/infra/web/http/middleware"
 )
 
 type FreeRequest struct {
@@ -21,7 +22,9 @@ func NewGameRouter(uc domain.GameUseCase) *GameRouter {
 	return &GameRouter{uc}
 }
 
-func (r *GameRouter) Register(engine *gin.Engine) {
+func (r *GameRouter) Register(engine *gin.Engine, m middleware.Middlewares) {
+	engine.Use(m.AuthFilter.WithRequired(true), m.LogInterceptor.Register())
+
 	engine.GET("/games/free-ticket", r.getTicketInfo)
 	engine.POST("/games/yut", r.playYut)
 }

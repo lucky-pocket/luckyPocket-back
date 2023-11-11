@@ -1,6 +1,7 @@
 package delivery
 
 import (
+	"github.com/lucky-pocket/luckyPocket-back/internal/infra/web/http/middleware"
 	"net/http"
 	"strconv"
 
@@ -17,7 +18,9 @@ func NewNoticeRouter(uc domain.NoticeUseCase) *NoticeRouter {
 	return &NoticeRouter{uc}
 }
 
-func (r *NoticeRouter) Register(engine *gin.Engine) {
+func (r *NoticeRouter) Register(engine *gin.Engine, m middleware.Middlewares) {
+	engine.Use(m.AuthFilter.WithRequired(true), m.LogInterceptor.Register())
+
 	engine.GET("/users/me/notices", r.getNotice)
 	engine.PATCH("/users/me/notices/:noticeID", r.checkNotice)
 }
