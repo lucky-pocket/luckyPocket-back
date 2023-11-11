@@ -1,0 +1,25 @@
+name: app
+app: golang@1.21
+options:
+  env:
+    - name: HTTP_PORT
+      value: 8080
+    - name: REDIS_ADDR
+      var: redis-addr
+    - name: REDIS_PASS
+      secret: redis-pass
+    - name: REDIS_DB_NUM
+      value: 0
+    - name: MYSQL_USER
+      var: mariadb-user
+    - name: MYSQL_PASS
+      secret: mariadb-pass
+    - name: MYSQL_HOST
+      var: mariadb-host
+    - name: MYSQL_PORT
+      var: mariadb-port
+    - name: MYSQL_DB
+      var: mariadb-db
+
+  ports: 8080
+  image: oneeonly/lucky-pocket/app:latest
