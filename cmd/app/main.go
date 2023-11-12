@@ -2,12 +2,17 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 
+	"github.com/gin-contrib/cors"
+	"github.com/gin-contrib/pprof"
+	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
@@ -72,7 +77,10 @@ func init() {
 	}
 
 	logger = zap.New(
-		zapcore.NewCore(zapcore.NewJSONEncoder(encoderConfig), zapcore.AddSync(rotator), zapcore.InfoLevel),
+		zapcore.NewTee(
+			zapcore.NewCore(zapcore.NewJSONEncoder(encoderConfig), zapcore.AddSync(rotator), zapcore.ErrorLevel),
+			zapcore.NewCore(zapcore.NewConsoleEncoder(encoderConfig), os.Stdout, zapcore.InfoLevel),
+		),
 	)
 
 	if err := config.Load("./resource/app.yml"); err != nil {
@@ -185,6 +193,14 @@ func main() {
 
 	e := gin.New()
 	e.Use(gin.Recovery())
+	e.Use(ginzap.Ginzap(logger, time.RFC3339, false))
+	e.Use(cors.New(cors.Config{
+		AllowAllOrigins:  true, // TODO: Change this to specific origin.
+		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type"},
+		MaxAge:           12 * time.Hour,
+		AllowCredentials: true,
+	}))
 
 	e.Use(errorFilter.Register())
 	e.Use(logHandler.Register())
@@ -240,6 +256,13 @@ func main() {
 			pocket.POST("/:pocketID/sender", pocketRouter.RevealSender)
 			pocket.PATCH("/:pocketID/visibility", pocketRouter.SetVisibility)
 		}
+	}
+
+	admin := e.Group("/admin")
+	{
+		// TODO: Add authorization for role admin.
+		// And we might need pocket management for admin.
+		pprof.RouteRegister(admin, "debug/pprof")
 	}
 
 	httpConf := config.Web().HTTP
