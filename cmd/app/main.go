@@ -48,6 +48,7 @@ import (
 	"github.com/lucky-pocket/luckyPocket-back/internal/infra/web/client/gauth"
 	"github.com/lucky-pocket/luckyPocket-back/internal/infra/web/http/filter"
 	"github.com/lucky-pocket/luckyPocket-back/internal/infra/web/http/interceptor"
+	"github.com/lucky-pocket/luckyPocket-back/internal/infra/web/http/middleware"
 )
 
 var logger *zap.Logger
@@ -190,6 +191,7 @@ func main() {
 	authFilter := filter.NewAuthFilter(jwtParser)
 	errorFilter := filter.NewErrorFilter()
 	logHandler := interceptor.NewLogger(logger)
+	ratelimiter := middleware.NewRateLimiter()
 
 	e := gin.New()
 	e.Use(gin.Recovery())
@@ -204,6 +206,7 @@ func main() {
 
 	e.Use(errorFilter.Register())
 	e.Use(logHandler.Register())
+	e.Use(ratelimiter.Register())
 
 	game := e.Group("/games")
 	{
@@ -255,6 +258,7 @@ func main() {
 			pocket.POST("", pocketRouter.SendPocket)
 			pocket.POST("/:pocketID/sender", pocketRouter.RevealSender)
 			pocket.PATCH("/:pocketID/visibility", pocketRouter.SetVisibility)
+
 		}
 	}
 
