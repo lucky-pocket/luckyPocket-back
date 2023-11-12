@@ -36,7 +36,7 @@ jobs:
           
           file: ./deploy/Dockerfile.app
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/lucky-pocket/app:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/lucky-pocket-app:latest
 
       - name: Build and push "batch" process
         uses: docker/build-push-action@v5
@@ -44,7 +44,7 @@ jobs:
           context: .
           file: ./deploy/Dockerfile.batch
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/lucky-pocket/batch:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/lucky-pocket-batch:latest
   
   deploy-to-cloudtype:
     runs-on: ubuntu-latest

@@ -19,4 +19,4 @@ options:
     - name: MYSQL_DB
       var: mariadb-db
       
-  image: oneeonly/lucky-pocket/batch:latest
+  image: oneeonly/lucky-pocket-batch:latest
