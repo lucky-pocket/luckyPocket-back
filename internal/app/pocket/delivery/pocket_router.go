@@ -18,7 +18,7 @@ type PocketQuery struct {
 
 type PocketRequest struct {
 	ReceiverID uint64 `json:"receiverID" binding:"required"`
-	Coins      int    `json:"coins" binding:"required,number,min=2"`
+	Coins      int    `json:"coins" binding:"required,number"`
 	Message    string `json:"message" binding:"required,max=300"`
 	IsPublic   bool   `json:"isPublic" binding:"required"`
 }
