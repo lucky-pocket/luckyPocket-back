@@ -7,7 +7,7 @@ options:
     - name: REDIS_PASS
       secret: redis-pass
     - name: REDIS_DB_NUM
-      value: 1
+      value: 0
     - name: MYSQL_USER
       var: mariadb-user
     - name: MYSQL_PASS
