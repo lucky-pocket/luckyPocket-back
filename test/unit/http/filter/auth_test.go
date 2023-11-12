@@ -11,6 +11,7 @@ import (
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/auth"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/auth/jwt"
+	"github.com/lucky-pocket/luckyPocket-back/internal/global/error/status"
 	"github.com/lucky-pocket/luckyPocket-back/internal/infra/web/http/filter"
 	"github.com/stretchr/testify/assert"
 )
@@ -29,8 +30,12 @@ func TestAuthFilter(t *testing.T) {
 
 	r := gin.Default()
 	r.Use(filter.NewErrorFilter().Register())
-	r.GET("/true", authFilter.WithRequired(true), func(ctx *gin.Context) { auth.MustExtract(ctx.Request.Context()) })
 	r.GET("/false", authFilter.WithRequired(false))
+	r.GET("/true", authFilter.WithRequired(true), func(ctx *gin.Context) {
+		if _, err := auth.Extract(ctx.Request.Context()); err != nil {
+			ctx.Error(status.NewError(http.StatusUnauthorized, ""))
+		}
+	})
 
 	testcases := []struct {
 		desc   string
