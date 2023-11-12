@@ -8,7 +8,6 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"gopkg.in/natefinch/lumberjack.v2"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/pprof"
@@ -69,17 +68,17 @@ func init() {
 		EncodeDuration: zapcore.StringDurationEncoder,
 	}
 
-	rotator := &lumberjack.Logger{
-		Filename:   "/var/log/app/app.log",
-		MaxSize:    5,
-		MaxAge:     60,
-		MaxBackups: 4,
-		LocalTime:  true,
-	}
+	// rotator := &lumberjack.Logger{
+	// 	Filename:   "./log/app.log",
+	// 	MaxSize:    5,
+	// 	MaxAge:     60,
+	// 	MaxBackups: 4,
+	// 	LocalTime:  true,
+	// }
 
 	logger = zap.New(
 		zapcore.NewTee(
-			zapcore.NewCore(zapcore.NewJSONEncoder(encoderConfig), zapcore.AddSync(rotator), zapcore.ErrorLevel),
+			// zapcore.NewCore(zapcore.NewJSONEncoder(encoderConfig), zapcore.AddSync(rotator), zapcore.ErrorLevel),
 			zapcore.NewCore(zapcore.NewConsoleEncoder(encoderConfig), os.Stdout, zapcore.InfoLevel),
 		),
 	)

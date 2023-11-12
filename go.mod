@@ -1,6 +1,6 @@
 module github.com/lucky-pocket/luckyPocket-back
 
-go 1.21.0
+go 1.20
 
 require (
 	entgo.io/ent v0.12.4
@@ -14,13 +14,12 @@ require (
 	github.com/go-sql-driver/mysql v1.7.1
 	github.com/golang-jwt/jwt/v5 v5.0.0
 	github.com/mattn/go-sqlite3 v1.14.17
-	github.com/onee-only/gauth-go v0.0.0-20231018150424-afdda7d3f230
+	github.com/onee-only/gauth-go v0.0.0-20231112131758-da1b4b7b90dc
 	github.com/pkg/errors v0.9.1
 	github.com/redis/go-redis/v9 v9.2.1
 	github.com/spf13/viper v1.17.0
 	github.com/stretchr/testify v1.8.4
 	go.uber.org/zap v1.26.0
-	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 )
 
 require (

@@ -2,11 +2,10 @@ FROM golang:alpine
 
 WORKDIR /build
 
+COPY ./resource/app.yml ./resource/app.yml
 COPY go.mod go.sum ./
 COPY ./cmd/batch ./cmd/batch/
 COPY ./internal ./internal/
-
-VOLUME ["/var/log/"]
 
 RUN go mod download
 

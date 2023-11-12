@@ -22,9 +22,9 @@ type HTTPConfig struct {
 }
 
 type GAuthConfig struct {
-	ClientID     string `yaml:"client-id"`
-	ClientSecret string `yaml:"client-secret"`
-	RedirectURI  string `yaml:"redirect-uri"`
+	ClientID     string `yaml:"clientid"`
+	ClientSecret string `yaml:"clientsecret"`
+	RedirectURI  string `yaml:"redirecturi"`
 }
 
 func JWT() JWTConfig {

@@ -53,5 +53,5 @@ func (n *noticeSender) Do() {
 		return
 	}
 
-	n.Logger.Info("notice not found")
+	n.Logger.Debug("notice not found")
 }

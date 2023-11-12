@@ -1,5 +1,5 @@
 name: app
-app: golang@1.21
+app: container
 options:
   env:
     - name: HTTP_PORT
@@ -20,6 +20,14 @@ options:
       var: mariadb-port
     - name: MYSQL_DB
       var: mariadb-db
-
+    - name: GAUTH_CLIENT_SECRET
+      secret: gauth-client-secret
+    - name: GAUTH_REDIRECT_URI
+      var: gauth-redirect-uri
+    - name: GAUTH_CLIENT_ID
+      var: gauth-client-id
+    - name: JWT_SECRET
+      secret: jwt-secret
+      
   ports: 8080
   image: oneeonly/lucky-pocket-app:latest
