@@ -1,0 +1,22 @@
+name: batch
+app: golang@1.21
+options:
+  env:
+    - name: REDIS_ADDR
+      var: redis-addr
+    - name: REDIS_PASS
+      secret: redis-pass
+    - name: REDIS_DB_NUM
+      value: 0
+    - name: MYSQL_USER
+      var: mariadb-user
+    - name: MYSQL_PASS
+      secret: mariadb-pass
+    - name: MYSQL_HOST
+      var: mariadb-host
+    - name: MYSQL_PORT
+      var: mariadb-port
+    - name: MYSQL_DB
+      var: mariadb-db
+      
+  image: oneeonly/lucky-pocket/batch:latest

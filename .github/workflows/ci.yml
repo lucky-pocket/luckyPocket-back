@@ -1,0 +1,94 @@
+name: CI
+
+on:
+  pull_request:
+    branches: ["main", "develop"]
+
+permissions:
+  contents: read
+    
+jobs:
+  lint: 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+          cache: true
+
+      - name: Set up mockery
+        run: go install github.com/vektra/mockery/v2@v2.33.3
+        
+      - name: Create mocks
+        run: make mocks
+
+      - name: Generate files
+        run: make generate
+
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: latest
+          args: --config=./resource/.golangci.yml 
+
+  unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+          cache: true
+
+      - name: Set up mockery
+        run: go install github.com/vektra/mockery/v2@v2.33.3
+        
+      - name: Create mocks
+        run: make mocks
+
+      - name: Generate files
+        run: make generate
+
+      - name: Test
+        run: go test -v -race -coverprofile=unit.out -covermode=atomic ./test/unit/... -coverpkg=./...
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: unit.out
+
+  integration-test:
+    needs: [unit-test]
+    runs-on: ubuntu-latest
+
+    services:
+      redis:
+        image: redis
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+          cache: true
+
+      - name: Generate files
+        run: make generate
+
+      - name: Test
+        run: go test -v -race -coverprofile=integration.out -covermode=atomic ./test/integration/... -coverpkg=./...
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: integration.out
