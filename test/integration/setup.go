@@ -10,7 +10,7 @@ import (
 
 func CreateTestEntClient() (c *ent.Client, closeFunc func(), err error) {
 	driver, dataSource := ent_client.NewMemorySQLiteDialect()
-	c, closeFunc, err = ent_client.NewClient(driver, dataSource)
+	c, _, closeFunc, err = ent_client.NewClient(driver, dataSource)
 	c = c.Debug()
 	if err != nil {
 		return nil, nil, errors.Wrap(err, "error createing test client")
