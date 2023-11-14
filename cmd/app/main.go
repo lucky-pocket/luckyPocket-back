@@ -210,8 +210,7 @@ func main() {
 		AllowCredentials: true,
 	}))
 
-	healthcheck.New(e, health_config.DefaultConfig(), []checks.Check{sqlCheck})
-	healthcheck.New(e, health_config.DefaultConfig(), []checks.Check{&redisCheck})
+	healthcheck.New(e, health_config.DefaultConfig(), []checks.Check{sqlCheck, &redisCheck})
 
 	e.Use(errorFilter.Register())
 	e.Use(logHandler.Register())
