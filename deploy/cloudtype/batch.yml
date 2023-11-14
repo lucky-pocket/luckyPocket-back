@@ -1,7 +1,9 @@
 name: batch
-app: golang@1.21
+app: container
 options:
   env:
+    - name: HTTP_PORT
+      value: 8080
     - name: REDIS_ADDR
       var: redis-addr
     - name: REDIS_PASS
@@ -18,5 +20,14 @@ options:
       var: mariadb-port
     - name: MYSQL_DB
       var: mariadb-db
-      
-  image: oneeonly/lucky-pocket/batch:latest
+    - name: GAUTH_CLIENT_SECRET
+      secret: gauth-client-secret
+    - name: GAUTH_REDIRECT_URI
+      var: gauth-redirect-uri
+    - name: GAUTH_CLIENT_ID
+      var: gauth-client-id
+    - name: JWT_SECRET
+      secret: jwt-secret
+
+  image: oneeonly/lucky-pocket-batch:latest
+  

@@ -5,7 +5,6 @@ import (
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
-	"gopkg.in/natefinch/lumberjack.v2"
 
 	"github.com/lucky-pocket/luckyPocket-back/internal/app/notice/repository"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/batch"
@@ -34,17 +33,17 @@ func init() {
 		EncodeDuration: zapcore.StringDurationEncoder,
 	}
 
-	rotator := &lumberjack.Logger{
-		Filename:   "/var/log/app/batch.log",
-		MaxSize:    5,
-		MaxAge:     60,
-		MaxBackups: 4,
-		LocalTime:  true,
-	}
+	// rotator := &lumberjack.Logger{
+	// 	Filename:   "./log/batch.log",
+	// 	MaxSize:    5,
+	// 	MaxAge:     60,
+	// 	MaxBackups: 4,
+	// 	LocalTime:  true,
+	// }
 
 	logger = zap.New(
 		zapcore.NewTee(
-			zapcore.NewCore(zapcore.NewJSONEncoder(encoderConfig), zapcore.AddSync(rotator), zapcore.ErrorLevel),
+			// zapcore.NewCore(zapcore.NewJSONEncoder(encoderConfig), zapcore.AddSync(rotator), zapcore.ErrorLevel),
 			zapcore.NewCore(zapcore.NewConsoleEncoder(encoderConfig), os.Stdout, zapcore.InfoLevel),
 		),
 	)
