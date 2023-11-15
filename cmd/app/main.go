@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 	"os"
 	"time"
 
@@ -195,10 +196,16 @@ func main() {
 	errorFilter := filter.NewErrorFilter()
 	logHandler := interceptor.NewLogger(logger)
 	ratelimiter := middleware.NewRateLimiter()
+	roleFilter := filter.NewRoleFilter()
 
 	e := gin.New()
 	e.Use(gin.Recovery())
-	e.Use(ginzap.Ginzap(logger, time.RFC3339, false))
+	e.Use(ginzap.GinzapWithConfig(logger, &ginzap.Config{
+		TimeFormat: time.RFC3339,
+		UTC:        false,
+		SkipPaths:  []string{"/healthz"},
+		Context:    nil,
+	}))
 	e.Use(cors.New(cors.Config{
 		AllowAllOrigins:  true, // TODO: Change this to specific origin.
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"},
@@ -272,8 +279,11 @@ func main() {
 
 	admin := e.Group("/admin")
 	{
-		// TODO: Add authorization for role admin.
-		// And we might need pocket management for admin.
+		admin.Use(
+			authFilter.WithRequired(true),
+			roleFilter.Register(constant.RoleAdmin),
+		)
+
 		pprof.RouteRegister(admin, "debug/pprof")
 	}
 
