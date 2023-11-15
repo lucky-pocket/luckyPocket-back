@@ -196,9 +196,6 @@ func main() {
 	logHandler := interceptor.NewLogger(logger)
 	ratelimiter := middleware.NewRateLimiter()
 
-	sqlCheck := checks.SqlCheck{Sql: drv}
-	redisCheck := checks.NewRedisCheck(redis)
-
 	e := gin.New()
 	e.Use(gin.Recovery())
 	e.Use(ginzap.Ginzap(logger, time.RFC3339, false))
@@ -210,7 +207,10 @@ func main() {
 		AllowCredentials: true,
 	}))
 
-	healthcheck.New(e, health_config.DefaultConfig(), []checks.Check{sqlCheck, &redisCheck})
+	healthcheck.New(e, health_config.DefaultConfig(), []checks.Check{
+		checks.SqlCheck{Sql: drv},
+		&checks.RedisCheck{Client: redis},
+	})
 
 	e.Use(errorFilter.Register())
 	e.Use(logHandler.Register())
