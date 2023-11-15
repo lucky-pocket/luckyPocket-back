@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 	"os"
@@ -110,7 +111,7 @@ func main() {
 	defer closeRedis()
 
 	mysqlConf := config.Data().Mysql
-	ent, sqlDB, closeMysql, err := ent.NewClient(ent.NewMySQLDialect(ent.MysqlDialectOpts{
+	entClient, sqlDB, closeMysql, err := ent.NewClient(ent.NewMySQLDialect(ent.MysqlDialectOpts{
 		User: mysqlConf.User,
 		Pass: mysqlConf.Pass,
 		Host: mysqlConf.Host,
@@ -122,14 +123,18 @@ func main() {
 	}
 	defer closeMysql()
 
+	if err = ent.Migrate(context.Background(), entClient); err != nil {
+		logger.Fatal(err.Error())
+	}
+
 	// repository layer configuration.
 	blacklistRepo := blacklist_repo.NewBlackListRepository(redis)
 	ticketRepo := ticket_repo.NewTicketRepository(redis)
 	noticePool := notice_repo.NewNoticePool(redis)
-	userRepo := user_repo.NewUserRepository(ent)
-	pocketRepo := pocket_repo.NewPocketRepository(ent)
-	gamelogRepo := gamelog_repo.NewGameLogRepository(ent)
-	noticeRepo := notice_repo.NewNoticeRepository(ent)
+	userRepo := user_repo.NewUserRepository(entClient)
+	pocketRepo := pocket_repo.NewPocketRepository(entClient)
+	gamelogRepo := gamelog_repo.NewGameLogRepository(entClient)
+	noticeRepo := notice_repo.NewNoticeRepository(entClient)
 
 	// helper configuration.
 	txManager := tx.NewTxManager()
