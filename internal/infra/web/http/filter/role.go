@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	errForbiddenAuthToken = status.NewError(http.StatusForbidden, "permission denied")
+	errNoPermission = status.NewError(http.StatusForbidden, "permission denied")
 )
 
 type RoleFilter struct{}
@@ -23,7 +23,7 @@ func (f *RoleFilter) Register(role constant.Role) gin.HandlerFunc {
 		info := auth.MustExtract(c.Request.Context())
 
 		if info.Role != role {
-			c.Error(errForbiddenAuthToken)
+			c.Error(errNoPermission)
 			return
 		}
 
