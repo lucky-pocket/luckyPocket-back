@@ -65,7 +65,7 @@ func main() {
 	defer closeRedis()
 
 	mysqlConfig := config.Data().Mysql
-	ent, closeMysql, err := ent.NewClient(ent.NewMySQLDialect(ent.MysqlDialectOpts{
+	ent, _, closeMysql, err := ent.NewClient(ent.NewMySQLDialect(ent.MysqlDialectOpts{
 		User: mysqlConfig.User,
 		Pass: mysqlConfig.Pass,
 		Host: mysqlConfig.Host,
