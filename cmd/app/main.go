@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 	"os"
 	"time"
 
@@ -195,6 +196,7 @@ func main() {
 	errorFilter := filter.NewErrorFilter()
 	logHandler := interceptor.NewLogger(logger)
 	ratelimiter := middleware.NewRateLimiter()
+	roleFilter := filter.NewRoleFilter()
 
 	e := gin.New()
 	e.Use(gin.Recovery())
@@ -277,8 +279,11 @@ func main() {
 
 	admin := e.Group("/admin")
 	{
-		// TODO: Add authorization for role admin.
-		// And we might need pocket management for admin.
+		admin.Use(
+			authFilter.WithRequired(true),
+			roleFilter.Register(constant.RoleAdmin),
+		)
+
 		pprof.RouteRegister(admin, "debug/pprof")
 	}
 
