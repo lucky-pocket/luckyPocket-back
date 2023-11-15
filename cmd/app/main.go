@@ -198,7 +198,12 @@ func main() {
 
 	e := gin.New()
 	e.Use(gin.Recovery())
-	e.Use(ginzap.Ginzap(logger, time.RFC3339, false))
+	e.Use(ginzap.GinzapWithConfig(logger, &ginzap.Config{
+		TimeFormat: time.RFC3339,
+		UTC:        false,
+		SkipPaths:  []string{"/healthz"},
+		Context:    nil,
+	}))
 	e.Use(cors.New(cors.Config{
 		AllowAllOrigins:  true, // TODO: Change this to specific origin.
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"},
