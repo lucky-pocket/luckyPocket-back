@@ -48,6 +48,10 @@ import (
 	"github.com/lucky-pocket/luckyPocket-back/internal/infra/web/http/filter"
 	"github.com/lucky-pocket/luckyPocket-back/internal/infra/web/http/interceptor"
 	"github.com/lucky-pocket/luckyPocket-back/internal/infra/web/http/middleware"
+
+	healthcheck "github.com/tavsec/gin-healthcheck"
+	"github.com/tavsec/gin-healthcheck/checks"
+	health_config "github.com/tavsec/gin-healthcheck/config"
 )
 
 var logger *zap.Logger
@@ -105,7 +109,7 @@ func main() {
 	defer closeRedis()
 
 	mysqlConf := config.Data().Mysql
-	ent, closeMysql, err := ent.NewClient(ent.NewMySQLDialect(ent.MysqlDialectOpts{
+	ent, sqlDB, closeMysql, err := ent.NewClient(ent.NewMySQLDialect(ent.MysqlDialectOpts{
 		User: mysqlConf.User,
 		Pass: mysqlConf.Pass,
 		Host: mysqlConf.Host,
@@ -202,6 +206,11 @@ func main() {
 		MaxAge:           12 * time.Hour,
 		AllowCredentials: true,
 	}))
+
+	healthcheck.New(e, health_config.DefaultConfig(), []checks.Check{
+		checks.SqlCheck{Sql: sqlDB},
+		&checks.RedisCheck{Client: redis},
+	})
 
 	e.Use(errorFilter.Register())
 	e.Use(logHandler.Register())
