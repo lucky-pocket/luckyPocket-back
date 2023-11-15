@@ -109,7 +109,7 @@ func main() {
 	defer closeRedis()
 
 	mysqlConf := config.Data().Mysql
-	ent, drv, closeMysql, err := ent.NewClient(ent.NewMySQLDialect(ent.MysqlDialectOpts{
+	ent, sqlDB, closeMysql, err := ent.NewClient(ent.NewMySQLDialect(ent.MysqlDialectOpts{
 		User: mysqlConf.User,
 		Pass: mysqlConf.Pass,
 		Host: mysqlConf.Host,
@@ -208,7 +208,7 @@ func main() {
 	}))
 
 	healthcheck.New(e, health_config.DefaultConfig(), []checks.Check{
-		checks.SqlCheck{Sql: drv},
+		checks.SqlCheck{Sql: sqlDB},
 		&checks.RedisCheck{Client: redis},
 	})
 
