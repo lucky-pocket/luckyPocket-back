@@ -30,6 +30,8 @@ options:
       secret: jwt-secret
     - name: GIN_MODE
       value: release
+    - name: TZ
+      var: tz
       
   ports: 8080
   image: ${{ steps.meta-app.outputs.tags }}
