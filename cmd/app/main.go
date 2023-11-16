@@ -275,10 +275,9 @@ func main() {
 		{
 			pocketAuth.Use(authFilter.WithRequired(true))
 
-			pocket.POST("", pocketRouter.SendPocket)
-			pocket.POST("/:pocketID/sender", pocketRouter.RevealSender)
-			pocket.PATCH("/:pocketID/visibility", pocketRouter.SetVisibility)
-
+			pocketAuth.POST("", pocketRouter.SendPocket)
+			pocketAuth.POST("/:pocketID/sender", pocketRouter.RevealSender)
+			pocketAuth.PATCH("/:pocketID/visibility", pocketRouter.SetVisibility)
 		}
 	}
 
