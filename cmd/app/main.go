@@ -3,9 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 	"os"
 	"time"
+
+	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 
 	_ "github.com/go-sql-driver/mysql"
 	"go.uber.org/zap"
@@ -208,7 +209,7 @@ func main() {
 	e.Use(ginzap.GinzapWithConfig(logger, &ginzap.Config{
 		TimeFormat: time.RFC3339,
 		UTC:        false,
-		SkipPaths:  []string{"/healthz"},
+		SkipPaths:  []string{"/healthz", "/favicon.ico"},
 		Context:    nil,
 	}))
 	e.Use(cors.New(cors.Config{
@@ -271,14 +272,11 @@ func main() {
 	{
 		pocket.GET("/:pocketID", authFilter.WithRequired(false), pocketRouter.GetPocketDetail)
 
-		pocketAuth := pocket.Group("")
+		pocketAuth := pocket.Group("", authFilter.WithRequired(true))
 		{
-			pocketAuth.Use(authFilter.WithRequired(true))
-
-			pocket.POST("", pocketRouter.SendPocket)
-			pocket.POST("/:pocketID/sender", pocketRouter.RevealSender)
-			pocket.PATCH("/:pocketID/visibility", pocketRouter.SetVisibility)
-
+			pocketAuth.POST("", pocketRouter.SendPocket)
+			pocketAuth.POST("/:pocketID/sender", pocketRouter.RevealSender)
+			pocketAuth.PATCH("/:pocketID/visibility", pocketRouter.SetVisibility)
 		}
 	}
 
