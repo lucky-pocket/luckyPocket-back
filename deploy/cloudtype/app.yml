@@ -34,4 +34,4 @@ options:
       var: tz
       
   ports: 8080
-  image: ${{ steps.meta-app.outputs.tags }}
+  image: oneeonly/lucky-pocket-app:latest
