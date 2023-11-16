@@ -1,12 +1,13 @@
 package delivery
 
 import (
+	"net/http"
+	"time"
+
 	"github.com/gin-gonic/gin"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/input"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/error/status"
-	"net/http"
-	"time"
 )
 
 type CodeQuery struct {
