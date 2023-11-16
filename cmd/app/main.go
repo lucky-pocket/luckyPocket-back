@@ -270,14 +270,14 @@ func main() {
 
 	pocket := e.Group("/pockets")
 	{
-		pocket.GET("/:pocketID", authFilter.WithRequired(false), pocketRouter.GetPocketDetail)
-
 		pocketAuth := pocket.Group("", authFilter.WithRequired(true))
 		{
 			pocketAuth.POST("", pocketRouter.SendPocket)
 			pocketAuth.POST("/:pocketID/sender", pocketRouter.RevealSender)
 			pocketAuth.PATCH("/:pocketID/visibility", pocketRouter.SetVisibility)
 		}
+
+		pocket.GET("/:pocketID", authFilter.WithRequired(false), pocketRouter.GetPocketDetail)
 	}
 
 	admin := e.Group("/admin")

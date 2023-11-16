@@ -31,5 +31,5 @@ options:
     - name: TZ
       var: tz
       
-  image: oneeonly/lucky-pocket-app:latest
+  image: oneeonly/lucky-pocket-batch:latest
   

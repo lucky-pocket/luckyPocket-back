@@ -28,8 +28,6 @@ options:
       var: gauth-client-id
     - name: JWT_SECRET
       secret: jwt-secret
-    - name: GIN_MODE
-      value: release
     - name: TZ
       var: tz
       
