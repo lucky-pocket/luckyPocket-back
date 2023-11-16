@@ -28,6 +28,8 @@ options:
       var: gauth-client-id
     - name: JWT_SECRET
       secret: jwt-secret
-
-  image: oneeonly/lucky-pocket-batch:latest
+    - name: TZ
+      var: tz
+      
+  image: ${{ steps.meta-batch.outputs.tags }}
   
