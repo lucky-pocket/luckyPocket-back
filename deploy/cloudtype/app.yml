@@ -28,6 +28,8 @@ options:
       var: gauth-client-id
     - name: JWT_SECRET
       secret: jwt-secret
+    - name: GIN_MODE
+      value: release
       
   ports: 8080
-  image: oneeonly/lucky-pocket-app:latest
+  image: ${{ steps.meta-app.outputs.tags }}

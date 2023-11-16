@@ -29,5 +29,5 @@ options:
     - name: JWT_SECRET
       secret: jwt-secret
 
-  image: oneeonly/lucky-pocket-batch:latest
+  image: ${{ steps.meta-batch.outputs.tags }}
   

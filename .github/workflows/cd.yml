@@ -28,6 +28,14 @@ jobs:
 
       - name: Generate files
         run: make generate
+
+      - name: Extract metadata for "app"
+        id: meta-app
+        uses: docker/metadata-action@v5
+        with:
+          images: oneeonly/lucky-pocket-app
+          tags: |
+            type=sha
           
       - name: Build and push "app" process
         uses: docker/build-push-action@v5
@@ -35,7 +43,16 @@ jobs:
           context: .
           file: ./deploy/Dockerfile.app
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/lucky-pocket-app:latest
+          tags: ${{ steps.meta-app.outputs.tags }}
+
+      - name: Extract metadata for "batch"
+        id: meta-batch
+        uses: docker/metadata-action@v5
+        with:
+          images: oneeonly/lucky-pocket-batch
+          tags: |
+            type=sha
+
 
       - name: Build and push "batch" process
         uses: docker/build-push-action@v5
@@ -43,7 +60,7 @@ jobs:
           context: .
           file: ./deploy/Dockerfile.batch
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/lucky-pocket-batch:latest
+          tags: ${{ steps.meta-batch.outputs.tags }}
   
   deploy-to-cloudtype:
     runs-on: ubuntu-latest
