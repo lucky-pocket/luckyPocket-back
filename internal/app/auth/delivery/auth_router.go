@@ -1,16 +1,21 @@
 package delivery
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/input"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/error/status"
+	"net/http"
+	"time"
 )
 
 type CodeQuery struct {
 	Code string `form:"code" binding:"required"`
+}
+
+type AccessResponse struct {
+	AccessToken string `json:"accessToken"`
+	ExpiresAt   string `json:"expiresAt"`
 }
 
 type AuthRouter struct {
@@ -37,7 +42,20 @@ func (a *AuthRouter) Login(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, tokenOutput)
+	http.SetCookie(c.Writer, &http.Cookie{
+		Name:     "refreshToken",
+		Value:    tokenOutput.Refresh.Token,
+		Domain:   "",
+		Expires:  tokenOutput.Refresh.ExpiresAt,
+		Secure:   true,
+		HttpOnly: true,
+		SameSite: http.SameSiteLaxMode,
+	})
+
+	c.JSON(http.StatusOK, AccessResponse{
+		AccessToken: tokenOutput.Access.Token,
+		ExpiresAt:   tokenOutput.Access.ExpiresAt.Local().Format(time.RFC3339),
+	})
 }
 
 func (a *AuthRouter) Logout(c *gin.Context) {
@@ -73,5 +91,18 @@ func (a *AuthRouter) RefreshToken(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, tokenOutput)
+	http.SetCookie(c.Writer, &http.Cookie{
+		Name:     "refreshToken",
+		Value:    tokenOutput.Refresh.Token,
+		Domain:   "",
+		Expires:  tokenOutput.Refresh.ExpiresAt,
+		Secure:   true,
+		HttpOnly: true,
+		SameSite: http.SameSiteLaxMode,
+	})
+
+	c.JSON(http.StatusOK, AccessResponse{
+		AccessToken: tokenOutput.Access.Token,
+		ExpiresAt:   tokenOutput.Access.ExpiresAt.Local().Format(time.RFC3339),
+	})
 }
