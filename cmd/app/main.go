@@ -256,7 +256,7 @@ func main() {
 		notice := me.Group("/notices")
 		{
 			notice.GET("", noticeRouter.GetNotice)
-			notice.PATCH(":noticeID", noticeRouter.CheckNotice)
+			notice.PATCH("/:noticeID", noticeRouter.CheckNotice)
 		}
 	}
 
@@ -270,10 +270,14 @@ func main() {
 
 	pocket := e.Group("/pockets")
 	{
-		pocket.POST("", authFilter.WithRequired(true), pocketRouter.SendPocket)
 		pocket.GET("/:pocketID", authFilter.WithRequired(false), pocketRouter.GetPocketDetail)
-		pocket.POST("/:pocketID/sender", authFilter.WithRequired(true), pocketRouter.RevealSender)
-		pocket.PATCH("/:pocketID/visibility", authFilter.WithRequired(true), pocketRouter.SetVisibility)
+
+		pocketAuth := pocket.Group("", authFilter.WithRequired(true))
+		{
+			pocketAuth.POST("", pocketRouter.SendPocket)
+			pocketAuth.POST("/:pocketID/sender", pocketRouter.RevealSender)
+			pocketAuth.PATCH("/:pocketID/visibility", pocketRouter.SetVisibility)
+		}
 
 	}
 
