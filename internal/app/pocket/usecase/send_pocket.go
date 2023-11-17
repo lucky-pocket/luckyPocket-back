@@ -77,5 +77,8 @@ func (uc *pocketUseCase) SendPocket(ctx context.Context, input *input.PocketInpu
 		}
 
 		return nil
-	}, uc.PocketRepository.(tx.Transactor).NewTx())
+	},
+		uc.PocketRepository.(tx.Transactor).NewTx(),
+		uc.UserRepository.(tx.Transactor).NewTx(),
+	)
 }
