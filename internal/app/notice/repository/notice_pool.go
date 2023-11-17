@@ -64,7 +64,7 @@ func (n *noticePool) Put(ctx context.Context, notice *domain.Notice) error {
 }
 
 func (n *noticePool) Take(ctx context.Context, count int) ([]*domain.Notice, error) {
-	cmd := n.getClient(ctx).SRandMemberN(ctx, poolKey, int64(count))
+	cmd := n.getClient(ctx).SPopN(ctx, poolKey, int64(count))
 	if err := cmd.Err(); err != nil {
 		return nil, err
 	}

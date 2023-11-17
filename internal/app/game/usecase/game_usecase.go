@@ -81,7 +81,7 @@ func (g *gameUseCase) PlayYut(ctx context.Context, input *input.FreeInput) (*out
 			return errors.Wrap(err, "unexpected error")
 		}
 
-		err = g.UserRepository.UpdateCoin(ctx, user.UserID, coins+coinsEarned)
+		err = g.UserRepository.UpdateCoin(ctx, user.UserID, max(coins+coinsEarned, 0))
 		if err != nil {
 			return errors.Wrap(err, "unexpected error")
 		}
