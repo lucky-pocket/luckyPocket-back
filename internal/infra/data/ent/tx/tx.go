@@ -36,6 +36,7 @@ func (etx *entTX) Begin() (any, error) {
 	if err != nil {
 		return nil, errors.Wrap(err, "ent transaciton begin failed")
 	}
+	etx.tx = tranx
 	return tranx, nil
 }
 

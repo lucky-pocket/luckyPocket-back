@@ -31,5 +31,5 @@ options:
     - name: TZ
       var: tz
       
-  image: ${{ steps.meta-batch.outputs.tags }}
+  image: oneeonly/lucky-pocket-batch:latest
   

@@ -256,7 +256,7 @@ func main() {
 		notice := me.Group("/notices")
 		{
 			notice.GET("", noticeRouter.GetNotice)
-			notice.PATCH(":noticeID", noticeRouter.CheckNotice)
+			notice.PATCH("/:noticeID", noticeRouter.CheckNotice)
 		}
 	}
 
@@ -278,6 +278,7 @@ func main() {
 			pocketAuth.POST("/:pocketID/sender", pocketRouter.RevealSender)
 			pocketAuth.PATCH("/:pocketID/visibility", pocketRouter.SetVisibility)
 		}
+
 	}
 
 	admin := e.Group("/admin")
