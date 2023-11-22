@@ -8,8 +8,9 @@ type YutResultElem struct {
 }
 
 type YutOutput struct {
-	Result      YutResultElem `json:"result"`
-	CoinsEarned int           `json:"coinsEarned"`
+	Result      *YutResultElem `json:"result"`
+	Output      string         `json:"output"`
+	CoinsEarned int            `json:"coinsEarned"`
 }
 
 type TicketOutput struct {
