@@ -36,9 +36,8 @@ func (g *gameUseCase) PlayYut(ctx context.Context, input *input.FreeInput) (*out
 	user := auth.MustExtract(ctx)
 
 	var (
-		coinsEarned int
-		marked      bool
-		out         *output.YutOutput
+		marked bool
+		out    *output.YutOutput
 	)
 
 	err := g.TxManager.WithTx(ctx, func(ctx context.Context) error {
@@ -76,19 +75,19 @@ func (g *gameUseCase) PlayYut(ctx context.Context, input *input.FreeInput) (*out
 		if isNak {
 			out = &output.YutOutput{Output: "낙"}
 			return nil
-		} else {
-			yutPieces := [3]bool{
-				rand.Intn(2) == 1,
-				rand.Intn(2) == 1,
-				rand.Intn(2) == 1,
-			}
-
-			marked = rand.Intn(2) == 1
-
-			coinsEarned, result := g.evaluateYutResult(marked, yutPieces)
-
-			out = mapper.ToYutOutput(marked, yutPieces, coinsEarned, result)
 		}
+
+		yutPieces := [3]bool{
+			rand.Intn(2) == 1,
+			rand.Intn(2) == 1,
+			rand.Intn(2) == 1,
+		}
+
+		marked = rand.Intn(2) == 1
+
+		coinsEarned, result := g.evaluateYutResult(marked, yutPieces)
+
+		out = mapper.ToYutOutput(marked, yutPieces, coinsEarned, result)
 
 		coins, err := g.UserRepository.CountCoinsByUserID(ctx, user.UserID)
 		if err != nil {
