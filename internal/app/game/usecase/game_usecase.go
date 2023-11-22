@@ -35,7 +35,11 @@ func NewGameUseCase(deps *Deps) domain.GameUseCase {
 func (g *gameUseCase) PlayYut(ctx context.Context, input *input.FreeInput) (*output.YutOutput, error) {
 	user := auth.MustExtract(ctx)
 
-	var output *output.YutOutput
+	var (
+		marked bool
+		out    *output.YutOutput
+	)
+
 	err := g.TxManager.WithTx(ctx, func(ctx context.Context) error {
 		if input.Free {
 			count, err := g.TicketRepository.CountByUserID(ctx, user.UserID)
@@ -67,14 +71,23 @@ func (g *gameUseCase) PlayYut(ctx context.Context, input *input.FreeInput) (*out
 			}
 		}
 
-		marked := rand.Intn(2) == 1
+		isNak := rand.Intn(20) == 0
+		if isNak {
+			out = &output.YutOutput{Output: "낙"}
+			return nil
+		}
+
 		yutPieces := [3]bool{
 			rand.Intn(2) == 1,
 			rand.Intn(2) == 1,
 			rand.Intn(2) == 1,
 		}
 
-		coinsEarned := g.evaluateYutResult(marked, yutPieces)
+		marked = rand.Intn(2) == 1
+
+		coinsEarned, result := g.evaluateYutResult(marked, yutPieces)
+
+		out = mapper.ToYutOutput(marked, yutPieces, coinsEarned, result)
 
 		coins, err := g.UserRepository.CountCoinsByUserID(ctx, user.UserID)
 		if err != nil {
@@ -95,7 +108,6 @@ func (g *gameUseCase) PlayYut(ctx context.Context, input *input.FreeInput) (*out
 			return errors.Wrap(err, "unexpected error")
 		}
 
-		output = mapper.ToYutOutput(marked, yutPieces, coinsEarned)
 		return nil
 	},
 		g.TicketRepository.(tx.Transactor).NewTx(),
@@ -103,11 +115,11 @@ func (g *gameUseCase) PlayYut(ctx context.Context, input *input.FreeInput) (*out
 		g.GameLogRepository.(tx.Transactor).NewTx(),
 	)
 
-	return output, err
+	return out, err
 }
 
-func (g *gameUseCase) evaluateYutResult(marked bool, yutPieces [3]bool) (coinsEarned int) {
-	yutCount := 0
+func (g *gameUseCase) evaluateYutResult(marked bool, yutPieces [3]bool) (coinsEarned int, result string) {
+	var yutCount int
 	for _, value := range yutPieces {
 		if value {
 			yutCount++
@@ -116,6 +128,7 @@ func (g *gameUseCase) evaluateYutResult(marked bool, yutPieces [3]bool) (coinsEa
 
 	if marked && yutCount == 0 {
 		coinsEarned = constant.PrizeBackDo
+		result = "빽도"
 	} else {
 		if marked {
 			yutCount++
@@ -124,18 +137,22 @@ func (g *gameUseCase) evaluateYutResult(marked bool, yutPieces [3]bool) (coinsEa
 		switch yutCount {
 		case 1:
 			coinsEarned = constant.PrizeDo
+			result = "도"
 		case 2:
 			coinsEarned = constant.PrizeGae
+			result = "개"
 		case 3:
 			coinsEarned = constant.PrizeGeol
+			result = "걸"
 		case 4:
 			coinsEarned = constant.PrizeMo
+			result = "모"
 		default:
 			coinsEarned = constant.PrizeYut
+			result = "윷"
 		}
 	}
-
-	return coinsEarned
+	return
 }
 
 func (g *gameUseCase) GetTicketInfo(ctx context.Context) (*output.TicketOutput, error) {
