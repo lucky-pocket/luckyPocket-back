@@ -6,13 +6,14 @@ import (
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/output"
 )
 
-func ToYutOutput(marked bool, yutPieces [3]bool, coinsEarned int) *output.YutOutput {
+func ToYutOutput(marked bool, yutPieces [3]bool, coinsEarned int, result string) *output.YutOutput {
 	return &output.YutOutput{
-		Result: output.YutResultElem{
+		Result: &output.YutResultElem{
 			Marked:    marked,
 			YutPieces: yutPieces,
 		},
 		CoinsEarned: coinsEarned,
+		Output:      result,
 	}
 }
 
