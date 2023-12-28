@@ -2,9 +2,7 @@ version: "3"
 
 services:
   app:
-    depends_on:
-      - redis
-      - mysql
+    restart: always
     image: "oneeonly/lucky-pocket-app:latest"
     container_name: "app"
     ports:
@@ -12,9 +10,7 @@ services:
     env_file:
       - .env
   batch:
-    depends_on:
-      - redis
-      - mysql
+    restart: always
     image: "oneeonly/lucky-pocket-batch:latest"
     container_name: "batch"
     env_file:
