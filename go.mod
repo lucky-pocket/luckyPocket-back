@@ -21,6 +21,7 @@ require (
 	github.com/stretchr/testify v1.8.4
 	github.com/tavsec/gin-healthcheck v1.4.3
 	go.uber.org/zap v1.26.0
+	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 )
 
 require (
