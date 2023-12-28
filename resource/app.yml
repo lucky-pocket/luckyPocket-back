@@ -15,8 +15,8 @@ data:
     pass: ${REDIS_PASS}
     db: ${REDIS_DB_NUM}
   mysql:
-    user: ${MYSQL_USER}
-    pass: ${MYSQL_PASS}
+    user: ${MYSQL_USERNAME}
+    pass: ${MYSQL_ROOT_PASSWORD}
     host: ${MYSQL_HOST}
     port: ${MYSQL_PORT}
-    db: ${MYSQL_DB}
+    db: ${MYSQL_DATABASE}
