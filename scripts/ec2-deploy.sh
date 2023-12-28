@@ -6,9 +6,8 @@ sudo docker-compose pull
 
 if [ ! -e /home/ubuntu/.initialized ];then
   echo "First time running"
-  sudo docker-compose -f $CONFIG_PATH up -d
+  sudo docker-compose -f $CONFIG_PATH up redis mysql -d --wait
   touch /home/ubuntu/.initialized
-else 
-  sudo docker-compose -f $CONFIG_PATH up app -d
-  sudo docker-compose -f $CONFIG_PATH up batch -d
 fi
+ 
+sudo docker-compose -f $CONFIG_PATH up app batch -d
