@@ -57,7 +57,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ubuntu
           key: ${{ secrets.SSH_KEY }}
-          source: "deploy/docker-compose.yml"
+          source: "deploy/docker-compose.yml,scripts/ec2-deploy.sh"
           target: "/home/ubuntu/"
 
       - name: Deploy application to EC2
@@ -66,14 +66,5 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ubuntu
           key: ${{ secrets.SSH_KEY }}
-          script: |
-            CONFIG_PATH="/home/ubuntu/docker-compose.yml"
-            sudo docker-compose pull
-            if [ ! -e /home/ubuntu/.initialized ];then
-              echo "First time running"
-              sudo docker-compose -f $CONFIG_PATH up -d
-              touch /home/ubuntu/.initialized
-            else 
-              sudo docker-compose -f $CONFIG_PATH up app -d
-              sudo docker-compose -f $CONFIG_PATH up batch -d
-            fi
+          script: "sudo sh /home/ubuntu/scripts/ec2-deploy.sh"
+            
