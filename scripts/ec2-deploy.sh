@@ -1,6 +1,6 @@
 #!/bin/sh
 
-CONFIG_PATH="/home/ubuntu/deploy/docker-compose.yml"
+CONFIG_PATH="/home/ubuntu/docker-compose.yml"
 
 sudo docker-compose pull
 
@@ -10,4 +10,4 @@ if [ ! -e /home/ubuntu/.initialized ];then
   touch /home/ubuntu/.initialized
 fi
  
-sudo docker-compose -f $CONFIG_PATH up app batch -d
+sudo docker-compose -f $CONFIG_PATH up app batch nginx -d
