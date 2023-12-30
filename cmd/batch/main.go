@@ -35,7 +35,7 @@ func init() {
 	}
 
 	rotator := &lumberjack.Logger{
-		Filename:   "/var/log/batch.log",
+		Filename:   "/var/log/batch/batch.log",
 		MaxSize:    5,
 		MaxAge:     60,
 		MaxBackups: 4,

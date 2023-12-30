@@ -77,7 +77,7 @@ func init() {
 	}
 
 	rotator := &lumberjack.Logger{
-		Filename:   "/var/log/app.log",
+		Filename:   "/var/log/app/app.log",
 		MaxSize:    5,
 		MaxAge:     60,
 		MaxBackups: 4,
@@ -214,7 +214,7 @@ func main() {
 		Context:    nil,
 	}))
 	e.Use(cors.New(cors.Config{
-		AllowAllOrigins:  true, // TODO: Change this to specific origin.
+		AllowOrigins:     []string{"lucky-pocket.site"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type"},
 		MaxAge:           12 * time.Hour,

@@ -6,7 +6,7 @@ services:
     image: nginx:latest
     restart: always
     volumes:
-      - log:/var/log/nginx
+      - log:/var/log
       - ./nginx.conf:/etc/nginx/nginx.conf
       - /etc/letsencrypt:/etc/letsencrypt
     environment: 
