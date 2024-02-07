@@ -12,6 +12,7 @@ func (r *userRepository) CountCoinsByUserID(ctx context.Context, userID uint64) 
 		Query().
 		Where(user.ID(userID)).
 		Select(user.FieldCoins).
+		ForUpdate().
 		Only(ctx)
 	if err != nil {
 		if ent.IsNotFound(err) {
