@@ -11,3 +11,5 @@ if [ ! -e /home/ubuntu/.initialized ];then
 fi
  
 sudo docker-compose -f $CONFIG_PATH up app batch nginx -d
+
+sudo docker image prune -a
