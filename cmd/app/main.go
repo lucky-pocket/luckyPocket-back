@@ -216,7 +216,7 @@ func main() {
 	e.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"https://lucky-pocket.site", "http://localhost:3000"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"},
-		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type"},
+		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
 		MaxAge:           12 * time.Hour,
 		AllowCredentials: true,
 	}))

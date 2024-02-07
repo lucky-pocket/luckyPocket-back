@@ -12,4 +12,4 @@ fi
  
 sudo docker-compose -f $CONFIG_PATH up app batch nginx -d
 
-sudo docker image prune -a
+sudo docker image prune -af
