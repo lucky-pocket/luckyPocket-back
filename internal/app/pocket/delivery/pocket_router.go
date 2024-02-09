@@ -13,7 +13,7 @@ import (
 
 type PocketQuery struct {
 	Offset *int `form:"offset" binding:"required,number"`
-	Limit  int  `form:"limit" binding:"required,number,max=30"`
+	Limit  int  `form:"limit" binding:"required,number,max=500"`
 }
 
 type PocketRequest struct {
