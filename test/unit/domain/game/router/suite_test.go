@@ -37,6 +37,7 @@ func (s *GameRouterTestSuite) SetupSuite() {
 	s.engine = gin.Default()
 	s.engine.Use(filter.NewErrorFilter().Register())
 
+	s.engine.GET("/games/count", s.r.GetPlayCount)
 	s.engine.GET("/games/free-ticket", s.r.GetTicketInfo)
 	s.engine.POST("/games/yut", s.r.PlayYut)
 }

@@ -18,6 +18,7 @@ type GameLog struct {
 type GameUseCase interface {
 	PlayYut(ctx context.Context, input *input.FreeInput) (*output.YutOutput, error)
 	GetTicketInfo(ctx context.Context) (*output.TicketOutput, error)
+	CountPlays(ctx context.Context) (*output.PlayCountOutput, error)
 }
 
 type TicketRepository interface {

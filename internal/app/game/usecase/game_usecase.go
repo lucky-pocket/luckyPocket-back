@@ -172,3 +172,14 @@ func (g *gameUseCase) GetTicketInfo(ctx context.Context) (*output.TicketOutput, 
 
 	return mapper.ToFreeTicketOutput(ticket, refillAt), nil
 }
+
+func (g *gameUseCase) CountPlays(ctx context.Context) (*output.PlayCountOutput, error) {
+	user := auth.MustExtract(ctx)
+
+	count, err := g.GameLogRepository.CountByUserID(ctx, user.UserID)
+	if err != nil {
+		return nil, errors.Wrap(err, "unexpected error")
+	}
+
+	return mapper.ToPlayCountOutput(count), nil
+}

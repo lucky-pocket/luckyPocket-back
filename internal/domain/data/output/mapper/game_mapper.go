@@ -23,3 +23,9 @@ func ToFreeTicketOutput(count int, refillAt time.Time) *output.TicketOutput {
 		TicketCount: count,
 	}
 }
+
+func ToPlayCountOutput(count int) *output.PlayCountOutput {
+	return &output.PlayCountOutput{
+		Count: count,
+	}
+}
