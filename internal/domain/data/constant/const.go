@@ -4,13 +4,14 @@ import "time"
 
 const (
 	JwtSigningMethod = "HS256"
-	JwtAccessTTL     = 5 * time.Minute
-	JwtRefreshTTL    = 10 * 24 * time.Hour
+	// TODO: UNSAFE! change this into proper value on production.
+	JwtAccessTTL  = 60 * time.Minute
+	JwtRefreshTTL = 10 * 24 * time.Hour
 )
 
 const (
-	CostRevealSender = 2
-	CostSendPocket   = 2
+	CostRevealSender = 1
+	CostSendPocket   = 1
 	CostPlayYut      = 2
 
 	PrizeDo     = 1
