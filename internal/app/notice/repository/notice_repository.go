@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 
+	"entgo.io/ent/dialect/sql"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/tx"
 	"github.com/lucky-pocket/luckyPocket-back/internal/infra/data/ent/ent"
@@ -47,6 +48,7 @@ func (r *noticeRepository) CreateBulk(ctx context.Context, notices []*domain.Not
 func (r *noticeRepository) FindAllByUserID(ctx context.Context, userID uint64) ([]*domain.Notice, error) {
 	entities, err := r.getClient(ctx).Notice.Query().
 		Where(notice.HasUserWith(user.ID(userID))).
+		Order(notice.ByCreatedAt(sql.OrderDesc())).
 		All(ctx)
 
 	if err != nil {
