@@ -12,15 +12,15 @@ import (
 )
 
 type PocketQuery struct {
-	Offset int `form:"offset" binding:"required,number"`
-	Limit  int `form:"limit" binding:"required,number,max=30"`
+	Offset *int `form:"offset" binding:"required,number"`
+	Limit  int  `form:"limit" binding:"required,number,max=30"`
 }
 
 type PocketRequest struct {
 	ReceiverID uint64 `json:"receiverID" binding:"required"`
-	Coins      int    `json:"coins" binding:"required,number"`
+	Coins      *int   `json:"coins" binding:"required,number"`
 	Message    string `json:"message" binding:"required,max=300"`
-	IsPublic   bool   `json:"isPublic" binding:"required"`
+	IsPublic   *bool  `json:"isPublic" binding:"required"`
 }
 
 type VisibilityRequest struct {
@@ -47,7 +47,7 @@ func (p *PocketRouter) GetMyPockets(c *gin.Context) {
 
 	pocketsList, err := p.pocketUseCase.GetUserPockets(c.Request.Context(), &input.PocketQueryInput{
 		UserID: userInfo.UserID,
-		Offset: pocketQuery.Offset,
+		Offset: *pocketQuery.Offset,
 		Limit:  pocketQuery.Limit,
 	})
 	if err != nil {
@@ -76,7 +76,7 @@ func (p *PocketRouter) GetUserPockets(c *gin.Context) {
 
 	pocketsList, err := p.pocketUseCase.GetUserPockets(c.Request.Context(), &input.PocketQueryInput{
 		UserID: userID,
-		Offset: pocketQuery.Offset,
+		Offset: *pocketQuery.Offset,
 		Limit:  pocketQuery.Limit,
 	})
 	if err != nil {
@@ -97,9 +97,9 @@ func (p *PocketRouter) SendPocket(c *gin.Context) {
 
 	err := p.pocketUseCase.SendPocket(c.Request.Context(), &input.PocketInput{
 		ReceiverID: pocketRequest.ReceiverID,
-		Coins:      pocketRequest.Coins,
+		Coins:      *pocketRequest.Coins,
 		Message:    pocketRequest.Message,
-		IsPublic:   pocketRequest.IsPublic,
+		IsPublic:   *pocketRequest.IsPublic,
 	})
 	if err != nil {
 		c.Error(err)
