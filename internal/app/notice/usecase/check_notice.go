@@ -31,3 +31,14 @@ func (uc *noticeUseCase) CheckNotice(ctx context.Context, noticeID uint64) error
 
 	return nil
 }
+
+func (uc *noticeUseCase) CheckAllNotices(ctx context.Context) error {
+	info := auth.MustExtract(ctx)
+
+	err := uc.NoticeRepository.SetCheckedByUserID(ctx, info.UserID, true)
+	if err != nil {
+		return errors.Wrap(err, "unexpected db error")
+	}
+
+	return nil
+}

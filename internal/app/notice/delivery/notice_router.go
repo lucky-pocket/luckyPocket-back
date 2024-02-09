@@ -27,6 +27,16 @@ func (r *NoticeRouter) GetNotice(c *gin.Context) {
 	c.JSON(http.StatusOK, notices)
 }
 
+func (r *NoticeRouter) CheckAllNotices(c *gin.Context) {
+	err := r.noticeUseCase.CheckAllNotices(c.Request.Context())
+	if err != nil {
+		c.Error(err)
+		return
+	}
+
+	c.Status(http.StatusOK)
+}
+
 func (r *NoticeRouter) CheckNotice(c *gin.Context) {
 	id := c.Param("noticeID")
 

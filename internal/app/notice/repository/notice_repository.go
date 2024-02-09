@@ -86,3 +86,10 @@ func (r *noticeRepository) SetChecked(ctx context.Context, noticeID uint64, chec
 		Where(notice.ID(noticeID)).
 		Exec(ctx)
 }
+
+func (r *noticeRepository) SetCheckedByUserID(ctx context.Context, userID uint64, checked bool) error {
+	return r.getClient(ctx).Notice.Update().
+		SetChecked(checked).
+		Where(notice.UserID(userID)).
+		Exec(ctx)
+}
