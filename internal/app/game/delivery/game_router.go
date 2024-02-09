@@ -21,6 +21,16 @@ func NewGameRouter(uc domain.GameUseCase) *GameRouter {
 	return &GameRouter{uc}
 }
 
+func (r *GameRouter) GetPlayCount(c *gin.Context) {
+	count, err := r.gameUseCase.CountPlays(c.Request.Context())
+	if err != nil {
+		c.Error(err)
+		return
+	}
+
+	c.JSON(http.StatusOK, count)
+}
+
 func (r *GameRouter) GetTicketInfo(c *gin.Context) {
 	ticket, err := r.gameUseCase.GetTicketInfo(c.Request.Context())
 	if err != nil {

@@ -234,6 +234,7 @@ func main() {
 	{
 		game.Use(authFilter.WithRequired(true))
 
+		game.GET("/count", gameRouter.GetPlayCount)
 		game.GET("/free-ticket", gameRouter.GetTicketInfo)
 		game.POST("/yut", gameRouter.PlayYut)
 	}

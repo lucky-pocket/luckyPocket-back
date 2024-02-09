@@ -17,3 +17,7 @@ type TicketOutput struct {
 	RefillAt    time.Time `json:"refillAt"`
 	TicketCount int       `json:"ticketCount"`
 }
+
+type PlayCountOutput struct {
+	Count int `json:"count"`
+}
