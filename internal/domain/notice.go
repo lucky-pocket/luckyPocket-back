@@ -22,6 +22,7 @@ type Notice struct {
 type NoticeUseCase interface {
 	GetNotice(ctx context.Context) (*output.NoticeListOutput, error)
 	CheckNotice(ctx context.Context, noticeID uint64) error
+	CheckAllNotices(ctx context.Context) error
 }
 
 type NoticeRepository interface {
@@ -30,6 +31,7 @@ type NoticeRepository interface {
 	FindByID(ctx context.Context, noticeID uint64) (*Notice, error)
 	ExistsByUserID(ctx context.Context, userID uint64) (bool, error)
 	SetChecked(ctx context.Context, noticeID uint64, checked bool) error
+	SetCheckedByUserID(ctx context.Context, userID uint64, checked bool) error
 }
 
 type NoticePool interface {

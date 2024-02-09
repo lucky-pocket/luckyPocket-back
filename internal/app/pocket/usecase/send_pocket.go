@@ -17,6 +17,9 @@ import (
 
 func (uc *pocketUseCase) SendPocket(ctx context.Context, input *input.PocketInput) error {
 	userInfo := auth.MustExtract(ctx)
+	if userInfo.UserID == input.ReceiverID {
+		return status.NewError(http.StatusForbidden, "자기 자신은 영원한 친구입니다.")
+	}
 
 	return uc.TxManager.WithTx(ctx, func(ctx context.Context) error {
 		receiver, err := uc.UserRepository.FindByID(ctx, input.ReceiverID)
