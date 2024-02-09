@@ -80,6 +80,17 @@ func (s *PocketUseCaseTestSuite) TestSendPocket() {
 				}
 			},
 		},
+		{
+			desc:  "self sending",
+			input: &input.PocketInput{ReceiverID: 1},
+			on:    func() {},
+			assert: func(err error) {
+				e, ok := err.(*status.Err)
+				if s.True(ok) {
+					s.Equal(http.StatusForbidden, e.Code)
+				}
+			},
+		},
 	}
 
 	ctx := auth.Inject(context.Background(), userInfo)
