@@ -257,6 +257,7 @@ func main() {
 		notice := me.Group("/notices")
 		{
 			notice.GET("", noticeRouter.GetNotice)
+			notice.PATCH("", noticeRouter.CheckAllNotices)
 			notice.PATCH("/:noticeID", noticeRouter.CheckNotice)
 		}
 	}

@@ -38,5 +38,6 @@ func (s *NoticeRouterTestSuite) SetupSuite() {
 	s.engine.Use(filter.NewErrorFilter().Register())
 
 	s.engine.GET("/users/me/notices", s.r.GetNotice)
+	s.engine.PATCH("/users/me/notices/", s.r.CheckAllNotices)
 	s.engine.PATCH("/users/me/notices/:noticeID", s.r.CheckNotice)
 }
