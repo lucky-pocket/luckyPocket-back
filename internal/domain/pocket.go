@@ -24,7 +24,7 @@ func (p Pocket) IsEmpty() bool {
 
 type PocketUseCase interface {
 	SendPocket(ctx context.Context, input *input.PocketInput) error
-	RevealSender(ctx context.Context, input *input.PocketIDInput) error
+	RevealSender(ctx context.Context, input *input.PocketIDInput) (*output.UserInfo, error)
 	GetUserPockets(ctx context.Context, input *input.PocketQueryInput) (*output.PocketListOutput, error)
 	GetPocketDetail(ctx context.Context, input *input.PocketIDInput) (*output.PocketOutput, error)
 	SetVisibility(ctx context.Context, input *input.VisibilityInput) error

@@ -9,16 +9,19 @@ import (
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/event"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/input"
+	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/output"
+	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/output/mapper"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/auth"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/error/status"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/tx"
 	"github.com/pkg/errors"
 )
 
-func (uc *pocketUseCase) RevealSender(ctx context.Context, input *input.PocketIDInput) error {
+func (uc *pocketUseCase) RevealSender(ctx context.Context, input *input.PocketIDInput) (*output.UserInfo, error) {
 	userInfo := auth.MustExtract(ctx)
+	var sender *domain.User
 
-	return uc.TxManager.WithTx(ctx, func(ctx context.Context) error {
+	err := uc.TxManager.WithTx(ctx, func(ctx context.Context) error {
 		pocket, err := uc.PocketRepository.FindByID(ctx, input.PocketID)
 		if err != nil {
 			return errors.Wrap(err, "unexpected db error")
@@ -59,6 +62,11 @@ func (uc *pocketUseCase) RevealSender(ctx context.Context, input *input.PocketID
 			return errors.Wrap(err, "unexpected db error")
 		}
 
+		sender, err = uc.UserRepository.FindByID(ctx, pocket.SenderID)
+		if err != nil {
+			return errors.Wrap(err, "unexpected db error")
+		}
+
 		notice := domain.Notice{
 			UserID:    pocket.SenderID,
 			PocketID:  pocket.PocketID,
@@ -76,4 +84,9 @@ func (uc *pocketUseCase) RevealSender(ctx context.Context, input *input.PocketID
 		uc.PocketRepository.(tx.Transactor).NewTx(),
 		uc.UserRepository.(tx.Transactor).NewTx(),
 	)
+	if err != nil {
+		return nil, err
+	}
+
+	return mapper.ToUserInfo(*sender), nil
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/constant"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/input"
+	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/output"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/auth"
 	"github.com/lucky-pocket/luckyPocket-back/internal/global/error/status"
 	"github.com/stretchr/testify/mock"
@@ -36,11 +37,16 @@ func (s *PocketUseCaseTestSuite) TestRevealSender() {
 		SenderID:   1,
 	}
 
+	sender := domain.User{
+		UserID: 5,
+		Name:   "hitehre",
+	}
+
 	testcases := []struct {
 		desc   string
 		input  *input.PocketIDInput
 		on     func()
-		assert func(err error)
+		assert func(output *output.UserInfo, err error)
 	}{
 		{
 			desc:  "success",
@@ -51,9 +57,10 @@ func (s *PocketUseCaseTestSuite) TestRevealSender() {
 				s.mockPocketRepository.On("RevealExists", mock.Anything, mock.Anything, mock.Anything).Return(false, nil).Once()
 				s.mockPocketRepository.On("CreateReveal", mock.Anything, mock.Anything, mock.Anything).Return(nil).Once()
 				s.mockUserRepository.On("UpdateCoin", mock.Anything, mock.Anything, mock.Anything).Return(nil).Once()
+				s.mockUserRepository.On("FindByID", mock.Anything, mock.Anything).Return(&sender, nil).Once()
 				s.mockEventManager.On("Publish", mock.Anything, mock.Anything, mock.Anything).Return(nil).Once()
 			},
-			assert: func(err error) {
+			assert: func(output *output.UserInfo, err error) {
 				s.Nil(err)
 			},
 		},
@@ -63,7 +70,7 @@ func (s *PocketUseCaseTestSuite) TestRevealSender() {
 			on: func() {
 				s.mockPocketRepository.On("FindByID", mock.Anything, mock.Anything).Return(nil, nil).Once()
 			},
-			assert: func(err error) {
+			assert: func(output *output.UserInfo, err error) {
 				e, ok := err.(*status.Err)
 				if s.True(ok) {
 					s.Equal(http.StatusNotFound, e.Code)
@@ -76,7 +83,7 @@ func (s *PocketUseCaseTestSuite) TestRevealSender() {
 			on: func() {
 				s.mockPocketRepository.On("FindByID", mock.Anything, mock.Anything).Return(&otherPocket, nil).Once()
 			},
-			assert: func(err error) {
+			assert: func(output *output.UserInfo, err error) {
 				e, ok := err.(*status.Err)
 				if s.True(ok) {
 					s.Equal(http.StatusForbidden, e.Code)
@@ -91,7 +98,7 @@ func (s *PocketUseCaseTestSuite) TestRevealSender() {
 				s.mockUserRepository.On("CountCoinsByUserID", mock.Anything, mock.Anything).Return(constant.CostRevealSender+1, nil).Once()
 				s.mockPocketRepository.On("RevealExists", mock.Anything, mock.Anything, mock.Anything).Return(true, nil).Once()
 			},
-			assert: func(err error) {
+			assert: func(output *output.UserInfo, err error) {
 				e, ok := err.(*status.Err)
 				if s.True(ok) {
 					s.Equal(http.StatusConflict, e.Code)
@@ -106,7 +113,7 @@ func (s *PocketUseCaseTestSuite) TestRevealSender() {
 				s.mockUserRepository.On("CountCoinsByUserID", mock.Anything, mock.Anything).Return(constant.CostRevealSender-1, nil).Once()
 				s.mockPocketRepository.On("RevealExists", mock.Anything, mock.Anything, mock.Anything).Return(false, nil).Once()
 			},
-			assert: func(err error) {
+			assert: func(output *output.UserInfo, err error) {
 				e, ok := err.(*status.Err)
 				if s.True(ok) {
 					s.Equal(http.StatusForbidden, e.Code)
@@ -120,9 +127,8 @@ func (s *PocketUseCaseTestSuite) TestRevealSender() {
 		s.Run(tc.desc, func() {
 			tc.on()
 
-			err := s.uc.RevealSender(ctx, tc.input)
-
-			tc.assert(err)
+			senderInfo, err := s.uc.RevealSender(ctx, tc.input)
+			tc.assert(senderInfo, err)
 
 			s.mockPocketRepository.AssertExpectations(s.T())
 			s.mockUserRepository.AssertExpectations(s.T())

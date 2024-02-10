@@ -4,10 +4,16 @@ import (
 	"net/http"
 	"net/http/httptest"
 
+	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/output"
 	"github.com/stretchr/testify/mock"
 )
 
 func (p *PocketRouterTestSuite) TestRevealSender() {
+	senderInfo := output.UserInfo{
+		UserID: 1,
+		Name:   "mock",
+	}
+
 	testcases := []struct {
 		desc       string
 		param      string
@@ -18,7 +24,7 @@ func (p *PocketRouterTestSuite) TestRevealSender() {
 			desc:  "success",
 			param: "1",
 			on: func() {
-				p.mockPocketUseCase.On("RevealSender", mock.Anything, mock.Anything).Return(nil).Once()
+				p.mockPocketUseCase.On("RevealSender", mock.Anything, mock.Anything).Return(&senderInfo, nil).Once()
 			},
 			statusCode: http.StatusOK,
 		},

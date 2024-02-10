@@ -162,11 +162,11 @@ func (p *PocketRouter) RevealSender(c *gin.Context) {
 		return
 	}
 
-	err = p.pocketUseCase.RevealSender(c.Request.Context(), &input.PocketIDInput{PocketID: pocketID})
+	senderInfo, err := p.pocketUseCase.RevealSender(c.Request.Context(), &input.PocketIDInput{PocketID: pocketID})
 	if err != nil {
 		c.Error(err)
 		return
 	}
 
-	c.Status(http.StatusOK)
+	c.JSON(http.StatusOK, senderInfo)
 }
