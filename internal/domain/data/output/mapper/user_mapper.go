@@ -33,6 +33,9 @@ func ToRankOutput(users []output.RankElem) *output.RankOutput {
 			UserInfo: user.UserInfo,
 			Gender:   user.Gender,
 			Amount:   user.Amount,
+			UserType: user.UserType,
+			Grade:    user.Grade,
+			Class:    user.Class,
 		})
 	}
 
