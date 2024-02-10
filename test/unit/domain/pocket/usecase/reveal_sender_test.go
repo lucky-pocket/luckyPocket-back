@@ -14,7 +14,7 @@ import (
 
 func (s *PocketUseCaseTestSuite) TestRevealSender() {
 	userInfo := auth.Info{
-		UserID: 1,
+		UserID: 2,
 		Role:   constant.RoleMember,
 	}
 
@@ -24,7 +24,7 @@ func (s *PocketUseCaseTestSuite) TestRevealSender() {
 			UserID: userInfo.UserID,
 		},
 		ReceiverID: 2,
-		SenderID:   1,
+		SenderID:   3,
 	}
 
 	otherPocket := domain.Pocket{
@@ -32,7 +32,7 @@ func (s *PocketUseCaseTestSuite) TestRevealSender() {
 		Receiver: &domain.User{
 			UserID: userInfo.UserID + 1,
 		},
-		ReceiverID: 2,
+		ReceiverID: 3,
 		SenderID:   1,
 	}
 
