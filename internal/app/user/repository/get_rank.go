@@ -41,8 +41,7 @@ func (r *userRepository) RankNonStudents(ctx context.Context, sortType constant.
 	if name != nil {
 		builder = builder.Where(user.NameContains(*name))
 	}
-
-	builder = builder.Where(user.UserTypeNEQ(constant.TypeStudent))
+	
 	return r.getRank(ctx, builder, sortType)
 }
 
