@@ -1,7 +1,6 @@
 package router_test
 
 import (
-	"github.com/lucky-pocket/luckyPocket-back/internal/global/error/status"
 	"net/http"
 	"net/http/httptest"
 
@@ -49,12 +48,24 @@ func (s *UserRouterTestSuite) TestGetRank() {
 			statusCode: http.StatusOK,
 		},
 		{
-			desc:  "failed (BAD-REQUEST)",
-			query: "sortType=COIN&userType=TEACHER&names=HI?",
-			on: func() {
-				s.mockUserUseCase.On("GetRanking", mock.Anything, mock.Anything).Return(nil, status.NewError(http.StatusBadRequest, "not valid param")).Once()
-			},
+			desc:       "failed (invalid query)",
+			query:      "sor=COIN",
+			on:         func() {},
 			statusCode: http.StatusBadRequest,
+		},
+		{
+			desc:       "failed (non-enum)",
+			query:      "sortType=COINA",
+			on:         func() {},
+			statusCode: http.StatusBadRequest,
+		},
+		{
+			desc:  "ok without userType",
+			query: "sortType=COIN",
+			on: func() {
+				s.mockUserUseCase.On("GetRanking", mock.Anything, mock.Anything).Return(&output.RankOutput{}, nil).Once()
+			},
+			statusCode: http.StatusOK,
 		},
 	}
 
