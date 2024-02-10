@@ -58,7 +58,10 @@ import (
 	health_config "github.com/tavsec/gin-healthcheck/config"
 )
 
-var logger *zap.Logger
+var (
+	logger  *zap.Logger
+	rotator *lumberjack.Logger
+)
 
 func init() {
 	encoderConfig := zapcore.EncoderConfig{
@@ -76,7 +79,7 @@ func init() {
 		EncodeDuration: zapcore.StringDurationEncoder,
 	}
 
-	rotator := &lumberjack.Logger{
+	rotator = &lumberjack.Logger{
 		Filename:   "/var/log/app/app.log",
 		MaxSize:    5,
 		MaxAge:     60,
@@ -206,7 +209,7 @@ func main() {
 	roleFilter := filter.NewRoleFilter()
 
 	e := gin.New()
-	e.Use(gin.Recovery())
+	e.Use(gin.RecoveryWithWriter(rotator))
 	e.Use(ginzap.GinzapWithConfig(logger, &ginzap.Config{
 		TimeFormat: time.RFC3339,
 		UTC:        false,
