@@ -44,3 +44,32 @@ func (r *pocketRepository) FindListByUserID(ctx context.Context, userID uint64, 
 	}
 	return pockets, nil
 }
+
+func (r *pocketRepository) FillSenderNameOnRevealed(ctx context.Context, pockets []*domain.Pocket, receiverID, userID uint64) error {
+	senderPockets, err := r.getClient(ctx).Pocket.Query().
+		Select(pocket.FieldID, pocket.SenderColumn).
+		Where(
+			pocket.And(
+				pocket.HasRevealersWith(user.ID(userID)),
+				pocket.ReceiverID(receiverID),
+			),
+		).
+		WithSender().
+		All(ctx)
+	if err != nil {
+		return err
+	}
+
+	senderMap := make(map[uint64]*ent.User, len(pockets))
+	for _, pocket := range senderPockets {
+		senderMap[pocket.ID] = pocket.Edges.Sender
+	}
+
+	for _, pocket := range pockets {
+		if sender, ok := senderMap[pocket.PocketID]; ok {
+			pocket.Sender = mapper.ToUserDomain(sender)
+		}
+	}
+
+	return nil
+}
