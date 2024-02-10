@@ -268,7 +268,7 @@ func main() {
 		user.GET("", userRouter.Search)
 		user.GET("/rank", userRouter.GetRanking)
 		user.GET("/:userID", userRouter.GetUserDetail)
-		user.GET("/:userID/pockets", pocketRouter.GetUserPockets)
+		user.GET("/:userID/pockets", authFilter.WithRequired(false), pocketRouter.GetUserPockets)
 	}
 
 	pocket := e.Group("/pockets")
