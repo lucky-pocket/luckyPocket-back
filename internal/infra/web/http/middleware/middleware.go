@@ -20,7 +20,7 @@ func NewRateLimiter() *RateLimiter {
 
 	l.storage = ratelimit.InMemoryStore(&ratelimit.InMemoryOptions{
 		Rate:  time.Second,
-		Limit: 5,
+		Limit: 10,
 	})
 
 	l.limiter = ratelimit.RateLimiter(l.storage, &ratelimit.Options{
