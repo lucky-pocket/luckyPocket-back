@@ -54,7 +54,7 @@ func (uc *pocketUseCase) SendPocket(ctx context.Context, input *input.PocketInpu
 		}
 
 		if input.IsPublic {
-			if err := uc.PocketRepository.CreateReveal(ctx, userInfo.UserID, pocket.PocketID); err != nil {
+			if err := uc.PocketRepository.CreateReveal(ctx, receiver.UserID, pocket.PocketID); err != nil {
 				return errors.Wrap(err, "unexpected db error")
 			}
 		}
