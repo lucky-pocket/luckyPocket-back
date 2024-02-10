@@ -34,6 +34,7 @@ type PocketRepository interface {
 	Create(ctx context.Context, pocket *Pocket) error
 	FindByID(ctx context.Context, pocketID uint64) (*Pocket, error)
 	FindListByUserID(ctx context.Context, userID uint64, offset, limit int) ([]*Pocket, error)
+	FillSenderNameOnRevealed(ctx context.Context, pockets []*Pocket, receiverID, userID uint64) error
 	UpdateVisibility(ctx context.Context, pocketID uint64, visible bool) error
 	CreateReveal(ctx context.Context, userID uint64, pocketID uint64) error
 	RevealExists(ctx context.Context, userID uint64, pocketID uint64) (bool, error)

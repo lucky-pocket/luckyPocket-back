@@ -11,10 +11,15 @@ func ToPocketListOutput(pockets []*domain.Pocket) *output.PocketListOutput {
 	}
 
 	for _, pocket := range pockets {
+		var name *string
+		if pocket.Sender != nil {
+			name = &pocket.Sender.Name
+		}
 		out.Pockets = append(out.Pockets, output.PocketElem{
-			PocketID: pocket.PocketID,
-			IsEmpty:  pocket.IsEmpty(),
-			IsPublic: pocket.IsPublic,
+			PocketID:   pocket.PocketID,
+			IsEmpty:    pocket.IsEmpty(),
+			IsPublic:   pocket.IsPublic,
+			SenderName: name,
 		})
 	}
 
