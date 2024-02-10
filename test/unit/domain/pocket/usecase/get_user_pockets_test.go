@@ -7,6 +7,7 @@ import (
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/input"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/output"
 	"github.com/lucky-pocket/luckyPocket-back/internal/domain/data/output/mapper"
+	"github.com/lucky-pocket/luckyPocket-back/internal/global/auth"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -37,6 +38,7 @@ func (s *PocketUseCaseTestSuite) TestGetUserPockets() {
 			input: &input.PocketQueryInput{},
 			on: func() {
 				s.mockPocketRepository.On("FindListByUserID", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(pockets, nil).Once()
+				s.mockPocketRepository.On("FillSenderNameOnRevealed", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(nil).Once()
 			},
 			assert: func(output *output.PocketListOutput, err error) {
 				if s.Nil(err) {
@@ -46,11 +48,12 @@ func (s *PocketUseCaseTestSuite) TestGetUserPockets() {
 		},
 	}
 
+	ctx := auth.Inject(context.Background(), auth.Info{UserID: 1})
 	for _, tc := range testcases {
 		s.Run(tc.desc, func() {
 			tc.on()
 
-			output, err := s.uc.GetUserPockets(context.Background(), tc.input)
+			output, err := s.uc.GetUserPockets(ctx, tc.input)
 
 			tc.assert(output, err)
 
