@@ -41,7 +41,7 @@ func (uc *pocketUseCase) SendPocket(ctx context.Context, input *input.PocketInpu
 			SenderID:   userInfo.UserID,
 			Content:    input.Message,
 			Coins:      input.Coins,
-			IsPublic:   input.IsPublic,
+			IsPublic:   true,
 		}
 
 		price := pocket.Coins + constant.CostSendPocket
