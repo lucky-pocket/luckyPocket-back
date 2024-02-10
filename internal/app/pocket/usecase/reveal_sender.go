@@ -28,7 +28,7 @@ func (uc *pocketUseCase) RevealSender(ctx context.Context, input *input.PocketID
 			return status.NewError(http.StatusNotFound, "user not found")
 		}
 
-		if pocket.Receiver.UserID != userInfo.UserID && !pocket.IsPublic {
+		if pocket.ReceiverID != userInfo.UserID && !pocket.IsPublic {
 			return status.NewError(http.StatusForbidden, "you have no permission to reveal this pocket")
 		}
 
