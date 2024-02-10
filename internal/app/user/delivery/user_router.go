@@ -13,7 +13,7 @@ import (
 
 type RankRequest struct {
 	SortType constant.SortType  `form:"sortType" binding:"required,enum"`
-	UserType *constant.UserType `form:"userType" binding:"enum"`
+	UserType *constant.UserType `form:"userType" binding:"omitempty,enum"`
 	grade    *int               `form:"grade" binding:"number"`
 	class    *int               `form:"class" binding:"number"`
 	name     *string            `form:"name"`
