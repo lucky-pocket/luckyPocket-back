@@ -7,9 +7,10 @@ type PocketOutput struct {
 }
 
 type PocketElem struct {
-	PocketID uint64 `json:"id"`
-	IsEmpty  bool   `json:"isEmpty"`
-	IsPublic bool   `json:"isPublic"`
+	PocketID   uint64  `json:"id"`
+	IsEmpty    bool    `json:"isEmpty"`
+	IsPublic   bool    `json:"isPublic"`
+	SenderName *string `json:"sender"`
 }
 
 type PocketListOutput struct {
