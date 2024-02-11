@@ -17,7 +17,7 @@ const (
 	PrizeGae    = 1
 	PrizeGeol   = 2
 	PrizeYut    = 3
-	PrizeMo     = 4
+	PrizeMo     = 5
 	PrizeBackDo = -2
 )
 
