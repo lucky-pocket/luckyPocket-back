@@ -57,8 +57,19 @@ func (r *ticketRepository) CountByUserID(ctx context.Context, userID uint64) (in
 	return cmd.Int()
 }
 func (r *ticketRepository) Increase(ctx context.Context, userID uint64) error {
-	cmd := r.getClient(ctx).Incr(ctx, buildKey(fmt.Sprint(userID)))
+	key := buildKey(fmt.Sprint(userID))
+	client := r.getClient(ctx)
+
+	cmd := client.Incr(ctx, key)
 	if err := cmd.Err(); err != nil {
+		return err
+	}
+
+	day := 24 * time.Hour
+	midNight := time.Now().Truncate(day).Add(day)
+
+	err := client.ExpireNX(ctx, key, time.Until(midNight)).Err()
+	if err != nil {
 		return err
 	}
 
