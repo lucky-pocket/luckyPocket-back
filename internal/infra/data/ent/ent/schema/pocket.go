@@ -1,7 +1,9 @@
 package schema
 
 import (
+	"errors"
 	"time"
+	"unicode/utf8"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -24,7 +26,17 @@ func (Pocket) Fields() []ent.Field {
 			Annotations(entsql.Annotation{Incremental: &t}),
 		field.Uint64("receiverID"),
 		field.Uint64("senderID"),
-		field.String("content").MaxLen(300),
+		field.String("content").
+			Annotations(entsql.Annotation{
+				Size: 300,
+			}).
+			Validate(func(s string) error {
+				if utf8.RuneCountInString(s) > 300 {
+					return errors.New("value is more than the max length")
+				}
+				return nil
+
+			}),
 		field.Int("coins").Min(0),
 		field.Bool("isPublic"),
 		field.Time("createdAt").Default(time.Now),
