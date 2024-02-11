@@ -15,7 +15,7 @@ func (r *userRepository) Create(ctx context.Context, userInfo domain.GAuthUser) 
 		SetRole(constant.RoleMember).
 		SetUserType(userInfo.Role).
 		SetGender(userInfo.Gender).
-		SetCoins(0)
+		SetCoins(10)
 
 	if userInfo.Role == constant.TypeStudent {
 		builder = builder.
