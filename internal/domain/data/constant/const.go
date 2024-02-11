@@ -9,15 +9,15 @@ const (
 )
 
 const (
-	CostRevealSender = 1
+	CostRevealSender = 2
 	CostSendPocket   = 1
 	CostPlayYut      = 2
 
-	PrizeDo     = 1
-	PrizeGae    = 1
-	PrizeGeol   = 2
-	PrizeYut    = 3
-	PrizeMo     = 5
+	PrizeDo     = 2
+	PrizeGae    = 2
+	PrizeGeol   = 3
+	PrizeYut    = 4
+	PrizeMo     = 6
 	PrizeBackDo = -2
 )
 
