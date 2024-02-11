@@ -21,9 +21,11 @@ func (s *GameLogRepositoryTestSuite) TestCountByUserID() {
 		return
 	}
 
+	now := time.Now()
+
 	err = s.client.GameLog.Create().
 		SetGameType("yut").
-		SetTimestamp(time.Now()).
+		SetTimestamp(now).
 		SetUserID(user.ID).Exec(context.Background())
 
 	if !s.NoError(err) {
@@ -32,7 +34,7 @@ func (s *GameLogRepositoryTestSuite) TestCountByUserID() {
 
 	err = s.client.GameLog.Create().
 		SetGameType("yut").
-		SetTimestamp(time.Now().Truncate(24 * time.Hour).Add(24*time.Hour + 1)).
+		SetTimestamp(time.Date(now.Year(), now.Month(), now.Day()+1, 0, 0, 0, 0, now.Location()).Add(time.Hour)).
 		SetUserID(user.ID).Exec(context.Background())
 
 	if !s.NoError(err) {

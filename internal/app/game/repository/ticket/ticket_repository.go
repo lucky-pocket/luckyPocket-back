@@ -65,8 +65,8 @@ func (r *ticketRepository) Increase(ctx context.Context, userID uint64) error {
 		return err
 	}
 
-	day := 24 * time.Hour
-	midNight := time.Now().Truncate(day).Add(day)
+	now := time.Now()
+	midNight := time.Date(now.Year(), now.Month(), now.Day()+1, 0, 0, 0, 0, now.Location())
 
 	err := client.ExpireNX(ctx, key, time.Until(midNight)).Err()
 	if err != nil {
