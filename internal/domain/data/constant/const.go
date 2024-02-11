@@ -4,9 +4,8 @@ import "time"
 
 const (
 	JwtSigningMethod = "HS256"
-	// TODO: UNSAFE! change this into proper value on production.
-	JwtAccessTTL  = 60 * time.Minute
-	JwtRefreshTTL = 10 * 24 * time.Hour
+	JwtAccessTTL     = 5 * time.Minute
+	JwtRefreshTTL    = 10 * 24 * time.Hour
 )
 
 const (
