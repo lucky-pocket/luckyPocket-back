@@ -71,15 +71,6 @@ func (g *gameUseCase) PlayYut(ctx context.Context, input *input.FreeInput) (*out
 			}
 		}
 
-		playCnt, err := g.GameLogRepository.CountByUserID(ctx, user.UserID)
-		if err != nil {
-			return errors.Wrap(err, "unexpected error")
-		}
-
-		if playCnt >= constant.PlayGameLimit {
-			return status.NewError(http.StatusForbidden, "play limit exceeded")
-		}
-
 		isNak := rand.Intn(20) == 0
 		if isNak {
 			out = &output.YutOutput{Output: "낙"}
