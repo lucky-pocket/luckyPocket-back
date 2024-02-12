@@ -38,4 +38,5 @@ type PocketRepository interface {
 	UpdateVisibility(ctx context.Context, pocketID uint64, visible bool) error
 	CreateReveal(ctx context.Context, userID uint64, pocketID uint64) error
 	RevealExists(ctx context.Context, userID uint64, pocketID uint64) (bool, error)
+	CountBySenderIdAndReceiverId(ctx context.Context, senderID uint64, receiverID uint64) (int, error)
 }
