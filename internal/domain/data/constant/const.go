@@ -10,7 +10,7 @@ const (
 
 const (
 	CostRevealSender = 2
-	CostSendPocket   = 1
+	CostSendPocket   = 5
 	CostPlayYut      = 2
 
 	PrizeDo     = 2
