@@ -71,23 +71,29 @@ func (g *gameUseCase) PlayYut(ctx context.Context, input *input.FreeInput) (*out
 			}
 		}
 
+		err := g.GameLogRepository.Create(ctx, domain.GameLog{
+			User:      &domain.User{UserID: user.UserID},
+			TimeStamp: time.Now(),
+			GameType:  "Yut",
+		})
+		if err != nil {
+			return errors.Wrap(err, "unexpected error")
+		}
+
 		isNak := rand.Intn(20) == 0
 		if isNak {
 			out = &output.YutOutput{Output: "낙"}
 			return nil
 		}
 
+		marked = rand.Intn(2) == 1
 		yutPieces := [3]bool{
 			rand.Intn(2) == 1,
 			rand.Intn(2) == 1,
 			rand.Intn(2) == 1,
 		}
 
-		marked = rand.Intn(2) == 1
-
 		coinsEarned, result := g.evaluateYutResult(marked, yutPieces)
-
-		out = mapper.ToYutOutput(marked, yutPieces, coinsEarned, result)
 
 		coins, err := g.UserRepository.CountCoinsByUserID(ctx, user.UserID)
 		if err != nil {
@@ -99,14 +105,7 @@ func (g *gameUseCase) PlayYut(ctx context.Context, input *input.FreeInput) (*out
 			return errors.Wrap(err, "unexpected error")
 		}
 
-		err = g.GameLogRepository.Create(ctx, domain.GameLog{
-			User:      &domain.User{UserID: user.UserID},
-			TimeStamp: time.Now(),
-			GameType:  "Yut",
-		})
-		if err != nil {
-			return errors.Wrap(err, "unexpected error")
-		}
+		out = mapper.ToYutOutput(marked, yutPieces, coinsEarned, result)
 
 		return nil
 	},
