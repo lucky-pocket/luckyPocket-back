@@ -26,8 +26,9 @@ func (s *PocketUseCaseTestSuite) TestSendPocket() {
 	}{
 		{
 			desc:  "success (not public)",
-			input: &input.PocketInput{Coins: 1, IsPublic: false},
+			input: &input.PocketInput{ReceiverID: 2, Coins: 1, IsPublic: false},
 			on: func() {
+				s.mockPocketRepository.On("CountBySenderIdAndReceiverId", mock.Anything, mock.Anything, mock.Anything).Return(0, nil).Once()
 				s.mockUserRepository.On("FindByID", mock.Anything, mock.Anything).Return(&domain.User{}, nil).Once()
 				s.mockUserRepository.On("CountCoinsByUserID", mock.Anything, mock.Anything).Return(constant.CostSendPocket+1, nil).Once()
 				s.mockPocketRepository.On("Create", mock.Anything, mock.Anything).Return(nil).Once()
@@ -40,8 +41,9 @@ func (s *PocketUseCaseTestSuite) TestSendPocket() {
 		},
 		{
 			desc:  "success (public)",
-			input: &input.PocketInput{Coins: 1, IsPublic: true},
+			input: &input.PocketInput{ReceiverID: 2, Coins: 1, IsPublic: true},
 			on: func() {
+				s.mockPocketRepository.On("CountBySenderIdAndReceiverId", mock.Anything, mock.Anything, mock.Anything).Return(0, nil).Once()
 				s.mockUserRepository.On("FindByID", mock.Anything, mock.Anything).Return(&domain.User{}, nil).Once()
 				s.mockUserRepository.On("CountCoinsByUserID", mock.Anything, mock.Anything).Return(constant.CostSendPocket+1, nil).Once()
 				s.mockPocketRepository.On("Create", mock.Anything, mock.Anything).Return(nil).Once()
@@ -55,8 +57,9 @@ func (s *PocketUseCaseTestSuite) TestSendPocket() {
 		},
 		{
 			desc:  "user not found",
-			input: &input.PocketInput{},
+			input: &input.PocketInput{ReceiverID: 2},
 			on: func() {
+				s.mockPocketRepository.On("CountBySenderIdAndReceiverId", mock.Anything, mock.Anything, mock.Anything).Return(0, nil).Once()
 				s.mockUserRepository.On("FindByID", mock.Anything, mock.Anything).Return(nil, nil).Once()
 			},
 			assert: func(err error) {
@@ -68,8 +71,9 @@ func (s *PocketUseCaseTestSuite) TestSendPocket() {
 		},
 		{
 			desc:  "not enough coins",
-			input: &input.PocketInput{Coins: 0, IsPublic: false},
+			input: &input.PocketInput{ReceiverID: 2, Coins: 0, IsPublic: false},
 			on: func() {
+				s.mockPocketRepository.On("CountBySenderIdAndReceiverId", mock.Anything, mock.Anything, mock.Anything).Return(0, nil).Once()
 				s.mockUserRepository.On("FindByID", mock.Anything, mock.Anything).Return(&domain.User{}, nil).Once()
 				s.mockUserRepository.On("CountCoinsByUserID", mock.Anything, mock.Anything).Return(constant.CostSendPocket-1, nil).Once()
 			},
@@ -88,6 +92,19 @@ func (s *PocketUseCaseTestSuite) TestSendPocket() {
 				e, ok := err.(*status.Err)
 				if s.True(ok) {
 					s.Equal(http.StatusForbidden, e.Code)
+				}
+			},
+		},
+		{
+			desc:  "limit send",
+			input: &input.PocketInput{ReceiverID: 2},
+			on: func() {
+				s.mockPocketRepository.On("CountBySenderIdAndReceiverId", mock.Anything, mock.Anything, mock.Anything).Return(constant.SameSendLimit, nil).Once()
+			},
+			assert: func(err error) {
+				e, ok := err.(*status.Err)
+				if s.True(ok) {
+					s.Equal(http.StatusTeapot, e.Code)
 				}
 			},
 		},
