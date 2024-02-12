@@ -27,7 +27,7 @@ func (uc *pocketUseCase) SendPocket(ctx context.Context, input *input.PocketInpu
 	}
 
 	if count >= constant.SameSendLimit {
-		return status.NewError(http.StatusTeapot, "You cannot send more than five times a day to the same user.")
+		return status.NewError(http.StatusNotAcceptable, "You cannot send more than five times a day to the same user.")
 	}
 
 	return uc.TxManager.WithTx(ctx, func(ctx context.Context) error {

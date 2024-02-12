@@ -104,7 +104,7 @@ func (s *PocketUseCaseTestSuite) TestSendPocket() {
 			assert: func(err error) {
 				e, ok := err.(*status.Err)
 				if s.True(ok) {
-					s.Equal(http.StatusTeapot, e.Code)
+					s.Equal(http.StatusNotAcceptable, e.Code)
 				}
 			},
 		},
