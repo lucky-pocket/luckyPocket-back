@@ -24,8 +24,5 @@ const (
 const (
 	PlayGameLimit = 30
 	TicketLimit   = 1
-)
-
-const (
-	LimitSendSame = 5
+	SameSendLimit = 5
 )
