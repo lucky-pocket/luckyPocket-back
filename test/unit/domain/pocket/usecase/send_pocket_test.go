@@ -99,7 +99,7 @@ func (s *PocketUseCaseTestSuite) TestSendPocket() {
 			desc:  "limit send",
 			input: &input.PocketInput{ReceiverID: 2},
 			on: func() {
-				s.mockPocketRepository.On("CountBySenderIdAndReceiverId", mock.Anything, mock.Anything, mock.Anything).Return(5, nil).Once()
+				s.mockPocketRepository.On("CountBySenderIdAndReceiverId", mock.Anything, mock.Anything, mock.Anything).Return(constant.SameSendLimit, nil).Once()
 			},
 			assert: func(err error) {
 				e, ok := err.(*status.Err)

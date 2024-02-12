@@ -26,7 +26,7 @@ func (uc *pocketUseCase) SendPocket(ctx context.Context, input *input.PocketInpu
 		return errors.Wrap(err, "unexpected db error")
 	}
 
-	if count >= constant.LimitSendSame {
+	if count >= constant.SameSendLimit {
 		return status.NewError(http.StatusForbidden, "You cannot send more than five times a day to the same user.")
 	}
 
