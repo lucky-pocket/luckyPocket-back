@@ -21,6 +21,15 @@ func (uc *pocketUseCase) SendPocket(ctx context.Context, input *input.PocketInpu
 		return status.NewError(http.StatusForbidden, "자기 자신은 영원한 친구입니다.")
 	}
 
+	count, err := uc.PocketRepository.CountBySenderIdAndReceiverId(ctx, userInfo.UserID, input.ReceiverID)
+	if err != nil {
+		return errors.Wrap(err, "unexpected db error")
+	}
+
+	if count >= constant.LimitSendSame {
+		return status.NewError(http.StatusForbidden, "You cannot send more than five times a day to the same user.")
+	}
+
 	return uc.TxManager.WithTx(ctx, func(ctx context.Context) error {
 		receiver, err := uc.UserRepository.FindByID(ctx, input.ReceiverID)
 		if err != nil {
