@@ -22,5 +22,6 @@ const (
 )
 
 const (
-	TicketLimit = 1
+	PlayGameLimit = 30
+	TicketLimit   = 1
 )
