@@ -30,7 +30,6 @@ func (g *GameUseCaseTestSuite) TestYutPlay() {
 			on: func() {
 				g.mockTicketRepository.On("CountByUserID", mock.Anything, mock.Anything).Return(0, nil).Once()
 				g.mockTicketRepository.On("Increase", mock.Anything, mock.Anything).Return(nil).Once()
-				g.mockGameLogRepository.On("CountByUserID", mock.Anything, mock.Anything).Return(0, nil).Once()
 				g.mockGameLogRepository.On("Create", mock.Anything, mock.Anything).Return(nil).Once()
 				g.mockUserRepository.On("CountCoinsByUserID", mock.Anything, mock.Anything).Return(10, nil).Once()
 				g.mockUserRepository.On("UpdateCoin", mock.Anything, mock.Anything, mock.Anything).Return(nil).Once()
@@ -48,7 +47,6 @@ func (g *GameUseCaseTestSuite) TestYutPlay() {
 			on: func() {
 				g.mockUserRepository.On("CountCoinsByUserID", mock.Anything, mock.Anything).Return(10, nil).Twice()
 				g.mockUserRepository.On("UpdateCoin", mock.Anything, mock.Anything, mock.Anything).Return(nil).Twice()
-				g.mockGameLogRepository.On("CountByUserID", mock.Anything, mock.Anything).Return(0, nil).Once()
 				g.mockGameLogRepository.On("Create", mock.Anything, mock.Anything).Return(nil).Once()
 			},
 			assert: func(output *output.YutOutput, err error) {
@@ -71,27 +69,12 @@ func (g *GameUseCaseTestSuite) TestYutPlay() {
 				}
 			},
 		},
+
 		{
 			desc:  "failed (no coins)",
 			input: &input.FreeInput{Free: false},
 			on: func() {
 				g.mockUserRepository.On("CountCoinsByUserID", mock.Anything, mock.Anything).Return(1, nil).Once()
-			},
-			assert: func(output *output.YutOutput, err error) {
-				e, ok := err.(*status.Err)
-				if g.True(ok) {
-					g.Equal(http.StatusForbidden, e.Code)
-				}
-			},
-		},
-		{
-			desc:  "failed (play limit exceeded)",
-			input: &input.FreeInput{Free: false},
-			on: func() {
-				g.mockUserRepository.On("CountCoinsByUserID", mock.Anything, mock.Anything).Return(constant.CostPlayYut, nil).Once()
-				g.mockUserRepository.On("UpdateCoin", mock.Anything, mock.Anything, mock.Anything).Return(nil).Once()
-				g.mockGameLogRepository.On("CountByUserID", mock.Anything, mock.Anything).Return(constant.PlayGameLimit, nil).Once()
-
 			},
 			assert: func(output *output.YutOutput, err error) {
 				e, ok := err.(*status.Err)
